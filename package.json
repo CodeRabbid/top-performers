@@ -11,6 +11,9 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run"
   },
+  "dependencies": {
+    "cypress": "^13.7.2"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -18,3 +21,6 @@
     "nodemon": "^3.1.0"
   }
 }
+
+
+    
