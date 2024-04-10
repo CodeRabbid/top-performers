@@ -7,7 +7,7 @@ function App() {
 
   useEffect(()=>{
     (async () => {
-      const response = await fetch('https://upward-sales.onrender.com/api/hello',
+      const response = await fetch('/api/hello',
       {
         headers : { 
         'Content-Type': 'application/json',
