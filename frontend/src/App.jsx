@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div id="title">
         {title}
       </div>
     </>
