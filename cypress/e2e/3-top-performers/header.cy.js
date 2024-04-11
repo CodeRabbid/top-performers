@@ -2,7 +2,7 @@
 
 describe('visit top performers', () => {
   beforeEach(() => {
-    cy.visit('https://upward-sales.onrender.com/');
+    cy.visit('http://localhost:5000');
   })
 
   it('displays title', () => {
