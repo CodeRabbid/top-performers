@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
-    "build": "cd frontend && npm i && npm run build",
+    "build": "npm i && cd frontend && npm i && npm run build",
     "server": "nodemon backend/server.js",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
