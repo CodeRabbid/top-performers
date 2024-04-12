@@ -18,6 +18,6 @@ jobs:
           wait-on: 'http://localhost:5000'
       - name: Deploy to production
         run: |
-          curl --request PUT \
+          curl --request GET \
           --url https://api.render.com/deploy/srv-cob9ijq1hbls73ap1jj0?key=Acvr-lOvpPI
           
