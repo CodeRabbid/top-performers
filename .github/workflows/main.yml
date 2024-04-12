@@ -19,5 +19,5 @@ jobs:
       - name: Deploy to production
         run: |
           curl --request GET \
-          --url https://api.render.com/deploy/srv-cob9ijq1hbls73ap1jj0?key=Acvr-lOvpPI
+          --url ${{ secrets.RENDER_DEPLOY_HOOKSecret }}
           
