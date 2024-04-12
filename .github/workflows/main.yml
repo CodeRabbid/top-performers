@@ -19,5 +19,5 @@ jobs:
       - name: Deploy to production
         run: |
           curl --request GET \
-          --url ${{ secrets.RENDER_DEPLOY_HOOKSecret }}
+          --url "${{ secrets.RENDER_DEPLOY_HOOK }}"
           
