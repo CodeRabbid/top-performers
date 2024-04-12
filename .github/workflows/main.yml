@@ -16,3 +16,8 @@ jobs:
           build: npm run build 
           start: npm start
           wait-on: 'http://localhost:5000'
+      - name: Deploy to production
+        run: |
+          curl --request PUT \
+          --url https://api.render.com/deploy/srv-cob9ijq1hbls73ap1jj0?key=Acvr-lOvpPI
+          
