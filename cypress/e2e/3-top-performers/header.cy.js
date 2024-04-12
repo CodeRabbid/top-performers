@@ -6,7 +6,7 @@ describe('visit top performers', () => {
   })
 
   it('displays title', () => {
-    cy.get('#title').should('have.text', 'Top Performers')
+    cy.get('#logo').should('have.text', 'Top Performers')
   })
 })
 
