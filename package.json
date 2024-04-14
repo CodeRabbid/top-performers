@@ -8,13 +8,14 @@
     "start": "node backend/server.js",
     "build": "npm i && cd frontend && npm i && npm run build",
     "server": "nodemon backend/server.js",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:open": "cypress open  --browser chrome",
+    "cy:run": "cypress run "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cypress": "^13.7.2",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "nodemon": "^3.1.0"
   }
