@@ -2,9 +2,8 @@
 
 describe("visit top performers", () => {
   beforeEach(() => {
-    // const port = process.env.FRONTEND_PORT;
-    const port = Cypress.env("port");
-    cy.visit("http://localhost:" + port);
+    const frontend_port = Cypress.env("frontend_port");
+    cy.visit("http://localhost:" + frontend_port);
   });
 
   it("displays title", () => {
