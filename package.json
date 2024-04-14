@@ -14,11 +14,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cypress": "^13.7.2",
     "express": "^4.19.2",
-    "nodemon": "^3.1.0",
-    "cypress": "^13.7.2"
+    "nodemon": "^3.1.0"
   }
 }
-
-
-    
