@@ -1,7 +1,8 @@
 name: Cypress Tests
 
 on: push
-
+env:
+  FRONTEND_PORT: 3000
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
@@ -13,11 +14,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          build: npm run build 
+          build: npm run build
           start: npm start
-          wait-on: 'http://localhost:5000'
+          wait-on: "http://localhost:5000"
       - name: Deploy to production
         run: |
           curl --request GET \
           --url "${{ secrets.RENDER_DEPLOY_HOOK }}"
-          
