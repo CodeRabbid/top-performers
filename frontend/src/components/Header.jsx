@@ -16,7 +16,7 @@ const Header = () => {
             <>
               <LinkContainer to="/register">
                 <Nav.Link>
-                  <FaSignOutAlt /> <div id="register">Register</div>
+                  <FaSignOutAlt /> <span id="register">Register</span>
                 </Nav.Link>
               </LinkContainer>
             </>
