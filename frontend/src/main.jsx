@@ -6,6 +6,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  RouterProvider,
 } from "react-router-dom";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
 
@@ -18,7 +19,5 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );
