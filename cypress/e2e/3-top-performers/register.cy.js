@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
+const frontend_port = Cypress.env("frontend_port");
 
 describe("registers", () => {
   beforeEach(() => {
-    const frontend_port = Cypress.env("frontend_port");
     cy.visit("http://localhost:" + frontend_port);
   });
 
@@ -17,6 +17,7 @@ describe("registers", () => {
     cy.get("#confirmPassword").click();
     cy.get("#confirmPassword").type("1234");
     cy.get("form").submit();
+    cy.url().should("eq", "http://localhost:" + frontend_port + "/");
   });
 
   it("register existing user", () => {
