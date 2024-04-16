@@ -9,7 +9,9 @@
     "build": "npm i && cd frontend && npm i && npm run build",
     "server": "nodemon backend/server.js",
     "cy:open": "cypress open  --browser chrome",
-    "cy:run": "cypress run "
+    "mongodb:restart": "docker stop test-mongo && docker rm test-mongo && docker run -d -p 27017:27017 --name test-mongo mongo:latest",
+    "cy:run:dev": "npm run mongodb:restart && cypress run ",
+    "cy:run": "npm run mongodb:restart && cypress run "
   },
   "author": "",
   "license": "ISC",
