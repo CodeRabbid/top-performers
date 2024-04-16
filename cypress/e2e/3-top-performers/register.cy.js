@@ -6,6 +6,19 @@ describe("registers", () => {
     cy.visit("http://localhost:" + frontend_port);
   });
 
+  it("register user", () => {
+    cy.get("#register").click();
+    cy.get("#name").click();
+    cy.get("#name").type("Existing User");
+    cy.get("#email").click();
+    cy.get("#email").type("existing@user.de");
+    cy.get("#password").click();
+    cy.get("#password").type("1234");
+    cy.get("#confirmPassword").click();
+    cy.get("#confirmPassword").type("1234");
+    cy.get("form").submit();
+  });
+
   it("register existing user", () => {
     cy.get("#register").click();
     cy.get("#name").click();
