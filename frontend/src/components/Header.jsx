@@ -1,8 +1,13 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaSignOutAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { userInfo } = useSelector((state) => state.auth);
+
+  console.log(userInfo);
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -13,13 +18,21 @@ const Header = () => {
             </Navbar.Brand>
           </LinkContainer>
           <Nav className="ms-auto">
-            <>
-              <LinkContainer to="/register">
-                <Nav.Link>
-                  <FaSignOutAlt /> <span id="register">Register</span>
-                </Nav.Link>
-              </LinkContainer>
-            </>
+            {userInfo?.user_info ? (
+              <>
+                <LinkContainer to="/register">
+                  <Nav.Link>{userInfo.user_info.name}</Nav.Link>
+                </LinkContainer>
+              </>
+            ) : (
+              <>
+                <LinkContainer to="/register">
+                  <Nav.Link>
+                    <FaSignOutAlt /> <span id="register">Register</span>
+                  </Nav.Link>
+                </LinkContainer>
+              </>
+            )}
           </Nav>
         </Container>
       </Navbar>

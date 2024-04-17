@@ -2,34 +2,40 @@
 const frontend_port = Cypress.env("frontend_port");
 
 describe("registers", () => {
+  const user_name = "Max Mustermann";
+  const email = "max@mustermann.de";
+  const password = "1234";
+  const homepage_uri = "http://localhost:" + frontend_port + "/";
+
   beforeEach(() => {
-    cy.visit("http://localhost:" + frontend_port);
+    cy.visit(homepage_uri);
   });
 
   it("register user", () => {
     cy.get("#register").click();
     cy.get("#name").click();
-    cy.get("#name").type("Existing User");
+    cy.get("#name").type(user_name);
     cy.get("#email").click();
-    cy.get("#email").type("existing@user.de");
+    cy.get("#email").type(email);
     cy.get("#password").click();
-    cy.get("#password").type("1234");
+    cy.get("#password").type(password);
     cy.get("#confirmPassword").click();
-    cy.get("#confirmPassword").type("1234");
+    cy.get("#confirmPassword").type(password);
     cy.get("form").submit();
-    cy.url().should("eq", "http://localhost:" + frontend_port + "/");
+    cy.url().should("eq", homepage_uri);
+    cy.contains(user_name).should("be.visible");
   });
 
   it("register existing user", () => {
     cy.get("#register").click();
     cy.get("#name").click();
-    cy.get("#name").type("Existing User");
+    cy.get("#name").type(user_name);
     cy.get("#email").click();
-    cy.get("#email").type("existing@user.de");
+    cy.get("#email").type(email);
     cy.get("#password").click();
-    cy.get("#password").type("1234");
+    cy.get("#password").type(password);
     cy.get("#confirmPassword").click();
-    cy.get("#confirmPassword").type("1234");
+    cy.get("#confirmPassword").type(password);
     cy.get("form").submit();
     cy.get(".Toastify__toast-body").should("have.text", "User already exists");
   });
