@@ -46,7 +46,8 @@ const Header = () => {
               <>
                 <LinkContainer to="/login">
                   <Nav.Link>
-                    <FaSignInAlt /> Log in
+                    <FaSignInAlt />
+                    <span id="login">Log in</span>
                   </Nav.Link>
                 </LinkContainer>
                 <LinkContainer to="/register">

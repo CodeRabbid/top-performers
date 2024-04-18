@@ -25,19 +25,20 @@ describe("registers", () => {
     cy.url().should("eq", homepage_uri);
     cy.contains(user_name).should("be.visible");
 
-    // logout
-
     cy.contains(user_name).click();
     cy.contains("Logout").click();
     cy.contains("Email").should("be.visible");
     cy.contains("Password").should("be.visible");
+  });
 
+  it("logs in user", () => {
+    cy.get("#login").click();
     cy.get("#email").click();
     cy.get("#email").type(email);
     cy.get("#password").click();
     cy.get("#password").type(password);
     cy.get("form").submit();
-
+    cy.url().should("eq", homepage_uri);
     cy.contains(user_name).should("be.visible");
   });
 

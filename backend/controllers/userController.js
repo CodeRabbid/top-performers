@@ -31,12 +31,16 @@ const registerUser = asyncHandler(async (req, res) => {
       expiresIn: "1h",
     });
     const { exp } = jwtDecode(access_token);
+
     const refresh_token = jwt.sign(payload, process.env.JWT_SECRET);
     res.cookie("refresh_token", refresh_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
       sameSite: "strict", // Prevent CSRF attacks
     });
+
+    user.refresh_token = refresh_token;
+    await user.save();
 
     res.json({
       access_token: access_token,
@@ -87,6 +91,50 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const refresh_token = req.cookies.refresh_token;
+
+  if (refresh_token) {
+    try {
+      const decoded = jwt.verify(refresh_token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded._id).select("-password");
+      if (user.refresh_token && user.refresh_token == refresh_token) {
+        const access_token = jwt.sign(
+          { _id: user._id },
+          process.env.JWT_SECRET,
+          { expiresIn: "110m" }
+        );
+        const { exp } = jwtDecode(access_token);
+        res.json({
+          access_token: access_token,
+          expiry_date: exp,
+          auth_provider: "custom",
+          user_info: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+          },
+        });
+      } else {
+        return res.status(401).send({
+          message: "Not authorized, refresh token revoked",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(401).send({
+        message: "Not authorized, refresh token failed",
+      });
+      // res.status(401);
+      // throw new Error('Not authorized, refresh token failed');
+    }
+  } else {
+    return res.status(401).send({
+      message: "Not authorized, no refresh token",
+    });
+  }
+});
+
 const logoutUser = asyncHandler(async (req, res) => {
   const refresh_token = req.cookies?.refresh_token;
 
@@ -114,4 +162,4 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-export { registerUser, authUser, logoutUser };
+export { registerUser, authUser, logoutUser, refreshAccessToken };
