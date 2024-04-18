@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,40 +26,101 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-        <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>
-              <div id="logo">Top Performers</div>
-            </Navbar.Brand>
-          </LinkContainer>
-          <Nav className="ms-auto">
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          backgroundColor: "#0d6efd94",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "700px",
+            minWidth: "320px",
+            margin: "auto",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            id="logo"
+            style={{
+              display: "flex",
+              padding: "7px",
+              whiteSpace: "nowrap",
+              fontWeight: "bold",
+            }}
+          >
+            Top Performers
+          </div>
+          <div>
             {userInfo?.user_info ? (
               <>
-                <NavDropdown title={userInfo.user_info.name} id="username">
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <div
+                  style={{
+                    display: "inline-block",
+                    padding: "0px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      style={{
+                        backgroundColor: "transparent",
+                        border: "none",
+                        color: "black",
+                        fontWeight: "bold",
+                      }}
+                      variant="success"
+                      id="dropdown-basic"
+                    >
+                      {userInfo.user_info.name}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        style={{ fontWeight: "bold" }}
+                        onClick={logoutHandler}
+                        id="Logout"
+                      >
+                        Log out{" "}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </>
             ) : (
               <>
-                <LinkContainer to="/login">
-                  <Nav.Link>
-                    <FaSignInAlt />
-                    <span id="login">Log in</span>
-                  </Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/register">
-                  <Nav.Link>
-                    <FaSignOutAlt /> <span id="register">Register</span>
-                  </Nav.Link>
-                </LinkContainer>
+                <div
+                  style={{
+                    display: "inline-block",
+                    padding: "7px",
+                    whiteSpace: "nowrap",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <LinkContainer to="/login">
+                    <Nav.Link id="login">Log in</Nav.Link>
+                  </LinkContainer>
+                </div>
+
+                <div
+                  style={{
+                    display: "inline-block",
+                    padding: "7px",
+                    whiteSpace: "nowrap",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <LinkContainer to="/register">
+                    <Nav.Link id="register">Register</Nav.Link>
+                  </LinkContainer>
+                </div>
               </>
             )}
-          </Nav>
-        </Container>
-      </Navbar>
+          </div>
+        </div>
+      </div>
     </header>
   );
 };

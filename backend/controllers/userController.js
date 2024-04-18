@@ -92,7 +92,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const refresh_token = req.cookies.refresh_token;
+  const refresh_token = req.cookies?.refresh_token;
 
   if (refresh_token) {
     try {

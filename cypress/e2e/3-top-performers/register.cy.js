@@ -26,7 +26,7 @@ describe("registers", () => {
     cy.contains(user_name).should("be.visible");
 
     cy.contains(user_name).click();
-    cy.contains("Logout").click();
+    cy.contains("Log out").click();
     cy.contains("Email").should("be.visible");
     cy.contains("Password").should("be.visible");
   });
