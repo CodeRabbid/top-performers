@@ -1,12 +1,28 @@
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../slices/api/authApiSlice";
+import { logout } from "../slices/authSlice";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <header>
@@ -20,9 +36,11 @@ const Header = () => {
           <Nav className="ms-auto">
             {userInfo?.user_info ? (
               <>
-                <LinkContainer to="/">
-                  <Nav.Link>{userInfo.user_info.name}</Nav.Link>
-                </LinkContainer>
+                <NavDropdown title={userInfo.user_info.name} id="username">
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
               </>
             ) : (
               <>

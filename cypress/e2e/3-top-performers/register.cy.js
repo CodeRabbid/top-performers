@@ -24,6 +24,13 @@ describe("registers", () => {
     cy.get("form").submit();
     cy.url().should("eq", homepage_uri);
     cy.contains(user_name).should("be.visible");
+
+    // logout
+
+    cy.contains(user_name).click();
+    cy.contains("Logout").click();
+    cy.contains("Email").should("be.visible");
+    cy.contains("Password").should("be.visible");
   });
 
   it("register existing user", () => {

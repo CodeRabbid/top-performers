@@ -87,4 +87,31 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, authUser };
+const logoutUser = asyncHandler(async (req, res) => {
+  const refresh_token = req.cookies?.refresh_token;
+
+  if (refresh_token) {
+    if (req.headers.auth_provider == "google") {
+      const refreshClient = new UserRefreshClient(
+        clientId,
+        clientSecret,
+        refresh_token
+      );
+      await refreshClient.revokeToken(refresh_token);
+    } else {
+      const { _id } = jwtDecode(refresh_token);
+      const user = await User.findById(_id);
+      user.refresh_token = undefined;
+      await user.save();
+    }
+  }
+
+  res.cookie("refresh_token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+export { registerUser, authUser, logoutUser };
