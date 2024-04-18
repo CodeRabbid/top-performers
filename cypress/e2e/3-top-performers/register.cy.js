@@ -31,6 +31,14 @@ describe("registers", () => {
     cy.contains("Logout").click();
     cy.contains("Email").should("be.visible");
     cy.contains("Password").should("be.visible");
+
+    cy.get("#email").click();
+    cy.get("#email").type(email);
+    cy.get("#password").click();
+    cy.get("#password").type(password);
+    cy.get("form").submit();
+
+    cy.contains(user_name).should("be.visible");
   });
 
   it("register existing user", () => {
