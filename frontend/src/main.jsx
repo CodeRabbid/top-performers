@@ -11,11 +11,13 @@ import {
 import { Provider } from "react-redux";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
 import store from "./store";
+import LoginScreen from "./screens/LoginScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path="/login" element={<LoginScreen />} />
     </Route>
   )
 );

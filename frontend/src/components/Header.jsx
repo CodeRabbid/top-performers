@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const Header = () => {
@@ -20,12 +20,17 @@ const Header = () => {
           <Nav className="ms-auto">
             {userInfo?.user_info ? (
               <>
-                <LinkContainer to="/register">
+                <LinkContainer to="/">
                   <Nav.Link>{userInfo.user_info.name}</Nav.Link>
                 </LinkContainer>
               </>
             ) : (
               <>
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <FaSignInAlt /> Log in
+                  </Nav.Link>
+                </LinkContainer>
                 <LinkContainer to="/register">
                   <Nav.Link>
                     <FaSignOutAlt /> <span id="register">Register</span>

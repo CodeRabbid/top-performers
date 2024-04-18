@@ -2,6 +2,8 @@ import asyncHandler from "express-async-handler";
 import { jwtDecode } from "jwt-decode";
 import jwt from "jsonwebtoken";
 
+import generateRefreshToken from "../utils/generateToken.js";
+
 import User from "../models/userModel.js";
 
 // @desc    Register a new user
@@ -52,4 +54,37 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser };
+// @desc    Auth user & get token
+// @route   POST /api/users/auth
+// @access  Public
+const authUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    await generateRefreshToken(res, user);
+
+    const payload = { _id: user._id };
+    const access_token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "10m",
+    });
+    const { exp } = jwtDecode(access_token);
+
+    res.json({
+      access_token: access_token,
+      expiry_date: exp,
+      auth_provider: "custom",
+      user_info: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } else {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+});
+
+export { registerUser, authUser };
