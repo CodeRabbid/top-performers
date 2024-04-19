@@ -30,7 +30,7 @@ const Header = () => {
         style={{
           position: "relative",
           width: "100%",
-          backgroundColor: "#0d6efd94",
+          backgroundColor: "rgb(0,99,242)",
         }}
       >
         <div
@@ -46,8 +46,9 @@ const Header = () => {
             id="logo"
             style={{
               display: "flex",
-              padding: "7px",
+              padding: "10px",
               whiteSpace: "nowrap",
+              color: "white",
               fontWeight: "bold",
             }}
           >
@@ -68,8 +69,8 @@ const Header = () => {
                       style={{
                         backgroundColor: "transparent",
                         border: "none",
-                        color: "black",
-                        fontWeight: "bold",
+                        // fontWeight: "bold",
+                        color: "white",
                       }}
                       variant="success"
                       id="dropdown-basic"
@@ -79,7 +80,10 @@ const Header = () => {
 
                     <Dropdown.Menu>
                       <Dropdown.Item
-                        style={{ fontWeight: "bold" }}
+                        style={{
+                          // fontWeight: "bold",
+                          color: "white",
+                        }}
                         onClick={logoutHandler}
                         id="Logout"
                       >
@@ -94,9 +98,10 @@ const Header = () => {
                 <div
                   style={{
                     display: "inline-block",
-                    padding: "7px",
+                    padding: "10px",
                     whiteSpace: "nowrap",
-                    fontWeight: "bold",
+                    // fontWeight: "bold",
+                    color: "white",
                   }}
                 >
                   <LinkContainer to="/login">
@@ -107,9 +112,10 @@ const Header = () => {
                 <div
                   style={{
                     display: "inline-block",
-                    padding: "7px",
+                    padding: "10px",
                     whiteSpace: "nowrap",
-                    fontWeight: "bold",
+                    // fontWeight: "bold",
+                    color: "white",
                   }}
                 >
                   <LinkContainer to="/register">
