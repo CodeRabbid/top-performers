@@ -35,7 +35,7 @@ const Header = () => {
       >
         <div
           style={{
-            maxWidth: "700px",
+            maxWidth: "880px",
             minWidth: "320px",
             margin: "auto",
             display: "flex",
