@@ -7,6 +7,7 @@ env:
   VITE_GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   GOOGLE_LOGIN_REDIRECT_URI: http://localhost:3000/login
+  MONGO_URI: mongodb://localhost:27017/?writeConcern=majority
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
