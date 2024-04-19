@@ -10,6 +10,7 @@ import {
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import GoogleLogo from "./folder/google-logo.svg?react";
 
 import { useGoogleLogin } from "@react-oauth/google";
 
@@ -95,15 +96,17 @@ const LoginScreen = () => {
             variant="primary"
             className="mt-2"
           >
-            Sign In
+            Log in
           </Button>
           <Button
             disabled={isLoading}
             variant="primary"
             className="mt-0"
             onClick={googleLoginHandler}
+            style={{ backgroundColor: "rgb(230, 238, 252)", color: "black" }}
           >
-            Google Sign in
+            <GoogleLogo style={{ height: "18px", width: "18px" }} />
+            &nbsp;Google Log in
           </Button>
         </div>
       </Form>
