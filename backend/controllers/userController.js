@@ -122,7 +122,6 @@ const googleAuthUser = asyncHandler(async (req, res) => {
         upsert: true,
       }
     );
-
     res.json({
       access_token: tokens.access_token,
       expiry_date: tokens.expiry_date,
@@ -226,58 +225,21 @@ const logoutUser = asyncHandler(async (req, res) => {
   const auth_provider = req.headers.auth_provider;
 
   if (refresh_token) {
-    if (auth_provider == "google") {
+    if (req.headers.auth_provider == "google") {
       const refreshClient = new UserRefreshClient(
         clientId,
         clientSecret,
         refresh_token
       );
-      const response = await refreshClient.refreshAccessToken();
-      const id_token = jwtDecode(response.credentials.id_token);
-
-      const update = {
-        name: id_token.name,
-        email: id_token.email,
-        picture: id_token.picture,
-      };
-      const user = await User.findOneAndUpdate(
-        { email: id_token.email },
-        update,
-        {
-          new: true,
-          upsert: true,
-        }
-      );
-
-      res.json({
-        access_token: response.credentials.access_token,
-        expiry_date: response.credentials.expiry_date,
-        auth_provider: "google",
-        user_info: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          picture: user.picture,
-        },
-      });
+      await refreshClient.revokeToken(refresh_token);
     } else {
-      if (req.headers.auth_provider == "google") {
-        const refreshClient = new UserRefreshClient(
-          clientId,
-          clientSecret,
-          refresh_token
-        );
-        await refreshClient.revokeToken(refresh_token);
-      } else {
-        const { _id } = jwtDecode(refresh_token);
-        const user = await User.findById(_id);
-        if (user) {
-          user.refresh_token = undefined;
-          await user.save();
-        }
-      }
+      const { _id } = jwtDecode(refresh_token);
+      const user = await User.findById(_id);
+      user.refresh_token = undefined;
+      await user.save();
     }
   }
+
   res.cookie("refresh_token", "", {
     httpOnly: true,
     expires: new Date(0),
