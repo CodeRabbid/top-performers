@@ -223,6 +223,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const logoutUser = asyncHandler(async (req, res) => {
   const refresh_token = req.cookies?.refresh_token;
+  const auth_provider = req.headers.auth_provider;
 
   if (refresh_token) {
     if (auth_provider == "google") {
