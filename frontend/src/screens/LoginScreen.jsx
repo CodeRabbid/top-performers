@@ -3,10 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../slices/api/authApiSlice";
+import {
+  useGoogleLoginMutation,
+  useLoginMutation,
+} from "../slices/api/authApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+
+import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -16,14 +21,37 @@ const LoginScreen = () => {
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
+  const [googleLogin] = useGoogleLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const queryParameters = new URLSearchParams(window.location.search);
+    const code = queryParameters.get("code");
+
+    if (code) {
+      (async () => {
+        try {
+          const res = await googleLogin({ code }).unwrap();
+          dispatch(setCredentials({ ...res }));
+        } catch (err) {
+          console.error(err?.data?.message || err.error);
+        }
+      })();
+    }
+  }, []);
 
   useEffect(() => {
     if (userInfo?.access_token) {
       navigate("/");
     }
   }, [navigate, userInfo]);
+
+  const googleLoginHandler = useGoogleLogin({
+    ux_mode: "redirect",
+    redirect_uri: "http://localhost:3000/login",
+    flow: "auth-code",
+  });
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -68,6 +96,14 @@ const LoginScreen = () => {
             className="mt-2"
           >
             Sign In
+          </Button>
+          <Button
+            disabled={isLoading}
+            variant="primary"
+            className="mt-0"
+            onClick={googleLoginHandler}
+          >
+            Google Sign in
           </Button>
         </div>
       </Form>

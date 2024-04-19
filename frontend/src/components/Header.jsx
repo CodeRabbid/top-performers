@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import { FaSignOutAlt, FaSignInAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaSignInAlt, FaCashRegister } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/api/authApiSlice";
@@ -69,7 +69,6 @@ const Header = () => {
                       style={{
                         backgroundColor: "transparent",
                         border: "none",
-                        // fontWeight: "bold",
                         color: "white",
                       }}
                       variant="success"
@@ -81,8 +80,7 @@ const Header = () => {
                     <Dropdown.Menu>
                       <Dropdown.Item
                         style={{
-                          // fontWeight: "bold",
-                          color: "white",
+                          color: "black",
                         }}
                         onClick={logoutHandler}
                         id="Logout"
@@ -100,7 +98,6 @@ const Header = () => {
                     display: "inline-block",
                     padding: "10px",
                     whiteSpace: "nowrap",
-                    // fontWeight: "bold",
                     color: "white",
                   }}
                 >
@@ -114,7 +111,6 @@ const Header = () => {
                     display: "inline-block",
                     padding: "10px",
                     whiteSpace: "nowrap",
-                    // fontWeight: "bold",
                     color: "white",
                   }}
                 >
