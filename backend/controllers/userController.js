@@ -225,19 +225,55 @@ const logoutUser = asyncHandler(async (req, res) => {
   const refresh_token = req.cookies?.refresh_token;
 
   if (refresh_token) {
-    if (req.headers.auth_provider == "google") {
+    if (auth_provider == "google") {
       const refreshClient = new UserRefreshClient(
         clientId,
         clientSecret,
         refresh_token
       );
-      await refreshClient.revokeToken(refresh_token);
+      const response = await refreshClient.refreshAccessToken();
+      const id_token = jwtDecode(response.credentials.id_token);
+
+      const update = {
+        name: id_token.name,
+        email: id_token.email,
+        picture: id_token.picture,
+      };
+      const user = await User.findOneAndUpdate(
+        { email: id_token.email },
+        update,
+        {
+          new: true,
+          upsert: true,
+        }
+      );
+
+      res.json({
+        access_token: response.credentials.access_token,
+        expiry_date: response.credentials.expiry_date,
+        auth_provider: "google",
+        user_info: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          picture: user.picture,
+        },
+      });
     } else {
-      const { _id } = jwtDecode(refresh_token);
-      const user = await User.findById(_id);
-      if (user) {
-        user.refresh_token = undefined;
-        await user.save();
+      if (req.headers.auth_provider == "google") {
+        const refreshClient = new UserRefreshClient(
+          clientId,
+          clientSecret,
+          refresh_token
+        );
+        await refreshClient.revokeToken(refresh_token);
+      } else {
+        const { _id } = jwtDecode(refresh_token);
+        const user = await User.findById(_id);
+        if (user) {
+          user.refresh_token = undefined;
+          await user.save();
+        }
       }
     }
   }
