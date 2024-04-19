@@ -9,12 +9,9 @@ import User from "../models/userModel.js";
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const redirectURI = process.env.GOOGLE_LOGIN_REDIRECT_URI;
 
-const oAuth2Client = new OAuth2Client(
-  clientId,
-  clientSecret,
-  "http://localhost:3000/login"
-);
+const oAuth2Client = new OAuth2Client(clientId, clientSecret, redirectURI);
 
 // @desc    Register a new user
 // @route   POST /api/users
