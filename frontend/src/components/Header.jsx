@@ -1,5 +1,5 @@
-import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import { Navbar, Nav, Container, Dropdown, Button } from "react-bootstrap";
+import { LinkContainer, Link } from "react-router-bootstrap";
 import { FaSignOutAlt, FaSignInAlt, FaCashRegister } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -42,18 +42,21 @@ const Header = () => {
             justifyContent: "space-between",
           }}
         >
-          <div
-            id="logo"
-            style={{
-              display: "flex",
-              padding: "10px",
-              whiteSpace: "nowrap",
-              color: "white",
-              fontWeight: "bold",
-            }}
-          >
-            Top Performers
-          </div>
+          <a href="/">
+            <LinkContainer
+              style={{
+                padding: "10px",
+                color: "white",
+                fontWeight: "bold",
+              }}
+              to="/"
+              isActive={false}
+              activeClassName=""
+            >
+              <div>Top Performers </div>
+            </LinkContainer>
+          </a>
+
           <div>
             {userInfo?.user_info ? (
               <>
@@ -64,31 +67,45 @@ const Header = () => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      style={{
-                        backgroundColor: "transparent",
-                        border: "none",
-                        color: "white",
-                      }}
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      {userInfo.user_info.name}
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item
+                  <Nav>
+                    <Dropdown>
+                      <Dropdown.Toggle
                         style={{
-                          color: "black",
+                          backgroundColor: "transparent",
+                          border: "none",
+                          color: "white",
                         }}
-                        onClick={logoutHandler}
-                        id="Logout"
+                        variant="success"
+                        id="dropdown-basic"
                       >
-                        Log out{" "}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                        {userInfo.user_info.name}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <LinkContainer
+                          to="/profile"
+                          isActive={false}
+                          activeClassName=""
+                        >
+                          <Dropdown.Item
+                            style={{
+                              color: "black",
+                            }}
+                          >
+                            <div>Profile </div>
+                          </Dropdown.Item>
+                        </LinkContainer>
+                        <Dropdown.Item
+                          style={{
+                            color: "black",
+                          }}
+                          onClick={logoutHandler}
+                          id="Logout"
+                        >
+                          Log out{" "}
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Nav>
                 </div>
               </>
             ) : (
