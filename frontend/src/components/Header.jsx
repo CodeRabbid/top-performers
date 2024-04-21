@@ -53,7 +53,7 @@ const Header = () => {
               isActive={false}
               activeClassName=""
             >
-              <div>Top Performers </div>
+              <div id="logo">Top Performers</div>
             </LinkContainer>
           </a>
 

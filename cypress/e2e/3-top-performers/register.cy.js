@@ -55,4 +55,20 @@ describe("registers", () => {
     cy.get("form").submit();
     cy.get(".Toastify__toast-body").should("have.text", "User already exists");
   });
+
+  it("logs in user", () => {
+    cy.get("#login").click();
+    cy.get("#email").click();
+    cy.get("#email").type(email);
+    cy.get("#password").click();
+    cy.get("#password").type(password);
+    cy.get("form").submit();
+    cy.url().should("eq", homepage_uri);
+    cy.contains(user_name).should("be.visible");
+
+    cy.contains(user_name).click();
+    cy.contains("Profile").click();
+    cy.contains("Email").should("be.visible");
+    cy.contains("Password").should("be.visible");
+  });
 });
