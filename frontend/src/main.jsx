@@ -14,12 +14,14 @@ import store from "./store";
 import LoginScreen from "./screens/LoginScreen.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import AuthProvider from "./components/AuthProvider";
+import ProfileScreen from "./screens/ProfileScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/login" element={<LoginScreen />} />
+      <Route path="/profile" element={<ProfileScreen />} />
     </Route>
   )
 );

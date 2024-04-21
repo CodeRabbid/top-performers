@@ -220,6 +220,35 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.body.credentials._id);
+
+  if (user) {
+    user.name = req.body.credentials.name || user.name;
+    user.email = req.body.credentials.email || user.email;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      user_info: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      },
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 const logoutUser = asyncHandler(async (req, res) => {
   const refresh_token = req.cookies?.refresh_token;
   const auth_provider = req.headers.auth_provider;
@@ -254,4 +283,5 @@ export {
   logoutUser,
   refreshAccessToken,
   googleAuthUser,
+  updateUserProfile,
 };
