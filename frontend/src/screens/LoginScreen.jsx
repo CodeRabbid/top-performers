@@ -10,7 +10,7 @@ import {
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
-import GoogleLogo from "./folder/google-logo.svg?react";
+import GoogleLogo from "../assets/google-logo.svg?react";
 
 import { useGoogleLogin } from "@react-oauth/google";
 
