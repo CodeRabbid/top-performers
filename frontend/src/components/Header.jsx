@@ -1,3 +1,4 @@
+import "./Header.css";
 import { Navbar, Nav, Container, Dropdown, Button } from "react-bootstrap";
 import { LinkContainer, Link } from "react-router-bootstrap";
 import { FaSignOutAlt, FaSignInAlt, FaCashRegister } from "react-icons/fa";
@@ -26,47 +27,17 @@ const Header = () => {
 
   return (
     <header>
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          backgroundColor: "rgb(0,99,242)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "880px",
-            minWidth: "320px",
-            margin: "auto",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <a href="/">
-            <LinkContainer
-              style={{
-                padding: "10px",
-                color: "white",
-                fontWeight: "bold",
-              }}
-              to="/"
-              isActive={false}
-              activeClassName=""
-            >
-              <div id="logo">Top Performers</div>
+      <div className="headerContainer">
+        <div className="headerInnerContainer">
+          <div className="logo">
+            <LinkContainer to="/register">
+              <Nav.Link id="logo">Top Performers</Nav.Link>
             </LinkContainer>
-          </a>
-
+          </div>
           <div>
             {userInfo?.user_info ? (
               <>
-                <div
-                  style={{
-                    display: "inline-block",
-                    padding: "0px",
-                    whiteSpace: "nowrap",
-                  }}
-                >
+                <div>
                   <Nav>
                     <Dropdown>
                       <Dropdown.Toggle
@@ -74,6 +45,7 @@ const Header = () => {
                           backgroundColor: "transparent",
                           border: "none",
                           color: "white",
+                          padding: "10px",
                         }}
                         variant="success"
                         id="dropdown-basic"
@@ -110,27 +82,12 @@ const Header = () => {
               </>
             ) : (
               <>
-                <div
-                  style={{
-                    display: "inline-block",
-                    padding: "10px",
-                    whiteSpace: "nowrap",
-                    color: "white",
-                  }}
-                >
+                <div className="topNavigation">
                   <LinkContainer to="/login">
                     <Nav.Link id="login">Log in</Nav.Link>
                   </LinkContainer>
                 </div>
-
-                <div
-                  style={{
-                    display: "inline-block",
-                    padding: "10px",
-                    whiteSpace: "nowrap",
-                    color: "white",
-                  }}
-                >
+                <div className="topNavigation">
                   <LinkContainer to="/register">
                     <Nav.Link id="register">Register</Nav.Link>
                   </LinkContainer>
