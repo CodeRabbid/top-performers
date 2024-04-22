@@ -30,7 +30,7 @@ const Header = () => {
       <div className="headerContainer">
         <div className="headerInnerContainer">
           <div className="logo">
-            <LinkContainer to="/register">
+            <LinkContainer to="/">
               <Nav.Link id="logo">Top Performers</Nav.Link>
             </LinkContainer>
           </div>

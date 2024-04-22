@@ -16,10 +16,12 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import AuthProvider from "./components/AuthProvider";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import HomeScreen from "./screens/HomeScreen";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<HomeScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="" element={<PrivateRoute />}>
