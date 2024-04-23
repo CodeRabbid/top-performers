@@ -1,5 +1,8 @@
-import "dotenv/config";
 import pg from "pg";
+
+console.log("POSTGRES_URI");
+console.log(process.env.POSTGRES_URI);
+console.log(process.env.MONGO_URI);
 
 export const client = new pg.Client(process.env.POSTGRES_URI);
 
