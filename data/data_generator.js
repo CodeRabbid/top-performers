@@ -24,7 +24,7 @@ try {
   const migrations_path = path.join(__dirname, "/data/migrations");
   const files = fs.readdirSync(migrations_path);
   for (const file of files) {
-    var sql = fs.readFileSync(migrations_path, file).toString();
+    var sql = fs.readFileSync(path.join(migrations_path, file)).toString();
     await client.query(sql);
   }
   console.log("Migrations successfull");
