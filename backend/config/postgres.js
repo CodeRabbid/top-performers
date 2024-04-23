@@ -1,6 +1,8 @@
 import pg from "pg";
 
-export const client = new pg.Client(process.env.POSTGRES_URI);
+export const client = new pg.Client(
+  "postgresql://postgres:mysecretpassword@localhost:5432/postgres"
+);
 
 const connectPostgres = async () => {
   try {
