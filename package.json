@@ -14,7 +14,7 @@
     "data:testuser": "node data/test_user.js",
     "data:generate": "node data/data_generator.js",
     "cy:run:dev": "npm run mongodb:restart && npm run data:testuser && npm run data:generate && cypress run ",
-    "cy:run": "cypress run "
+    "cy:run": "npm run data:testuser && npm run data:generate && cypress run "
   },
   "author": "",
   "license": "ISC",
