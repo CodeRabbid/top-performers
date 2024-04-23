@@ -35,7 +35,7 @@ jobs:
         with:
           mongodb-version: 6.0
       - name: Generate Data
-        run: npm run data:testuser && npm run data:generate
+        run: npm i && npm run data:testuser && npm run data:generate
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
