@@ -8,10 +8,13 @@
     "start": "node backend/server.js",
     "build": "npm i && cd frontend && npm i && npm run build",
     "server": "nodemon backend/server.js",
-    "cy:open": "npm run mongodb:restart && cypress open  --browser chrome",
+    "cy:open:dev": "npm run mongodb:restart && cypress open  --browser chrome",
+    "cy:open": "cypress open  --browser chrome",
     "mongodb:restart": "docker stop test-mongo && docker rm test-mongo && docker run -d -p 27017:27017 --name test-mongo mongo:latest",
-    "cy:run:dev": "npm run mongodb:restart && cypress run ",
-    "cy:run": "npm run mongodb:restart && cypress run "
+    "data:testuser": "node data/test_user.js",
+    "data:generate": "node data/data_generator.js",
+    "cy:run:dev": "npm run mongodb:restart && npm run data:testuser && npm run data:generate && cypress run ",
+    "cy:run": "cypress run "
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.3.1",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.5"
   }
 }

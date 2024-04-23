@@ -92,6 +92,7 @@ const LoginScreen = () => {
         <div className="d-grid gap-2">
           <Button
             disabled={isLoading}
+            id="submit_login"
             type="submit"
             variant="primary"
             className="mt-2"

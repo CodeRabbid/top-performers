@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
+import PurchaseScreen from "./screens/PurchaseScreen.jsx";
 import store from "./store";
 import LoginScreen from "./screens/LoginScreen.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />} />
+        <Route path="/purchases" element={<PurchaseScreen />} />
       </Route>
     </Route>
   )
