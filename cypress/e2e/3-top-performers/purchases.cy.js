@@ -35,10 +35,24 @@ describe("purchases", () => {
     cy.get("#row_0").contains("Sandals");
   });
 
-  it("filter Boots", () => {
-    cy.get('[data-testid="ArrowDropDownIcon"] > path').click();
+  it("filters Boots", () => {
+    cy.get("#categories-filter").click();
     cy.get("#categories-filter-option-0").click();
     cy.get("table").should("include.text", "Boots");
     cy.get("table").should("not.include.text", "Sandals");
+  });
+
+  it("filters Ankle", () => {
+    cy.get("#types-filter").click();
+    cy.get("#types-filter-option-0").click();
+    cy.get("table").should("include.text", "Ankle");
+    cy.get("table").should("not.include.text", "Athletic");
+  });
+
+  it("filters adidas", () => {
+    cy.get("#brands-filter").click();
+    cy.get("#brands-filter-option-0").click();
+    cy.get("table").should("include.text", "adidas");
+    cy.get("table").should("not.include.text", "A. Testony");
   });
 });

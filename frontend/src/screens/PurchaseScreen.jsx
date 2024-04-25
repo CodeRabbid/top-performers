@@ -139,7 +139,7 @@ const PurchaseScreen = () => {
         <Autocomplete
           multiple
           limitTags={1}
-          id="types-filter"
+          id="brands-filter"
           options={filters.brands}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
