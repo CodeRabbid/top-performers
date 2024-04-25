@@ -21,7 +21,24 @@ describe("purchases", () => {
   });
 
   it("view purchases", () => {
-    cy.contains("Purchase Date").should("be.visible");
+    cy.contains("Category").should("be.visible");
     cy.contains("adidas").should("be.visible");
+  });
+
+  it("sorts by items sold", () => {
+    cy.get("#items_sold_sort").click();
+    cy.get("#row_0").contains("Boots");
+  });
+
+  it("sorts by total sales", () => {
+    cy.get("#total_sales_sort").click();
+    cy.get("#row_0").contains("Sandals");
+  });
+
+  it("filter Boots", () => {
+    cy.get('[data-testid="ArrowDropDownIcon"] > path').click();
+    cy.get("#categories-filter-option-0").click();
+    cy.get("table").should("include.text", "Boots");
+    cy.get("table").should("not.include.text", "Sandals");
   });
 });

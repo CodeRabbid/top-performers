@@ -37,15 +37,17 @@ try {
     `INSERT INTO customer
     (first_name, last_name, gender, birthday)
     VALUES
-    ('Max', 'Mustermann', 'male', '2000-01-01' )`
+    ('Max', 'Mustermann', 'male', '2000-01-01' ),
+    ('Julia', 'Mustermann', 'female', '2007-01-01' )
+    `
   );
 
   await client.query(
     `INSERT INTO product
-      (type, model, brand, price, image)
+      (category, type, brand, price, image)
     VALUES
-      ('Boots', 'Ankle', 'A. Testony', 79.99, '7965307.5291.jpg'),
-      ('Sandals', 'Athletic', 'adidas', 49.99, '115220.151.jpg')`
+      ('Boots', 'Ankle', 'A. Testony', 39.99, '7965307.5291.jpg'),
+      ('Sandals', 'Athletic', 'adidas', 89.99, '115220.151.jpg')`
   );
 
   await client.query(
@@ -53,6 +55,7 @@ try {
       (customer_id, product_id, purchase_time)
     VALUES
       ('1', '1', '2022-02-22T22:00:00.000Z'),
+      ('2', '1', '2022-02-23T22:00:00.000Z'),
       ('1', '2', '2022-02-22T23:00:00.000Z')
       `
   );
