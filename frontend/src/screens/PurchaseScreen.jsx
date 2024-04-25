@@ -61,11 +61,11 @@ const PurchaseScreen = () => {
     setSortBy(field);
   };
 
-  const categoriesFilterHandler = (event, values) => {
-    const selected = values.map((value) => value.category);
+  const filterHandler = (event, values, column) => {
+    const selected = values.map((value) => value.name);
     setSelectedFilters((selectedFilters) => ({
       ...selectedFilters,
-      categories: selected,
+      [column]: selected,
     }));
   };
 
@@ -78,7 +78,7 @@ const PurchaseScreen = () => {
           id="categories-filter"
           options={filters.categories}
           disableCloseOnSelect
-          getOptionLabel={(option) => option.category}
+          getOptionLabel={(option) => option.name}
           renderOption={(props, option, { selected }) => (
             <li {...props}>
               <Checkbox
@@ -87,14 +87,16 @@ const PurchaseScreen = () => {
                 style={{ marginRight: 8 }}
                 checked={selected}
               />
-              {option.category}
+              {option.name}
               <span style={{ position: "absolute", right: "10px" }}>
                 {option.count}
               </span>
             </li>
           )}
           style={{ width: 220 }}
-          onChange={categoriesFilterHandler}
+          onChange={(event, values) =>
+            filterHandler(event, values, "categories")
+          }
           renderInput={(params) => (
             <TextField
               {...params}
@@ -104,7 +106,64 @@ const PurchaseScreen = () => {
           )}
         />
       </div>
-
+      <div style={{ float: "left", margin: "0 5px 0 0" }}>
+        <Autocomplete
+          multiple
+          limitTags={1}
+          id="types-filter"
+          options={filters.types}
+          disableCloseOnSelect
+          getOptionLabel={(option) => option.name}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.name}
+              <span style={{ position: "absolute", right: "10px" }}>
+                {option.count}
+              </span>
+            </li>
+          )}
+          style={{ width: 220 }}
+          onChange={(event, values) => filterHandler(event, values, "types")}
+          renderInput={(params) => (
+            <TextField {...params} label="Types" placeholder="Search ..." />
+          )}
+        />
+      </div>
+      <div style={{ float: "left", margin: "0 5px 0 0" }}>
+        <Autocomplete
+          multiple
+          limitTags={1}
+          id="types-filter"
+          options={filters.brands}
+          disableCloseOnSelect
+          getOptionLabel={(option) => option.name}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                icon={icon}
+                checkedIcon={checkedIcon}
+                style={{ marginRight: 8 }}
+                checked={selected}
+              />
+              {option.name}
+              <span style={{ position: "absolute", right: "10px" }}>
+                {option.count}
+              </span>
+            </li>
+          )}
+          style={{ width: 220 }}
+          onChange={(event, values) => filterHandler(event, values, "brands")}
+          renderInput={(params) => (
+            <TextField {...params} label="Types" placeholder="Search ..." />
+          )}
+        />
+      </div>
       <Table striped bordered hover>
         <thead>
           <tr>

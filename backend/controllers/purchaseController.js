@@ -20,7 +20,9 @@ const allPurchases = asyncHandler(async (req, res) => {
 	    product.image as image
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
-    WHERE category = ANY($1::VARCHAR[]) OR $2
+    WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+    AND ( type = ANY($3::VARCHAR[]) OR $4 )
+    AND ( brand = ANY($5::VARCHAR[]) OR $6 )
     GROUP BY 
       product.category, 
       product.type, 
@@ -30,7 +32,14 @@ const allPurchases = asyncHandler(async (req, res) => {
     ORDER BY ${sortBy} DESC
     LIMIT 20
     `,
-      [filters.categories, filters.categories.length == 0]
+      [
+        filters.categories,
+        filters.categories.length == 0,
+        filters.types,
+        filters.types.length == 0,
+        filters.brands,
+        filters.brands.length == 0,
+      ]
     );
     res.json({ purchase: result.rows });
   } catch (err) {
@@ -47,33 +56,33 @@ const getFilters = asyncHandler(async (req, res) => {
     let result = await postgres.query(
       `SELECT 
           count(category) as count,
-          category
+          category as name
       FROM product 
       GROUP BY 
-        category
-      ORDER BY category ASC
+        name
+      ORDER BY name ASC
       `
     );
     filters.categories = result.rows;
     result = await postgres.query(
       `SELECT 
         count(type) as count,
-        type
+        type as name
       FROM product 
       GROUP BY 
-        type
-      ORDER BY type ASC
+        name
+      ORDER BY name ASC
       `
     );
     filters.types = result.rows;
     result = await postgres.query(
       `SELECT 
         count(brand) as count,
-        brand
+        brand as name
       FROM product 
       GROUP BY 
-        brand
-      ORDER BY brand ASC
+        name
+      ORDER BY name ASC
       `
     );
     filters.brands = result.rows;
