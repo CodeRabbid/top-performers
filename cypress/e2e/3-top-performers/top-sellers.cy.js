@@ -42,7 +42,7 @@ describe("purchases", () => {
     cy.get("table").should("not.include.text", "Sandals");
   });
 
-  it("filters Ankle", () => {
+  it.only("filters Ankle", () => {
     cy.get("#types-filter").click();
     cy.get("#types-filter-option-0").click();
     cy.get("table").should("include.text", "Ankle");

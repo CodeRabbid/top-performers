@@ -45,10 +45,10 @@ const PurchaseScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getFilters().unwrap();
+      const result = await getFilters({ selectedFilters }).unwrap();
       setFilters(result);
     })();
-  }, []);
+  }, [selectedFilters]);
 
   useEffect(() => {
     (async () => {
@@ -76,6 +76,7 @@ const PurchaseScreen = () => {
           multiple
           limitTags={1}
           id="categories-filter"
+          isOptionEqualToValue={(option, value) => option.name === value.name}
           options={filters.categories}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
@@ -111,6 +112,7 @@ const PurchaseScreen = () => {
           multiple
           limitTags={1}
           id="types-filter"
+          isOptionEqualToValue={(option, value) => option.name === value.name}
           options={filters.types}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
@@ -140,6 +142,7 @@ const PurchaseScreen = () => {
           multiple
           limitTags={1}
           id="brands-filter"
+          isOptionEqualToValue={(option, value) => option.name === value.name}
           options={filters.brands}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}

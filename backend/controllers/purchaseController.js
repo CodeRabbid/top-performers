@@ -47,10 +47,11 @@ const allPurchases = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Fetch purchases
-// @route   GET /api/purchase
+// @desc    Fetch filters
+// @route   GET /api/filters
 // @access  Private
 const getFilters = asyncHandler(async (req, res) => {
+  const selectedFilters = req.body.selectedFilters;
   try {
     const filters = {};
     let result = await postgres.query(
@@ -58,10 +59,18 @@ const getFilters = asyncHandler(async (req, res) => {
           count(category) as count,
           category as name
       FROM product 
+      WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
+      AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       GROUP BY 
         name
       ORDER BY name ASC
-      `
+      `,
+      [
+        selectedFilters.types,
+        selectedFilters.types.length == 0,
+        selectedFilters.brands,
+        selectedFilters.brands.length == 0,
+      ]
     );
     filters.categories = result.rows;
     result = await postgres.query(
@@ -69,21 +78,37 @@ const getFilters = asyncHandler(async (req, res) => {
         count(type) as count,
         type as name
       FROM product 
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       GROUP BY 
         name
       ORDER BY name ASC
-      `
+      `,
+      [
+        selectedFilters.categories,
+        selectedFilters.categories.length == 0,
+        selectedFilters.brands,
+        selectedFilters.brands.length == 0,
+      ]
     );
     filters.types = result.rows;
     result = await postgres.query(
       `SELECT 
         count(brand) as count,
         brand as name
-      FROM product 
+      FROM product
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      AND ( type = ANY($3::VARCHAR[]) OR $4 )
       GROUP BY 
         name
       ORDER BY name ASC
-      `
+      `,
+      [
+        selectedFilters.categories,
+        selectedFilters.categories.length == 0,
+        selectedFilters.types,
+        selectedFilters.types.length == 0,
+      ]
     );
     filters.brands = result.rows;
 
