@@ -46,7 +46,7 @@ try {
     `INSERT INTO product
       (category, type, brand, price, image)
     VALUES
-      ('Boots', 'Ankle', 'A. Testony', 39.99, '8028671.3.jpg'),
+      ('Boots', 'Ankle', 'Ahnu', 39.99, '7688415.411.jpg'),
       ('Boots', 'Ankle', 'Aetrex', 59.99, '7965307.5291.jpg'),
       ('Sandals', 'Athletic', 'adidas', 89.99, '115220.151.jpg')`
   );
@@ -55,10 +55,10 @@ try {
     `INSERT INTO purchase
       (customer_id, product_id, purchase_time)
     VALUES
-      ('1', '1', '2022-02-22T22:00:00.000Z'),
-      ('2', '1', '2022-02-23T22:00:00.000Z'),
+      ('1', '1', '2022-01-01T22:00:00.000Z'),
+      ('2', '1', '2022-01-01T22:00:00.000Z'),
       ('2', '2', '2022-05-23T22:00:00.000Z'),
-      ('1', '3', '2022-02-22T23:00:00.000Z')
+      ('1', '3', '2022-07-22T23:00:00.000Z')
       `
   );
 

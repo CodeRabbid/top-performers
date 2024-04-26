@@ -7,6 +7,8 @@ import { client as postgres } from "../config/postgres.js";
 const allPurchases = asyncHandler(async (req, res) => {
   const sortBy = req.body.sortBy;
   const filters = req.body.selectedFilters;
+  const earliestPuchaseDate = req.body.earliestPurchaseDate;
+  const latestPurchaseDate = req.body.latestPurchaseDate;
   try {
     const result = await postgres.query(
       `
@@ -17,12 +19,13 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.type as type, 
       product.brand as brand, 
       product.price as price,
-	    product.image as image
+	    product.image as image 
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
     WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
     AND ( type = ANY($3::VARCHAR[]) OR $4 )
     AND ( brand = ANY($5::VARCHAR[]) OR $6 )
+    AND purchase_time BETWEEN $7 AND $8
     GROUP BY 
       product.category, 
       product.type, 
@@ -39,8 +42,11 @@ const allPurchases = asyncHandler(async (req, res) => {
         filters.types.length == 0,
         filters.brands,
         filters.brands.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
       ]
     );
+    // console.log(result.rows);
     res.json({ purchase: result.rows });
   } catch (err) {
     console.log(err);

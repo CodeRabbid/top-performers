@@ -6,18 +6,25 @@ import {
   useAllPurchasesMutation,
   useGetFiltersMutation,
 } from "../slices/api/purchaseApiSlice.js";
-import { Navbar, Nav, Container, Dropdown, Button } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
 
-function valuetext(value) {
-  return `${value}°C`;
-}
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-daterangepicker/daterangepicker.css";
+
+// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import "dayjs/locale/de";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -43,6 +50,18 @@ const PurchaseScreen = () => {
     brands: [],
   });
 
+  const [dateRange, setDateRange] = useState({
+    start: "2022-01-01T00:00:00.000Z",
+    end: "2024-04-24T00:00:00.000Z",
+  });
+
+  const [earliestPurchaseDate, setEarlierstPurchaseDate] = useState(
+    dayjs("2022-01-01")
+  );
+  const [latestPurchaseDate, setLatestPurchaseDate] = useState(
+    dayjs("2024-04-26")
+  );
+
   useEffect(() => {
     (async () => {
       const result = await getFilters({ selectedFilters }).unwrap();
@@ -52,10 +71,15 @@ const PurchaseScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await allPurchases({ sortBy, selectedFilters }).unwrap();
+      const result = await allPurchases({
+        sortBy,
+        selectedFilters,
+        earliestPurchaseDate,
+        latestPurchaseDate,
+      }).unwrap();
       setPurchases(result.purchase);
     })();
-  }, [sortBy, selectedFilters]);
+  }, [sortBy, selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
 
   const handleSort = (field) => {
     setSortBy(field);
@@ -67,6 +91,27 @@ const PurchaseScreen = () => {
       ...selectedFilters,
       [column]: selected,
     }));
+  };
+
+  const handleDatePicker = (date, value) => {
+    // console.log(date);
+    // console.log(value);
+    // console.log(value.startDate);
+    // console.log(value.startDate._d);
+    setDateRange({ start: value.startDate._d, end: value.endDate._d });
+  };
+
+  const handleEarliestPurchaseDate = (value) => {
+    setEarlierstPurchaseDate(value);
+    if (value > latestPurchaseDate) {
+      setLatestPurchaseDate(value);
+    }
+  };
+  const handleLatestPurchaseDate = (value) => {
+    setLatestPurchaseDate(value);
+    if (value < earliestPurchaseDate) {
+      setEarlierstPurchaseDate(value);
+    }
   };
 
   return (
@@ -163,10 +208,47 @@ const PurchaseScreen = () => {
           style={{ width: 220 }}
           onChange={(event, values) => filterHandler(event, values, "brands")}
           renderInput={(params) => (
-            <TextField {...params} label="Types" placeholder="Search ..." />
+            <TextField {...params} label="Brands" placeholder="Search ..." />
           )}
         />
       </div>
+      <div
+        id="earliest-purchase-date-picker"
+        style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+          {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
+          <DatePicker
+            label="Earliest purchase date"
+            value={earliestPurchaseDate}
+            onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
+          />
+          {/* </DemoContainer> */}
+        </LocalizationProvider>
+      </div>
+      <div
+        id="latest-purchase-date-picker"
+        style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+          {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
+          <DatePicker
+            label="Latest purchase date"
+            value={latestPurchaseDate}
+            onChange={(newValue) => handleLatestPurchaseDate(newValue)}
+          />
+          {/* </DemoContainer> */}
+        </LocalizationProvider>
+      </div>
+      {/* <Form.Control style={{ width: "140px", height: "56px" }} type="date" /> */}
+      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={["DateRangePicker"]}>
+          <DateRangePicker
+            localeText={{ start: "Check-in", end: "Check-out" }}
+          />
+        </DemoContainer>
+      </LocalizationProvider> */}
+
       <Table striped bordered hover>
         <thead>
           <tr>
