@@ -58,15 +58,20 @@ const allPurchases = asyncHandler(async (req, res) => {
 // @access  Private
 const getFilters = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
+  const earliestPuchaseDate = req.body.earliestPurchaseDate;
+  const latestPurchaseDate = req.body.latestPurchaseDate;
   try {
     const filters = {};
     let result = await postgres.query(
-      `SELECT 
-          count(category) as count,
-          category as name
-      FROM product 
+      `
+      SELECT 
+        COUNT(DISTINCT image) as count,
+        category as name
+      FROM purchase 
+      JOIN product ON purchase.product_id=product.id  
       WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
+      AND purchase_time BETWEEN $5 AND $6
       GROUP BY 
         name
       ORDER BY name ASC
@@ -76,16 +81,20 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.types.length == 0,
         selectedFilters.brands,
         selectedFilters.brands.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
       ]
     );
     filters.categories = result.rows;
     result = await postgres.query(
       `SELECT 
-        count(type) as count,
+        COUNT(DISTINCT image) as count,
         type as name
-      FROM product 
-      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      FROM purchase 
+      JOIN product ON purchase.product_id=product.id  
+      WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
+      AND purchase_time BETWEEN $5 AND $6
       GROUP BY 
         name
       ORDER BY name ASC
@@ -95,16 +104,20 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.categories.length == 0,
         selectedFilters.brands,
         selectedFilters.brands.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
       ]
     );
     filters.types = result.rows;
     result = await postgres.query(
       `SELECT 
-        count(brand) as count,
+        COUNT(DISTINCT image) as count,
         brand as name
-      FROM product
-      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
-      AND ( type = ANY($3::VARCHAR[]) OR $4 )
+      FROM purchase 
+      JOIN product ON purchase.product_id=product.id  
+      WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
+      AND ( brand = ANY($3::VARCHAR[]) OR $4 )
+      AND purchase_time BETWEEN $5 AND $6
       GROUP BY 
         name
       ORDER BY name ASC
@@ -114,6 +127,8 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.categories.length == 0,
         selectedFilters.types,
         selectedFilters.types.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
       ]
     );
     filters.brands = result.rows;

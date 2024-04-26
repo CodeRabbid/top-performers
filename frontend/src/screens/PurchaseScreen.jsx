@@ -47,13 +47,8 @@ const PurchaseScreen = () => {
     brands: [],
   });
 
-  const [dateRange, setDateRange] = useState({
-    start: "2022-01-01T00:00:00.000Z",
-    end: "2024-04-24T00:00:00.000Z",
-  });
-
   const [earliestPurchaseDate, setEarlierstPurchaseDate] = useState(
-    dayjs("2022-01-01")
+    dayjs("2000-01-01")
   );
   const [latestPurchaseDate, setLatestPurchaseDate] = useState(
     dayjs("2024-04-26")
@@ -61,10 +56,14 @@ const PurchaseScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getFilters({ selectedFilters }).unwrap();
+      const result = await getFilters({
+        selectedFilters,
+        earliestPurchaseDate,
+        latestPurchaseDate,
+      }).unwrap();
       setFilters(result);
     })();
-  }, [selectedFilters]);
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
 
   useEffect(() => {
     (async () => {
