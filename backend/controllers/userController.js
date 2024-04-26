@@ -251,7 +251,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 const logoutUser = asyncHandler(async (req, res) => {
   const refresh_token = req.cookies?.refresh_token;
-  const auth_provider = req.headers.auth_provider;
 
   if (refresh_token) {
     if (req.headers.auth_provider == "google") {
@@ -264,8 +263,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     } else {
       const { _id } = jwtDecode(refresh_token);
       const user = await User.findById(_id);
-      user.refresh_token = undefined;
-      await user.save();
+      if (user) {
+        user.refresh_token = undefined;
+        await user.save();
+      }
     }
   }
 
