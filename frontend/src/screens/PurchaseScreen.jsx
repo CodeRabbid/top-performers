@@ -113,20 +113,24 @@ const PurchaseScreen = () => {
           options={filters.categories}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-              <span style={{ position: "absolute", right: "10px" }}>
-                {option.count}
-              </span>
-            </li>
-          )}
+          renderOption={(props, option, { selected }) => {
+            const { key, ...restProps } = props;
+            const prop = { ...restProps };
+            return (
+              <li {...restProps} key={key}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.name}
+                <span style={{ position: "absolute", right: "10px" }}>
+                  {option.count}
+                </span>
+              </li>
+            );
+          }}
           style={{ width: 220 }}
           onChange={(event, values) =>
             filterHandler(event, values, "categories")
@@ -149,20 +153,24 @@ const PurchaseScreen = () => {
           options={filters.types}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-              <span style={{ position: "absolute", right: "10px" }}>
-                {option.count}
-              </span>
-            </li>
-          )}
+          renderOption={(props, option, { selected }) => {
+            const { key, ...restProps } = props;
+            const prop = { ...restProps };
+            return (
+              <li {...restProps} key={key}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.name}
+                <span style={{ position: "absolute", right: "10px" }}>
+                  {option.count}
+                </span>
+              </li>
+            );
+          }}
           style={{ width: 220 }}
           onChange={(event, values) => filterHandler(event, values, "types")}
           renderInput={(params) => (
@@ -179,20 +187,24 @@ const PurchaseScreen = () => {
           options={filters.brands}
           disableCloseOnSelect
           getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-              <span style={{ position: "absolute", right: "10px" }}>
-                {option.count}
-              </span>
-            </li>
-          )}
+          renderOption={(props, option, { selected }) => {
+            const { key, ...restProps } = props;
+            const prop = { ...restProps };
+            return (
+              <li {...restProps} key={key}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {option.name}
+                <span style={{ position: "absolute", right: "10px" }}>
+                  {option.count}
+                </span>
+              </li>
+            );
+          }}
           style={{ width: 220 }}
           onChange={(event, values) => filterHandler(event, values, "brands")}
           renderInput={(params) => (
