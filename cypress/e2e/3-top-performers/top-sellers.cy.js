@@ -57,7 +57,6 @@ describe("purchases", () => {
   });
 
   it("filters earliest purchaae date", () => {
-    cy.visit("http://localhost:3000/purchases");
     cy.get("#earliest-purchase-date-picker").click();
     cy.get("#earliest-purchase-date-picker").type("01.02.2022");
     cy.get("table").should("not.include.text", "Ahnu");
@@ -65,7 +64,6 @@ describe("purchases", () => {
   });
 
   it("filters latest purchase date", () => {
-    cy.visit("http://localhost:3000/purchases");
     cy.get("#latest-purchase-date-picker").click();
     cy.get("#latest-purchase-date-picker").type("01.06.2022");
     cy.get("table").should("not.include.text", "adidas");
