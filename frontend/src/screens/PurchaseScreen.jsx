@@ -115,7 +115,6 @@ const PurchaseScreen = () => {
           getOptionLabel={(option) => option.name}
           renderOption={(props, option, { selected }) => {
             const { key, ...restProps } = props;
-            const prop = { ...restProps };
             return (
               <li {...restProps} key={key}>
                 <Checkbox
@@ -155,7 +154,6 @@ const PurchaseScreen = () => {
           getOptionLabel={(option) => option.name}
           renderOption={(props, option, { selected }) => {
             const { key, ...restProps } = props;
-            const prop = { ...restProps };
             return (
               <li {...restProps} key={key}>
                 <Checkbox
@@ -189,7 +187,6 @@ const PurchaseScreen = () => {
           getOptionLabel={(option) => option.name}
           renderOption={(props, option, { selected }) => {
             const { key, ...restProps } = props;
-            const prop = { ...restProps };
             return (
               <li {...restProps} key={key}>
                 <Checkbox
