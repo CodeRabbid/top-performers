@@ -15,15 +15,12 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
 
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import "dayjs/locale/de";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -91,14 +88,6 @@ const PurchaseScreen = () => {
       ...selectedFilters,
       [column]: selected,
     }));
-  };
-
-  const handleDatePicker = (date, value) => {
-    // console.log(date);
-    // console.log(value);
-    // console.log(value.startDate);
-    // console.log(value.startDate._d);
-    setDateRange({ start: value.startDate._d, end: value.endDate._d });
   };
 
   const handleEarliestPurchaseDate = (value) => {
@@ -217,13 +206,11 @@ const PurchaseScreen = () => {
         style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-          {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
           <DatePicker
             label="Earliest purchase date"
             value={earliestPurchaseDate}
             onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
           />
-          {/* </DemoContainer> */}
         </LocalizationProvider>
       </div>
       <div
@@ -231,23 +218,13 @@ const PurchaseScreen = () => {
         style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-          {/* <DemoContainer components={["DatePicker", "DatePicker"]}> */}
           <DatePicker
             label="Latest purchase date"
             value={latestPurchaseDate}
             onChange={(newValue) => handleLatestPurchaseDate(newValue)}
           />
-          {/* </DemoContainer> */}
         </LocalizationProvider>
       </div>
-      {/* <Form.Control style={{ width: "140px", height: "56px" }} type="date" /> */}
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={["DateRangePicker"]}>
-          <DateRangePicker
-            localeText={{ start: "Check-in", end: "Check-out" }}
-          />
-        </DemoContainer>
-      </LocalizationProvider> */}
 
       <Table striped bordered hover>
         <thead>
