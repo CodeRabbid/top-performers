@@ -150,8 +150,175 @@ const PurchaseScreen = () => {
   };
 
   return (
-    <Container>
-      <div style={{ width: "100%" }}>
+    <div style={{ width: "100%" }}>
+      <Container style={{ width: "100%", maxWidth: "100%" }}>
+        <div style={{ width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              p: 1,
+              m: 1,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+            }}
+          >
+            <div>
+              <div style={{ float: "left", margin: "0 5px 0 0" }}>
+                <Autocomplete
+                  multiple
+                  limitTags={1}
+                  id="categories-filter"
+                  isOptionEqualToValue={(option, value) =>
+                    option.name === value.name
+                  }
+                  options={filters.categories}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(props, option, { selected }) => {
+                    const { k, ...restProps } = props;
+                    const key = option.key;
+                    const prop = { ...restProps };
+                    return (
+                      <li {...props} key={option.name}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.name}
+                        <span style={{ position: "absolute", right: "10px" }}>
+                          {option.count}
+                        </span>
+                      </li>
+                    );
+                  }}
+                  renderTags={(tagValue, getTagProps) => {
+                    return tagValue.map((option, index) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={option.name}
+                        label={option.name}
+                      />
+                    ));
+                  }}
+                  style={{ width: 240 }}
+                  onChange={(event, values) =>
+                    filterHandler(event, values, "categories")
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Categories"
+                      placeholder="Search ..."
+                    />
+                  )}
+                />
+              </div>
+              <div style={{ float: "left", margin: "0 5px 0 0" }}>
+                <Autocomplete
+                  multiple
+                  limitTags={1}
+                  id="types-filter"
+                  isOptionEqualToValue={(option, value) =>
+                    option.name === value.name
+                  }
+                  options={filters.types}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(props, option, { selected }) => {
+                    const { key, ...restProps } = props;
+                    return (
+                      <li {...restProps} key={key}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.name}
+                        <span style={{ position: "absolute", right: "10px" }}>
+                          {option.count}
+                        </span>
+                      </li>
+                    );
+                  }}
+                  renderTags={(tagValue, getTagProps) => {
+                    return tagValue.map((option, index) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={option.name}
+                        label={option.name}
+                      />
+                    ));
+                  }}
+                  style={{ width: 240 }}
+                  onChange={(event, values) =>
+                    filterHandler(event, values, "types")
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Types"
+                      placeholder="Search ..."
+                    />
+                  )}
+                />
+              </div>
+              <div style={{ float: "left", margin: "0 5px 0 0" }}>
+                <Autocomplete
+                  multiple
+                  limitTags={1}
+                  id="brands-filter"
+                  isOptionEqualToValue={(option, value) =>
+                    option.name === value.name
+                  }
+                  options={filters.brands}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(props, option, { selected }) => {
+                    const { key, ...restProps } = props;
+                    return (
+                      <li {...restProps} key={key}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.name}
+                        <span style={{ position: "absolute", right: "10px" }}>
+                          {option.count}
+                        </span>
+                      </li>
+                    );
+                  }}
+                  renderTags={(tagValue, getTagProps) => {
+                    return tagValue.map((option, index) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={option.name}
+                        label={option.name}
+                      />
+                    ));
+                  }}
+                  style={{ width: 240 }}
+                  onChange={(event, values) =>
+                    filterHandler(event, values, "brands")
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Brands"
+                      placeholder="Search ..."
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </Box>
+        </div>
         <Box
           sx={{
             display: "flex",
@@ -162,206 +329,48 @@ const PurchaseScreen = () => {
             borderRadius: 1,
           }}
         >
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              limitTags={1}
-              id="categories-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.categories}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderOption={(props, option, { selected }) => {
-                const { k, ...restProps } = props;
-                const key = option.key;
-                const prop = { ...restProps };
-                return (
-                  <li {...props} key={option.name}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <Chip
-                    {...getTagProps({ index })}
-                    key={option.name}
-                    label={option.name}
-                  />
-                ));
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "categories")
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Categories"
-                  placeholder="Search ..."
-                />
-              )}
-            />
+          <div
+            id="earliest-purchase-date-picker"
+            style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+              <DatePicker
+                label="Earliest purchase date"
+                value={earliestPurchaseDate}
+                onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
+              />
+            </LocalizationProvider>
           </div>
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              limitTags={1}
-              id="types-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.types}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderOption={(props, option, { selected }) => {
-                const { key, ...restProps } = props;
-                return (
-                  <li {...restProps} key={key}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <Chip
-                    {...getTagProps({ index })}
-                    key={option.name}
-                    label={option.name}
-                  />
-                ));
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "types")
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Types" placeholder="Search ..." />
-              )}
-            />
-          </div>
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              limitTags={1}
-              id="brands-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.brands}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderOption={(props, option, { selected }) => {
-                const { key, ...restProps } = props;
-                return (
-                  <li {...restProps} key={key}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <Chip
-                    {...getTagProps({ index })}
-                    key={option.name}
-                    label={option.name}
-                  />
-                ));
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "brands")
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Brands"
-                  placeholder="Search ..."
-                />
-              )}
-            />
+          <div
+            id="latest-purchase-date-picker"
+            style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+              <DatePicker
+                label="Latest purchase date"
+                value={latestPurchaseDate}
+                onChange={(newValue) => handleLatestPurchaseDate(newValue)}
+              />
+            </LocalizationProvider>
           </div>
         </Box>
-      </div>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <div
-          id="earliest-purchase-date-picker"
-          style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            p: 1,
+            m: 1,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+            width: "100%",
+          }}
         >
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-            <DatePicker
-              label="Earliest purchase date"
-              value={earliestPurchaseDate}
-              onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
-            />
-          </LocalizationProvider>
-        </div>
-        <div
-          id="latest-purchase-date-picker"
-          style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
-        >
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-            <DatePicker
-              label="Latest purchase date"
-              value={latestPurchaseDate}
-              onChange={(newValue) => handleLatestPurchaseDate(newValue)}
-            />
-          </LocalizationProvider>
-        </div>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          p: 1,
-          m: 1,
-          bgcolor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <div id="table">
-          <DataGrid disableColumnFilter columns={columns} rows={purchases} />
-        </div>
-      </Box>
-    </Container>
+          <div id="table" style={{ width: "100%" }}>
+            <DataGrid disableColumnFilter columns={columns} rows={purchases} />
+          </div>
+        </Box>
+      </Container>
+    </div>
   );
 };
 
