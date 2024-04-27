@@ -116,8 +116,8 @@ const getFilters = asyncHandler(async (req, res) => {
         brand as name
       FROM purchase 
       JOIN product ON purchase.product_id=product.id  
-      WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
-      AND ( brand = ANY($3::VARCHAR[]) OR $4 )
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      AND ( type = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
       GROUP BY 
         name
