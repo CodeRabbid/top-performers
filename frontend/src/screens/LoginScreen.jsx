@@ -50,7 +50,7 @@ const LoginScreen = () => {
 
   const googleLoginHandler = useGoogleLogin({
     ux_mode: "redirect",
-    redirect_uri: "http://localhost:3000/login",
+    redirect_uri: import.meta.env.VITE_GOOGLE_LOGIN_REDIRECT_URI,
     flow: "auth-code",
   });
 
