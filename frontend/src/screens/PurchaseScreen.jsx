@@ -364,7 +364,7 @@ const PurchaseScreen = () => {
         }}
       >
         <div>
-          <DataGrid columns={columns} rows={purchases} />
+          <DataGrid disableColumnFilter columns={columns} rows={purchases} />
         </div>
       </Box>
     </Container>
