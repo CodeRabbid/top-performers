@@ -28,35 +28,35 @@ describe("purchases", () => {
   it("filters Boots", () => {
     cy.get("#categories-filter").click();
     cy.get("#categories-filter-option-0").click();
-    cy.get("table").should("include.text", "Boots");
-    cy.get("table").should("not.include.text", "Sandals");
+    cy.get("#table").should("include.text", "Boots");
+    cy.get("#table").should("not.include.text", "Sandals");
   });
 
   it("filters Ankle", () => {
     cy.get("#types-filter").click();
     cy.get("#types-filter-option-0").click();
-    cy.get("table").should("include.text", "Ankle");
-    cy.get("table").should("not.include.text", "Athletic");
+    cy.get("#table").should("include.text", "Ankle");
+    cy.get("#table").should("not.include.text", "Athletic");
   });
 
   it("filters adidas", () => {
     cy.get("#brands-filter").click();
     cy.get("#brands-filter-option-0").click();
-    cy.get("table").should("include.text", "adidas");
-    cy.get("table").should("not.include.text", "Ahnu");
+    cy.get("#table").should("include.text", "adidas");
+    cy.get("#table").should("not.include.text", "Ahnu");
   });
 
   it("filters earliest purchaae date", () => {
     cy.get("#earliest-purchase-date-picker").click();
     cy.get("#earliest-purchase-date-picker").type("01.02.2022");
-    cy.get("table").should("not.include.text", "Ahnu");
-    cy.get("table").should("include.text", "adidas");
+    cy.get("#table").should("not.include.text", "Ahnu");
+    cy.get("#table").should("include.text", "adidas");
   });
 
   it("filters latest purchase date", () => {
     cy.get("#latest-purchase-date-picker").click();
     cy.get("#latest-purchase-date-picker").type("01.06.2022");
-    cy.get("table").should("not.include.text", "adidas");
-    cy.get("table").should("include.text", "Ahnu");
+    cy.get("#table").should("not.include.text", "adidas");
+    cy.get("#table").should("include.text", "Ahnu");
   });
 });

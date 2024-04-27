@@ -5,7 +5,6 @@ import { client as postgres } from "../config/postgres.js";
 // @route   GET /api/purchase
 // @access  Private
 const allPurchases = asyncHandler(async (req, res) => {
-  const sortBy = req.body.sortBy;
   const filters = req.body.selectedFilters;
   const earliestPuchaseDate = req.body.earliestPurchaseDate;
   const latestPurchaseDate = req.body.latestPurchaseDate;
@@ -32,8 +31,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.type, 
       product.brand, 
       product.price, 
-      product.image
-    ORDER BY ${sortBy} DESC
+      product.image 
     LIMIT 20
     `,
       [

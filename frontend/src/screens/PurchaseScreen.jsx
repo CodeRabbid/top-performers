@@ -87,7 +87,6 @@ const PurchaseScreen = () => {
   const [allPurchases, { isLoading }] = useAllPurchasesMutation();
   const [getFilters] = useGetFiltersMutation();
 
-  const [sortBy, setSortBy] = useState("total_sales");
   const [filters, setFilters] = useState({
     categories: [],
     types: [],
@@ -121,18 +120,13 @@ const PurchaseScreen = () => {
   useEffect(() => {
     (async () => {
       const result = await allPurchases({
-        sortBy,
         selectedFilters,
         earliestPurchaseDate,
         latestPurchaseDate,
       }).unwrap();
       setPurchases(result.purchase);
     })();
-  }, [sortBy, selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
-
-  const handleSort = (field) => {
-    setSortBy(field);
-  };
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
 
   const filterHandler = (event, values, column) => {
     const selected = values.map((value) => value.name);
@@ -363,7 +357,7 @@ const PurchaseScreen = () => {
           borderRadius: 1,
         }}
       >
-        <div>
+        <div id="table">
           <DataGrid disableColumnFilter columns={columns} rows={purchases} />
         </div>
       </Box>
