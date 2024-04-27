@@ -25,6 +25,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -179,9 +180,11 @@ const PurchaseScreen = () => {
               disableCloseOnSelect
               getOptionLabel={(option) => option.name}
               renderOption={(props, option, { selected }) => {
-                const { key, ...restProps } = props;
+                const { k, ...restProps } = props;
+                const key = option.key;
+                const prop = { ...restProps };
                 return (
-                  <li {...restProps} key={key}>
+                  <li {...props} key={option.name}>
                     <Checkbox
                       icon={icon}
                       checkedIcon={checkedIcon}
@@ -194,6 +197,15 @@ const PurchaseScreen = () => {
                     </span>
                   </li>
                 );
+              }}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={option.name}
+                    label={option.name}
+                  />
+                ));
               }}
               style={{ width: 240 }}
               onChange={(event, values) =>
@@ -236,6 +248,15 @@ const PurchaseScreen = () => {
                   </li>
                 );
               }}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={option.name}
+                    label={option.name}
+                  />
+                ));
+              }}
               style={{ width: 240 }}
               onChange={(event, values) =>
                 filterHandler(event, values, "types")
@@ -272,6 +293,15 @@ const PurchaseScreen = () => {
                     </span>
                   </li>
                 );
+              }}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={option.name}
+                    label={option.name}
+                  />
+                ));
               }}
               style={{ width: 240 }}
               onChange={(event, values) =>
