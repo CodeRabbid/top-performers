@@ -9,7 +9,15 @@ function App() {
     <>
       <Header />
       <ToastContainer />
-      <Container className="m-0" style={{ width: "120%", maxWidth: "100%" }}>
+      <Container
+        // className="m-0"
+        style={{
+          width: "100%",
+          minWidth: "320px",
+          maxWidth: "880px",
+          marginLeft: "auto",
+        }}
+      >
         <Outlet />
       </Container>
     </>
