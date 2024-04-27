@@ -13,6 +13,7 @@ const allPurchases = asyncHandler(async (req, res) => {
     const result = await postgres.query(
       `
     SELECT 
+      row_number() OVER () as id,
       COUNT(product.image) as items_sold, 
 	    SUM(product.price) as total_sales,
       product.category as category, 

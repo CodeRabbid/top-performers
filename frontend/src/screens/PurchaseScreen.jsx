@@ -20,8 +20,60 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
+import { DataGrid } from "@mui/x-data-grid";
+
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 import "dayjs/locale/de";
+
+const columns = [
+  {
+    field: "category",
+    headerName: "Category",
+    editable: true,
+  },
+  {
+    field: "type",
+    headerName: "Type",
+    editable: true,
+  },
+  {
+    field: "brand",
+    headerName: "Brand",
+    editable: true,
+  },
+  {
+    field: "image",
+    headerName: "Image",
+    editable: true,
+  },
+  {
+    field: "price",
+    headerName: "Price",
+    editable: true,
+  },
+  {
+    field: "items_sold",
+    headerName: "Items Sold",
+    editable: true,
+  },
+  {
+    field: "total_sales",
+    headerName: "Total Sales",
+    editable: true,
+  },
+];
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -29,7 +81,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const PurchaseScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  const [purchases, setPurchases] = useState();
+  const [purchases, setPurchases] = useState([]);
 
   const [allPurchases, { isLoading }] = useAllPurchasesMutation();
   const [getFilters] = useGetFiltersMutation();
@@ -104,182 +156,187 @@ const PurchaseScreen = () => {
 
   return (
     <Container>
-      <div style={{ float: "left", margin: "0 5px 0 0" }}>
-        <Autocomplete
-          multiple
-          limitTags={1}
-          id="categories-filter"
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          options={filters.categories}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => {
-            const { key, ...restProps } = props;
-            return (
-              <li {...restProps} key={key}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.name}
-                <span style={{ position: "absolute", right: "10px" }}>
-                  {option.count}
-                </span>
-              </li>
-            );
+      <div style={{ width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            p: 1,
+            m: 1,
+            bgcolor: "background.paper",
+            borderRadius: 1,
           }}
-          style={{ width: 220 }}
-          onChange={(event, values) =>
-            filterHandler(event, values, "categories")
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Categories"
-              placeholder="Search ..."
+        >
+          <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <Autocomplete
+              multiple
+              limitTags={1}
+              id="categories-filter"
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              options={filters.categories}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...restProps } = props;
+                return (
+                  <li {...restProps} key={key}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                    <span style={{ position: "absolute", right: "10px" }}>
+                      {option.count}
+                    </span>
+                  </li>
+                );
+              }}
+              style={{ width: 240 }}
+              onChange={(event, values) =>
+                filterHandler(event, values, "categories")
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Categories"
+                  placeholder="Search ..."
+                />
+              )}
             />
-          )}
-        />
-      </div>
-      <div style={{ float: "left", margin: "0 5px 0 0" }}>
-        <Autocomplete
-          multiple
-          limitTags={1}
-          id="types-filter"
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          options={filters.types}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => {
-            const { key, ...restProps } = props;
-            return (
-              <li {...restProps} key={key}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
+          </div>
+          <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <Autocomplete
+              multiple
+              limitTags={1}
+              id="types-filter"
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              options={filters.types}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...restProps } = props;
+                return (
+                  <li {...restProps} key={key}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                    <span style={{ position: "absolute", right: "10px" }}>
+                      {option.count}
+                    </span>
+                  </li>
+                );
+              }}
+              style={{ width: 240 }}
+              onChange={(event, values) =>
+                filterHandler(event, values, "types")
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Types" placeholder="Search ..." />
+              )}
+            />
+          </div>
+          <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <Autocomplete
+              multiple
+              limitTags={1}
+              id="brands-filter"
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              options={filters.brands}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...restProps } = props;
+                return (
+                  <li {...restProps} key={key}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                    <span style={{ position: "absolute", right: "10px" }}>
+                      {option.count}
+                    </span>
+                  </li>
+                );
+              }}
+              style={{ width: 240 }}
+              onChange={(event, values) =>
+                filterHandler(event, values, "brands")
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Brands"
+                  placeholder="Search ..."
                 />
-                {option.name}
-                <span style={{ position: "absolute", right: "10px" }}>
-                  {option.count}
-                </span>
-              </li>
-            );
-          }}
-          style={{ width: 220 }}
-          onChange={(event, values) => filterHandler(event, values, "types")}
-          renderInput={(params) => (
-            <TextField {...params} label="Types" placeholder="Search ..." />
-          )}
-        />
+              )}
+            />
+          </div>
+        </Box>
       </div>
-      <div style={{ float: "left", margin: "0 5px 0 0" }}>
-        <Autocomplete
-          multiple
-          limitTags={1}
-          id="brands-filter"
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          options={filters.brands}
-          disableCloseOnSelect
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option, { selected }) => {
-            const { key, ...restProps } = props;
-            return (
-              <li {...restProps} key={key}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                  checked={selected}
-                />
-                {option.name}
-                <span style={{ position: "absolute", right: "10px" }}>
-                  {option.count}
-                </span>
-              </li>
-            );
-          }}
-          style={{ width: 220 }}
-          onChange={(event, values) => filterHandler(event, values, "brands")}
-          renderInput={(params) => (
-            <TextField {...params} label="Brands" placeholder="Search ..." />
-          )}
-        />
-      </div>
-      <div
-        id="earliest-purchase-date-picker"
-        style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-          <DatePicker
-            label="Earliest purchase date"
-            value={earliestPurchaseDate}
-            onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
-          />
-        </LocalizationProvider>
-      </div>
-      <div
-        id="latest-purchase-date-picker"
-        style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+        <div
+          id="earliest-purchase-date-picker"
+          style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+            <DatePicker
+              label="Earliest purchase date"
+              value={earliestPurchaseDate}
+              onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
+            />
+          </LocalizationProvider>
+        </div>
+        <div
+          id="latest-purchase-date-picker"
+          style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
+            <DatePicker
+              label="Latest purchase date"
+              value={latestPurchaseDate}
+              onChange={(newValue) => handleLatestPurchaseDate(newValue)}
+            />
+          </LocalizationProvider>
+        </div>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          p: 1,
+          m: 1,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
-          <DatePicker
-            label="Latest purchase date"
-            value={latestPurchaseDate}
-            onChange={(newValue) => handleLatestPurchaseDate(newValue)}
-          />
-        </LocalizationProvider>
-      </div>
-
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Brand</th>
-            <th>Price</th>
-            <th>Product</th>
-            <th>
-              Items Sold
-              <button
-                id="items_sold_sort"
-                onClick={() => handleSort("items_sold")}
-              >
-                &#9660;
-              </button>
-            </th>
-            <th>
-              Total Sales{" "}
-              <button
-                id="total_sales_sort"
-                onClick={() => handleSort("total_sales")}
-              >
-                &#9660;
-              </button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {purchases ? (
-            purchases.map((purchase, index) => (
-              <tr key={index} id={"row_" + index}>
-                <td>{purchase.category}</td>
-                <td>{purchase.type}</td>
-                <td>{purchase.brand}</td>
-                <td>{purchase.price}</td>
-                <td>{purchase.image}</td>
-                <td>{purchase.items_sold}</td>
-                <td>{purchase.total_sales}</td>
-              </tr>
-            ))
-          ) : (
-            <></>
-          )}
-        </tbody>
-      </Table>
+        <div>
+          <DataGrid columns={columns} rows={purchases} />
+        </div>
+      </Box>
     </Container>
   );
 };
