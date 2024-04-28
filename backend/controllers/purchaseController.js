@@ -19,7 +19,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.type as type, 
       product.brand as brand, 
       product.price as price,
-	    product.image as image, 
+	    product.model as model, 
       product.image_url as image_url
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
@@ -31,6 +31,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.category, 
       product.type, 
       product.brand, 
+      product.model, 
       product.price, 
       product.image,
       product.image_url

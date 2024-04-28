@@ -62,8 +62,8 @@ const columns = [
     editable: true,
   },
   {
-    field: "image",
-    headerName: "Image",
+    field: "model",
+    headerName: "Model",
     editable: true,
   },
   {
