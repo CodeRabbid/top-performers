@@ -13,7 +13,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       `
     SELECT 
       row_number() OVER () as id,
-      COUNT(product.image) as items_sold, 
+      COUNT(product.image)::INT as items_sold, 
 	    SUM(product.price) as total_sales,
       product.category as category, 
       product.type as type, 

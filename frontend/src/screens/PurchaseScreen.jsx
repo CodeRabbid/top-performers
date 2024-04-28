@@ -27,6 +27,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
+import "dayjs/locale/de";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -35,8 +36,6 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-
-import "dayjs/locale/de";
 
 const columns = [
   {
@@ -133,6 +132,7 @@ const PurchaseScreen = () => {
         latestPurchaseDate,
       }).unwrap();
       setPurchases(result.purchase);
+      console.log(result.purchase);
     })();
   }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
 
