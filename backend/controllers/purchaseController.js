@@ -19,7 +19,8 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.type as type, 
       product.brand as brand, 
       product.price as price,
-	    product.image as image 
+	    product.image as image, 
+      product.image_url as image_url
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
     WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
@@ -31,7 +32,8 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.type, 
       product.brand, 
       product.price, 
-      product.image 
+      product.image,
+      product.image_url
     LIMIT 20
     `,
       [

@@ -44,11 +44,11 @@ try {
 
   await client.query(
     `INSERT INTO product
-      (category, type, brand, price, image)
+      (category, type, brand, price, image, image_url)
     VALUES
-      ('Boots', 'Ankle', 'Ahnu', 39.99, '7688415.411.jpg'),
-      ('Boots', 'Ankle', 'Aetrex', 59.99, '7965307.5291.jpg'),
-      ('Sandals', 'Athletic', 'adidas', 89.99, '115220.151.jpg')`
+      ('Boots', 'Ankle', 'Ahnu', 39.99, '7688415.411.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714159056/7688415.411.jpg'),
+      ('Boots', 'Ankle', 'Aetrex', 59.99, '7965307.5291.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714158832/7965307.5291.jpg'),
+      ('Sandals', 'Athletic', 'adidas', 89.99, '115220.151.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714248606/115220.151.jpg')`
   );
 
   await client.query(

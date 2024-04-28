@@ -40,6 +40,14 @@ import "dayjs/locale/de";
 
 const columns = [
   {
+    field: "image_url",
+    headerName: "",
+    editable: true,
+    renderCell: (params) => (
+      <img src={params.value} style={{ maxHeight: "46px" }} />
+    ),
+  },
+  {
     field: "category",
     headerName: "Category",
     editable: true,
