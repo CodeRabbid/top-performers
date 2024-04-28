@@ -26,7 +26,7 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
-import Grid from "@mui/material/Grid";
+import Slider from "@mui/material/Slider";
 import "dayjs/locale/de";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -113,16 +113,21 @@ const PurchaseScreen = () => {
     dayjs("2024-04-26")
   );
 
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [priceRangeRange, setPriceRangeRange] = useState([18, 99]);
+
   useEffect(() => {
     (async () => {
       const result = await getFilters({
         selectedFilters,
         earliestPurchaseDate,
         latestPurchaseDate,
+        priceRange,
       }).unwrap();
       setFilters(result);
+      setPriceRangeRange(result.price_range);
     })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
 
   useEffect(() => {
     (async () => {
@@ -130,11 +135,11 @@ const PurchaseScreen = () => {
         selectedFilters,
         earliestPurchaseDate,
         latestPurchaseDate,
+        priceRange,
       }).unwrap();
       setPurchases(result.purchase);
-      console.log(result.purchase);
     })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
 
   const filterHandler = (event, values, column) => {
     const selected = values.map((value) => value.name);
@@ -145,16 +150,20 @@ const PurchaseScreen = () => {
   };
 
   const handleEarliestPurchaseDate = (value) => {
+    if (value > latestPurchaseDate) setLatestPurchaseDate(value);
     setEarlierstPurchaseDate(value);
-    if (value > latestPurchaseDate) {
-      setLatestPurchaseDate(value);
-    }
   };
   const handleLatestPurchaseDate = (value) => {
+    if (value < earliestPurchaseDate) setEarlierstPurchaseDate(value);
     setLatestPurchaseDate(value);
-    if (value < earliestPurchaseDate) {
-      setEarlierstPurchaseDate(value);
-    }
+  };
+
+  function valuetext(value) {
+    return `${value}°C`;
+  }
+
+  const handlePriceRange = (event, newPriceRange) => {
+    setPriceRange(newPriceRange);
   };
 
   return (
@@ -351,7 +360,7 @@ const PurchaseScreen = () => {
           </div>
           <div
             id="latest-purchase-date-picker"
-            style={{ width: "220px", float: "left", margin: "0 5px 0 0" }}
+            style={{ width: "220px", float: "left", margin: "0 15px 0 0" }}
           >
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
               <DatePicker
@@ -360,6 +369,21 @@ const PurchaseScreen = () => {
                 onChange={(newValue) => handleLatestPurchaseDate(newValue)}
               />
             </LocalizationProvider>
+          </div>
+          <div
+            id="price-range-slider"
+            style={{ width: "220px", float: "left", margin: "0px 5px 0 0" }}
+          >
+            <div>Price Range</div>
+            <Slider
+              min={priceRangeRange[0]}
+              max={priceRangeRange[1]}
+              getAriaLabel={() => "Temperature range"}
+              value={priceRange}
+              onChange={handlePriceRange}
+              valueLabelDisplay="auto"
+              getAriaValueText={valuetext}
+            />
           </div>
         </Box>
         <Box
@@ -373,8 +397,13 @@ const PurchaseScreen = () => {
             width: "100%",
           }}
         >
-          <div id="table" style={{ width: "100%" }}>
-            <DataGrid disableColumnFilter columns={columns} rows={purchases} />
+          <div id="table" style={{ width: "100%", height: 450 }}>
+            <DataGrid
+              loading={isLoading}
+              disableColumnFilter
+              columns={columns}
+              rows={purchases}
+            />
           </div>
         </Box>
       </Container>

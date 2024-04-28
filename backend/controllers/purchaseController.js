@@ -8,6 +8,7 @@ const allPurchases = asyncHandler(async (req, res) => {
   const filters = req.body.selectedFilters;
   const earliestPuchaseDate = req.body.earliestPurchaseDate;
   const latestPurchaseDate = req.body.latestPurchaseDate;
+  const priceRange = req.body.priceRange;
   try {
     const result = await postgres.query(
       `
@@ -27,6 +28,7 @@ const allPurchases = asyncHandler(async (req, res) => {
     AND ( type = ANY($3::VARCHAR[]) OR $4 )
     AND ( brand = ANY($5::VARCHAR[]) OR $6 )
     AND purchase_time BETWEEN $7 AND $8
+    AND price BETWEEN $9 AND $10
     GROUP BY 
       product.category, 
       product.type, 
@@ -35,7 +37,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.price, 
       product.image,
       product.image_url
-    LIMIT 20
+    -- LIMIT 20
     `,
       [
         filters.categories,
@@ -46,9 +48,11 @@ const allPurchases = asyncHandler(async (req, res) => {
         filters.brands.length == 0,
         earliestPuchaseDate,
         latestPurchaseDate,
+        priceRange[0],
+        priceRange[1],
       ]
     );
-    // console.log(result.rows);
+    console.log(result.rows);
     res.json({ purchase: result.rows });
   } catch (err) {
     console.log(err);
@@ -62,6 +66,7 @@ const getFilters = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
   const earliestPuchaseDate = req.body.earliestPurchaseDate;
   const latestPurchaseDate = req.body.latestPurchaseDate;
+  const priceRange = req.body.priceRange;
   try {
     const filters = {};
     let result = await postgres.query(
@@ -74,6 +79,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
+      AND price BETWEEN $7 AND $8
       GROUP BY 
         name
       ORDER BY name ASC
@@ -85,9 +91,12 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.brands.length == 0,
         earliestPuchaseDate,
         latestPurchaseDate,
+        priceRange[0],
+        priceRange[1],
       ]
     );
     filters.categories = result.rows;
+
     result = await postgres.query(
       `SELECT 
         COUNT(DISTINCT image) as count,
@@ -97,6 +106,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
+      AND price BETWEEN $7 AND $8
       GROUP BY 
         name
       ORDER BY name ASC
@@ -108,9 +118,12 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.brands.length == 0,
         earliestPuchaseDate,
         latestPurchaseDate,
+        priceRange[0],
+        priceRange[1],
       ]
     );
     filters.types = result.rows;
+
     result = await postgres.query(
       `SELECT 
         COUNT(DISTINCT image) as count,
@@ -120,6 +133,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
       AND ( type = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
+      AND price BETWEEN $7 AND $8
       GROUP BY 
         name
       ORDER BY name ASC
@@ -131,9 +145,35 @@ const getFilters = asyncHandler(async (req, res) => {
         selectedFilters.types.length == 0,
         earliestPuchaseDate,
         latestPurchaseDate,
+        priceRange[0],
+        priceRange[1],
       ]
     );
     filters.brands = result.rows;
+
+    result = await postgres.query(
+      `SELECT 
+        MIN(price) as min_price,
+        MAX(price) as max_price
+      FROM purchase 
+      JOIN product ON purchase.product_id=product.id  
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      AND ( type = ANY($3::VARCHAR[]) OR $4 )
+      AND ( brand = ANY($5::VARCHAR[]) OR $6 )
+      AND purchase_time BETWEEN $7 AND $8
+      `,
+      [
+        selectedFilters.categories,
+        selectedFilters.categories.length == 0,
+        selectedFilters.types,
+        selectedFilters.types.length == 0,
+        selectedFilters.brands,
+        selectedFilters.brands.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
+      ]
+    );
+    filters.price_range = [result.rows[0].min_price, result.rows[0].max_price];
 
     res.json(filters);
   } catch (err) {
