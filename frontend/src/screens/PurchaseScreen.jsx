@@ -159,26 +159,9 @@ const PurchaseScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await allPurchases({
-        selectedFilters,
-        earliestPurchaseDate,
-        latestPurchaseDate,
-        priceRange,
-        sortModel,
-        paginationModel,
-      }).unwrap();
-      setPurchases(result.purchase);
-      setMaxcount(result.count);
-      console.log(result);
+      await fetchItems();
     })();
-  }, [
-    selectedFilters,
-    earliestPurchaseDate,
-    latestPurchaseDate,
-    priceRange,
-    sortModel,
-    paginationModel,
-  ]);
+  }, []);
 
   const filterHandler = (event, values, column) => {
     const selected = values.map((value) => value.name);
@@ -203,6 +186,23 @@ const PurchaseScreen = () => {
 
   const handlePriceRange = (event, newPriceRange) => {
     setPriceRange(newPriceRange);
+  };
+
+  const fetchItems = async () => {
+    const result = await allPurchases({
+      selectedFilters,
+      earliestPurchaseDate,
+      latestPurchaseDate,
+      priceRange,
+      sortModel,
+      paginationModel,
+    }).unwrap();
+    setPurchases(result.purchase);
+    setMaxcount(result.count);
+  };
+
+  const handleApply = async () => {
+    await fetchItems();
   };
 
   return (
@@ -411,7 +411,12 @@ const PurchaseScreen = () => {
           </div>
           <div
             id="price-range-slider"
-            style={{ width: "220px", float: "left", margin: "0px 5px 0 10px" }}
+            style={{
+              maxWidth: "200px",
+              minWidth: "150px",
+              float: "left",
+              margin: "0px 25px 0 10px",
+            }}
           >
             <div>Price Range</div>
             <Slider
@@ -421,8 +426,18 @@ const PurchaseScreen = () => {
               value={priceRange}
               onChange={handlePriceRange}
               valueLabelDisplay="auto"
-              getAriaValueText={valuetext}
+              // getAriaValueText={valuetext}
             />
+          </div>
+          <div>
+            <Button
+              id="apply"
+              style={{ height: 56, width: 100 }}
+              variant="contained"
+              onClick={handleApply}
+            >
+              Apply
+            </Button>
           </div>
         </Box>
         <Box

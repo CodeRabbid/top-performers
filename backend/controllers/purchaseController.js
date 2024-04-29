@@ -14,7 +14,6 @@ const allPurchases = asyncHandler(async (req, res) => {
   const sorting = sortModel.length
     ? `ORDER BY ${sortModel[0].field} ${sortModel[0].sort}`
     : "";
-  console.log(priceRange.length);
   try {
     const result = await postgres.query(
       `
@@ -68,7 +67,7 @@ const allPurchases = asyncHandler(async (req, res) => {
     const count_result = await postgres.query(
       `
     SELECT 
-      COUNT(DISTINCT image) as count
+      COUNT(DISTINCT image)::INT as count
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
     WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
@@ -91,7 +90,6 @@ const allPurchases = asyncHandler(async (req, res) => {
         priceRange.length == 0,
       ]
     );
-    console.log(count_result.rows);
 
     res.json({ purchase: result.rows, count: count_result.rows[0].count });
   } catch (err) {

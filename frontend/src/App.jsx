@@ -10,7 +10,6 @@ function App() {
       <Header />
       <ToastContainer />
       <Container
-        // className="m-0"
         style={{
           width: "100%",
           minWidth: "320px",

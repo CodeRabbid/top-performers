@@ -41,9 +41,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         plugin_name="Memories App"
         cookiepolicy="single_host_origin"
       >
-        <React.StrictMode>
-          <RouterProvider router={router} />
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <RouterProvider router={router} />
+        {/* </React.StrictMode>  */}
       </GoogleOAuthProvider>
     </AuthProvider>
   </Provider>

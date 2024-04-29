@@ -1,7 +1,6 @@
 import "./Header.css";
-import { Navbar, Nav, Container, Dropdown, Button } from "react-bootstrap";
-import { LinkContainer, Link } from "react-router-bootstrap";
-import { FaSignOutAlt, FaSignInAlt, FaCashRegister } from "react-icons/fa";
+import { Nav, Dropdown } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/api/authApiSlice";
@@ -30,7 +29,7 @@ const Header = () => {
       <div className="headerContainer">
         <div className="headerInnerContainer">
           <div className="logo">
-            <LinkContainer to="/">
+            <LinkContainer to="/register">
               <Nav.Link id="logo">Top Performers</Nav.Link>
             </LinkContainer>
           </div>
