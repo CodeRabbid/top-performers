@@ -25,8 +25,6 @@ const TopSellersFilters = ({
   setEarlierstPurchaseDate,
   latestPurchaseDate,
   setLatestPurchaseDate,
-  priceRangeRange,
-  setPriceRangeRange,
   priceRange,
   setPriceRange,
   handleApply,
@@ -37,6 +35,7 @@ const TopSellersFilters = ({
     categories: [],
     types: [],
     brands: [],
+    price_bounds: [],
   });
 
   const [getFilters] = useGetFiltersMutation();
@@ -50,8 +49,7 @@ const TopSellersFilters = ({
         priceRange,
       }).unwrap();
       setFilters(result);
-      setPriceRangeRange(result.price_range);
-      setPriceRange(result.price_range);
+      setPriceRange(result.price_bounds);
     })();
   }, []);
 
@@ -64,7 +62,6 @@ const TopSellersFilters = ({
         priceRange,
       }).unwrap();
       setFilters(result);
-      setPriceRangeRange(result.price_range);
     })();
   }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
 
@@ -304,8 +301,8 @@ const TopSellersFilters = ({
         >
           <div>Price Range</div>
           <Slider
-            min={priceRangeRange[0]}
-            max={priceRangeRange[1]}
+            min={filters.price_bounds[0]}
+            max={filters.price_bounds[1]}
             getAriaLabel={() => "Temperature range"}
             value={priceRange}
             onChange={handlePriceRange}

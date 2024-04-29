@@ -86,7 +86,6 @@ const PurchaseScreen = () => {
   const [maxCount, setMaxcount] = useState(0);
 
   const [priceRange, setPriceRange] = useState([]);
-  const [priceRangeRange, setPriceRangeRange] = useState([18, 99]);
   const [sortModel, setSortModel] = useState([
     {
       field: "items_sold",
@@ -130,8 +129,6 @@ const PurchaseScreen = () => {
           setEarlierstPurchaseDate={setEarlierstPurchaseDate}
           latestPurchaseDate={latestPurchaseDate}
           setLatestPurchaseDate={setLatestPurchaseDate}
-          priceRangeRange={priceRangeRange}
-          setPriceRangeRange={setPriceRangeRange}
           priceRange={priceRange}
           setPriceRange={setPriceRange}
           handleApply={handleApply}

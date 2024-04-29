@@ -211,7 +211,7 @@ const getFilters = asyncHandler(async (req, res) => {
         latestPurchaseDate,
       ]
     );
-    filters.price_range = [result.rows[0].min_price, result.rows[0].max_price];
+    filters.price_bounds = [result.rows[0].min_price, result.rows[0].max_price];
 
     res.json(filters);
   } catch (err) {
