@@ -25,8 +25,6 @@ const TopSellersFilters = ({
   setEarlierstPurchaseDate,
   latestPurchaseDate,
   setLatestPurchaseDate,
-  priceRange,
-  setPriceRange,
   handleApply,
   selectedFilters,
   setSelectedFilters,
@@ -46,10 +44,8 @@ const TopSellersFilters = ({
         selectedFilters,
         earliestPurchaseDate,
         latestPurchaseDate,
-        priceRange,
       }).unwrap();
       setFilters(result);
-      setPriceRange(result.price_bounds);
       setSelectedFilters({
         ...selectedFilters,
         price_range: result.price_bounds,
@@ -63,11 +59,10 @@ const TopSellersFilters = ({
         selectedFilters,
         earliestPurchaseDate,
         latestPurchaseDate,
-        priceRange,
       }).unwrap();
       setFilters(result);
     })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
 
   const handleEarliestPurchaseDate = (value) => {
     if (value > latestPurchaseDate) setLatestPurchaseDate(value);
@@ -88,7 +83,6 @@ const TopSellersFilters = ({
   };
 
   const handlePriceRange = (event, newPriceRange) => {
-    setPriceRange(newPriceRange);
     setSelectedFilters({ ...selectedFilters, price_range: newPriceRange });
   };
 
