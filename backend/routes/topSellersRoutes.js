@@ -1,6 +1,6 @@
 import express from "express";
-import { allPurchases } from "../controllers/purchaseController.js";
-import { getFilters } from "../controllers/purchaseController.js";
+import { allPurchases } from "../controllers/topSellersController.js";
+import { getFilters } from "../controllers/topSellersController.js";
 
 const router = express.Router();
 
