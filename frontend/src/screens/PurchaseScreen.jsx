@@ -75,14 +75,9 @@ const PurchaseScreen = () => {
     types: [],
     brands: [],
     price_range: [],
+    earliest_purchase_date: dayjs("2000-01-01"),
+    latest_purchase_date: dayjs("2024-04-26"),
   });
-
-  const [earliestPurchaseDate, setEarlierstPurchaseDate] = useState(
-    dayjs("2000-01-01")
-  );
-  const [latestPurchaseDate, setLatestPurchaseDate] = useState(
-    dayjs("2024-04-26")
-  );
 
   const [maxCount, setMaxcount] = useState(0);
 
@@ -108,8 +103,6 @@ const PurchaseScreen = () => {
   const fetchItems = async () => {
     const result = await allPurchases({
       selectedFilters,
-      earliestPurchaseDate,
-      latestPurchaseDate,
       priceRange,
       sortModel,
       paginationModel,
@@ -126,10 +119,6 @@ const PurchaseScreen = () => {
     <div style={{ width: "100%" }}>
       <Container style={{ width: "100%", maxWidth: "100%" }}>
         <TopSellersFilters
-          earliestPurchaseDate={earliestPurchaseDate}
-          setEarlierstPurchaseDate={setEarlierstPurchaseDate}
-          latestPurchaseDate={latestPurchaseDate}
-          setLatestPurchaseDate={setLatestPurchaseDate}
           priceRange={priceRange}
           setPriceRange={setPriceRange}
           handleApply={handleApply}

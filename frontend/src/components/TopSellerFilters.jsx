@@ -21,10 +21,6 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const TopSellersFilters = ({
-  earliestPurchaseDate,
-  setEarlierstPurchaseDate,
-  latestPurchaseDate,
-  setLatestPurchaseDate,
   handleApply,
   selectedFilters,
   setSelectedFilters,
@@ -42,8 +38,6 @@ const TopSellersFilters = ({
     (async () => {
       const result = await getFilters({
         selectedFilters,
-        earliestPurchaseDate,
-        latestPurchaseDate,
       }).unwrap();
       setFilters(result);
       setSelectedFilters({
@@ -57,21 +51,31 @@ const TopSellersFilters = ({
     (async () => {
       const result = await getFilters({
         selectedFilters,
-        earliestPurchaseDate,
-        latestPurchaseDate,
       }).unwrap();
       setFilters(result);
     })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate]);
+  }, [selectedFilters]);
 
   const handleEarliestPurchaseDate = (value) => {
-    if (value > latestPurchaseDate) setLatestPurchaseDate(value);
-    setEarlierstPurchaseDate(value);
+    setSelectedFilters({
+      ...selectedFilters,
+      earliest_purchase_date: value,
+      latest_purchase_date:
+        value > selectedFilters.latest_purchase_date
+          ? value
+          : selectedFilters.latest_purchase_date,
+    });
   };
 
   const handleLatestPurchaseDate = (value) => {
-    if (value < earliestPurchaseDate) setEarlierstPurchaseDate(value);
-    setLatestPurchaseDate(value);
+    setSelectedFilters({
+      ...selectedFilters,
+      earliest_purchase_date:
+        value < selectedFilters.earliest_purchase_date
+          ? value
+          : selectedFilters.earliest_purchase_date,
+      latest_purchase_date: value,
+    });
   };
 
   const filterHandler = (event, values, column) => {
@@ -272,7 +276,7 @@ const TopSellersFilters = ({
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
             <DatePicker
               label="Earliest purchase date"
-              value={earliestPurchaseDate}
+              value={selectedFilters.earliest_purchase_date}
               onChange={(newValue) => handleEarliestPurchaseDate(newValue)}
             />
           </LocalizationProvider>
@@ -284,7 +288,7 @@ const TopSellersFilters = ({
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
             <DatePicker
               label="Latest purchase date"
-              value={latestPurchaseDate}
+              value={selectedFilters.latest_purchase_date}
               onChange={(newValue) => handleLatestPurchaseDate(newValue)}
             />
           </LocalizationProvider>

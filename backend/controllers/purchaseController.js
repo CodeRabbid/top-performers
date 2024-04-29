@@ -6,10 +6,9 @@ import { client as postgres } from "../config/postgres.js";
 // @access  Private
 const allPurchases = asyncHandler(async (req, res) => {
   const filters = req.body.selectedFilters;
-  const earliestPuchaseDate = req.body.earliestPurchaseDate;
-  const latestPurchaseDate = req.body.latestPurchaseDate;
+  const earliestPuchaseDate = req.body.selectedFilters.earliest_purchase_date;
+  const latestPurchaseDate = req.body.selectedFilters.latest_purchase_date;
   const priceRange = req.body.selectedFilters.price_range;
-  console.log(priceRange);
   const paginationModel = req.body.paginationModel;
   const sortModel = req.body.sortModel;
   const sorting = sortModel.length
@@ -103,8 +102,8 @@ const allPurchases = asyncHandler(async (req, res) => {
 // @access  Private
 const getFilters = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
-  const earliestPuchaseDate = req.body.earliestPurchaseDate;
-  const latestPurchaseDate = req.body.latestPurchaseDate;
+  const earliestPuchaseDate = req.body.selectedFilters.earliest_purchase_date;
+  const latestPurchaseDate = req.body.selectedFilters.latest_purchase_date;
   const priceRange = req.body.selectedFilters.price_range;
   try {
     const filters = {};
