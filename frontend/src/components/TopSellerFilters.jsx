@@ -11,6 +11,10 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Slider from "@mui/material/Slider";
 import Checkbox from "@mui/material/Checkbox";
+import {
+  useAllPurchasesMutation,
+  useGetFiltersMutation,
+} from "../slices/api/purchaseApiSlice.js";
 import dayjs from "dayjs";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -21,8 +25,6 @@ const TopSellersFilters = ({
   setEarlierstPurchaseDate,
   latestPurchaseDate,
   setLatestPurchaseDate,
-  filters,
-  setFilters,
   priceRangeRange,
   setPriceRangeRange,
   priceRange,
@@ -31,6 +33,41 @@ const TopSellersFilters = ({
   selectedFilters,
   setSelectedFilters,
 }) => {
+  const [filters, setFilters] = useState({
+    categories: [],
+    types: [],
+    brands: [],
+  });
+
+  const [getFilters] = useGetFiltersMutation();
+
+  useEffect(() => {
+    (async () => {
+      const result = await getFilters({
+        selectedFilters,
+        earliestPurchaseDate,
+        latestPurchaseDate,
+        priceRange,
+      }).unwrap();
+      setFilters(result);
+      setPriceRangeRange(result.price_range);
+      setPriceRange(result.price_range);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const result = await getFilters({
+        selectedFilters,
+        earliestPurchaseDate,
+        latestPurchaseDate,
+        priceRange,
+      }).unwrap();
+      setFilters(result);
+      setPriceRangeRange(result.price_range);
+    })();
+  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
+
   const handleEarliestPurchaseDate = (value) => {
     if (value > latestPurchaseDate) setLatestPurchaseDate(value);
     setEarlierstPurchaseDate(value);

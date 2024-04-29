@@ -2,16 +2,10 @@ import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Form } from "react-bootstrap";
-import {
-  useAllPurchasesMutation,
-  useGetFiltersMutation,
-} from "../slices/api/purchaseApiSlice.js";
+import { useAllPurchasesMutation } from "../slices/api/purchaseApiSlice.js";
 import { Container } from "react-bootstrap";
 
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import { DataGrid } from "@mui/x-data-grid";
@@ -75,13 +69,6 @@ const PurchaseScreen = () => {
   const [purchases, setPurchases] = useState([]);
 
   const [allPurchases, { isLoading }] = useAllPurchasesMutation();
-  const [getFilters] = useGetFiltersMutation();
-
-  const [filters, setFilters] = useState({
-    categories: [],
-    types: [],
-    brands: [],
-  });
 
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [],
@@ -114,33 +101,6 @@ const PurchaseScreen = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await getFilters({
-        selectedFilters,
-        earliestPurchaseDate,
-        latestPurchaseDate,
-        priceRange,
-      }).unwrap();
-      setFilters(result);
-      setPriceRangeRange(result.price_range);
-      setPriceRange(result.price_range);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const result = await getFilters({
-        selectedFilters,
-        earliestPurchaseDate,
-        latestPurchaseDate,
-        priceRange,
-      }).unwrap();
-      setFilters(result);
-      setPriceRangeRange(result.price_range);
-    })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
-
-  useEffect(() => {
-    (async () => {
       await fetchItems();
     })();
   }, []);
@@ -170,8 +130,6 @@ const PurchaseScreen = () => {
           setEarlierstPurchaseDate={setEarlierstPurchaseDate}
           latestPurchaseDate={latestPurchaseDate}
           setLatestPurchaseDate={setLatestPurchaseDate}
-          filters={filters}
-          setFilters={setFilters}
           priceRangeRange={priceRangeRange}
           setPriceRangeRange={setPriceRangeRange}
           priceRange={priceRange}
