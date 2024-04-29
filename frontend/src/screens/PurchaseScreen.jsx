@@ -45,6 +45,7 @@ const columns = [
     renderCell: (params) => (
       <img src={params.value} style={{ maxHeight: "46px" }} />
     ),
+    sortable: false,
   },
   {
     field: "category",
@@ -113,8 +114,35 @@ const PurchaseScreen = () => {
     dayjs("2024-04-26")
   );
 
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [maxCount, setMaxcount] = useState(0);
+
+  const [priceRange, setPriceRange] = useState([]);
   const [priceRangeRange, setPriceRangeRange] = useState([18, 99]);
+  const [sortModel, setSortModel] = useState([
+    {
+      field: "items_sold",
+      sort: "desc",
+    },
+  ]);
+
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 25,
+    page: 0,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const result = await getFilters({
+        selectedFilters,
+        earliestPurchaseDate,
+        latestPurchaseDate,
+        priceRange,
+      }).unwrap();
+      setFilters(result);
+      setPriceRangeRange(result.price_range);
+      setPriceRange(result.price_range);
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -136,10 +164,21 @@ const PurchaseScreen = () => {
         earliestPurchaseDate,
         latestPurchaseDate,
         priceRange,
+        sortModel,
+        paginationModel,
       }).unwrap();
       setPurchases(result.purchase);
+      setMaxcount(result.count);
+      console.log(result);
     })();
-  }, [selectedFilters, earliestPurchaseDate, latestPurchaseDate, priceRange]);
+  }, [
+    selectedFilters,
+    earliestPurchaseDate,
+    latestPurchaseDate,
+    priceRange,
+    sortModel,
+    paginationModel,
+  ]);
 
   const filterHandler = (event, values, column) => {
     const selected = values.map((value) => value.name);
@@ -372,7 +411,7 @@ const PurchaseScreen = () => {
           </div>
           <div
             id="price-range-slider"
-            style={{ width: "220px", float: "left", margin: "0px 5px 0 0" }}
+            style={{ width: "220px", float: "left", margin: "0px 5px 0 10px" }}
           >
             <div>Price Range</div>
             <Slider
@@ -399,10 +438,16 @@ const PurchaseScreen = () => {
         >
           <div id="table" style={{ width: "100%", height: 450 }}>
             <DataGrid
-              loading={isLoading}
               disableColumnFilter
               columns={columns}
               rows={purchases}
+              loading={isLoading}
+              onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
+              onPaginationModelChange={setPaginationModel}
+              rowCount={maxCount}
+              pageSizeOptions={[25, 50]}
+              paginationModel={paginationModel}
+              paginationMode="server"
             />
           </div>
         </Box>

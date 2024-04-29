@@ -9,6 +9,12 @@ const allPurchases = asyncHandler(async (req, res) => {
   const earliestPuchaseDate = req.body.earliestPurchaseDate;
   const latestPurchaseDate = req.body.latestPurchaseDate;
   const priceRange = req.body.priceRange;
+  const paginationModel = req.body.paginationModel;
+  const sortModel = req.body.sortModel;
+  const sorting = sortModel.length
+    ? `ORDER BY ${sortModel[0].field} ${sortModel[0].sort}`
+    : "";
+  console.log(priceRange.length);
   try {
     const result = await postgres.query(
       `
@@ -21,14 +27,15 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.brand as brand, 
       product.price as price,
 	    product.model as model, 
-      product.image_url as image_url
+      product.image_url as image_url, 
+      COUNT(*) as count
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
     WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
     AND ( type = ANY($3::VARCHAR[]) OR $4 )
     AND ( brand = ANY($5::VARCHAR[]) OR $6 )
     AND purchase_time BETWEEN $7 AND $8
-    AND price BETWEEN $9 AND $10
+    AND ( price BETWEEN $9 AND $10 OR $11)
     GROUP BY 
       product.category, 
       product.type, 
@@ -37,7 +44,9 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.price, 
       product.image,
       product.image_url
-    -- LIMIT 20
+    ${sorting}
+    LIMIT $12
+    OFFSET $13
     `,
       [
         filters.categories,
@@ -50,10 +59,41 @@ const allPurchases = asyncHandler(async (req, res) => {
         latestPurchaseDate,
         priceRange[0],
         priceRange[1],
+        priceRange.length == 0,
+        paginationModel.pageSize,
+        paginationModel.pageSize * paginationModel.page,
       ]
     );
-    console.log(result.rows);
-    res.json({ purchase: result.rows });
+
+    const count_result = await postgres.query(
+      `
+    SELECT 
+      COUNT(DISTINCT image) as count
+    FROM purchase 
+    JOIN product ON purchase.product_id=product.id
+    WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+    AND ( type = ANY($3::VARCHAR[]) OR $4 )
+    AND ( brand = ANY($5::VARCHAR[]) OR $6 )
+    AND purchase_time BETWEEN $7 AND $8
+    AND ( price BETWEEN $9 AND $10 OR $11)
+    `,
+      [
+        filters.categories,
+        filters.categories.length == 0,
+        filters.types,
+        filters.types.length == 0,
+        filters.brands,
+        filters.brands.length == 0,
+        earliestPuchaseDate,
+        latestPurchaseDate,
+        priceRange[0],
+        priceRange[1],
+        priceRange.length == 0,
+      ]
+    );
+    console.log(count_result.rows);
+
+    res.json({ purchase: result.rows, count: count_result.rows[0].count });
   } catch (err) {
     console.log(err);
   }

@@ -48,7 +48,7 @@ try {
     VALUES
       ('Boots', 'Ankle', 'Ahnu', 'BAA76', 39.99, '7688415.411.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714159056/7688415.411.jpg'),
       ('Boots', 'Ankle', 'Aetrex', 'BAA79', 59.99, '7965307.5291.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714158832/7965307.5291.jpg'),
-      ('Sandals', 'Athletic', 'adidas', 'SAa11', 89.99, '115220.151.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714248606/115220.151.jpg')`
+      ('Sandals', 'Athletic', 'adidas', 'SAa11', 129.99, '115220.151.jpg', 'https://res.cloudinary.com/dqckq3bjr/image/upload/v1714248606/115220.151.jpg')`
   );
 
   await client.query(
