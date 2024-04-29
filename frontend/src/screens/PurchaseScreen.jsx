@@ -6,13 +6,7 @@ import {
   useAllPurchasesMutation,
   useGetFiltersMutation,
 } from "../slices/api/purchaseApiSlice.js";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import Checkbox from "@mui/material/Checkbox";
-
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { Container } from "react-bootstrap";
 
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -29,14 +23,6 @@ import Paper from "@mui/material/Paper";
 import "dayjs/locale/de";
 
 import TopSellersFilters from "../components/TopSellerFilters.jsx";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 const columns = [
   {
@@ -85,12 +71,7 @@ const columns = [
   },
 ];
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
 const PurchaseScreen = () => {
-  const { userInfo } = useSelector((state) => state.auth);
-
   const [purchases, setPurchases] = useState([]);
 
   const [allPurchases, { isLoading }] = useAllPurchasesMutation();
@@ -196,6 +177,8 @@ const PurchaseScreen = () => {
           priceRange={priceRange}
           setPriceRange={setPriceRange}
           handleApply={handleApply}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
         />
 
         <Box

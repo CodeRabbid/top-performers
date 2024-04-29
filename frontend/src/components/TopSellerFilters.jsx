@@ -2,13 +2,19 @@ import { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Slider from "@mui/material/Slider";
+import Checkbox from "@mui/material/Checkbox";
 import dayjs from "dayjs";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const TopSellersFilters = ({
   earliestPurchaseDate,
@@ -22,6 +28,8 @@ const TopSellersFilters = ({
   priceRange,
   setPriceRange,
   handleApply,
+  selectedFilters,
+  setSelectedFilters,
 }) => {
   const handleEarliestPurchaseDate = (value) => {
     if (value > latestPurchaseDate) setLatestPurchaseDate(value);
