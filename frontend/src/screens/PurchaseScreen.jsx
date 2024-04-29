@@ -74,6 +74,7 @@ const PurchaseScreen = () => {
     categories: [],
     types: [],
     brands: [],
+    price_range: [],
   });
 
   const [earliestPurchaseDate, setEarlierstPurchaseDate] = useState(

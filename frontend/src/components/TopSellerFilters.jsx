@@ -50,6 +50,10 @@ const TopSellersFilters = ({
       }).unwrap();
       setFilters(result);
       setPriceRange(result.price_bounds);
+      setSelectedFilters({
+        ...selectedFilters,
+        price_range: result.price_bounds,
+      });
     })();
   }, []);
 
@@ -85,6 +89,7 @@ const TopSellersFilters = ({
 
   const handlePriceRange = (event, newPriceRange) => {
     setPriceRange(newPriceRange);
+    setSelectedFilters({ ...selectedFilters, price_range: newPriceRange });
   };
 
   return (
@@ -304,7 +309,7 @@ const TopSellersFilters = ({
             min={filters.price_bounds[0]}
             max={filters.price_bounds[1]}
             getAriaLabel={() => "Temperature range"}
-            value={priceRange}
+            value={selectedFilters.price_range}
             onChange={handlePriceRange}
             valueLabelDisplay="auto"
             // getAriaValueText={valuetext}
