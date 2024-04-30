@@ -112,13 +112,13 @@ const PurchaseScreen = () => {
   };
 
   return (
-    <div id="filtered-table">
+    <div id="filtered-table" style={{}}>
       <TopSellersFilters
         handleApply={handleApply}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
       />
-      <div id="table" style={{ flex: "1 0 auto" }}>
+      <div id="table" style={{ flex: "1 0 auto", height: "0%" }}>
         <DataGrid
           columns={columns}
           rows={items}
