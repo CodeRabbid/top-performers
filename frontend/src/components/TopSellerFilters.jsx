@@ -11,11 +11,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Slider from "@mui/material/Slider";
 import Checkbox from "@mui/material/Checkbox";
-import {
-  useAllPurchasesMutation,
-  useGetFiltersMutation,
-} from "../slices/api/purchaseApiSlice.js";
-import dayjs from "dayjs";
+import { useGetFiltersMutation } from "../slices/api/itemsApiSlice.js";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;

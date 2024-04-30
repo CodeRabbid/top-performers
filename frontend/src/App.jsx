@@ -15,6 +15,8 @@ function App() {
           minWidth: "320px",
           maxWidth: "880px",
           marginLeft: "auto",
+          height: "0%",
+          flex: "1 0 auto",
         }}
       >
         <Outlet />

@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { Provider } from "react-redux";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
-import PurchaseScreen from "./screens/PurchaseScreen.jsx";
+import PurchaseScreen from "./screens/TopSellersScreen.jsx";
 import store from "./store";
 import LoginScreen from "./screens/LoginScreen.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -18,6 +18,8 @@ import AuthProvider from "./components/AuthProvider";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import HomeScreen from "./screens/HomeScreen";
+import DiagramsScreen from "./screens/DiagramsScreen";
+import "./main.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,7 @@ const router = createBrowserRouter(
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/purchases" element={<PurchaseScreen />} />
+        <Route path="/diagrams" element={<DiagramsScreen />} />
       </Route>
     </Route>
   )

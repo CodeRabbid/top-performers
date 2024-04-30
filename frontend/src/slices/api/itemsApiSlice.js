@@ -1,9 +1,9 @@
 import { apiSlice } from "./baseApiSlice";
 const PURCHASE_URL = "/api/purchase";
 
-export const purchaseApiSlice = apiSlice.injectEndpoints({
+export const itemsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    allPurchases: builder.mutation({
+    getItems: builder.mutation({
       query: (data) => ({
         url: `${PURCHASE_URL}/all`,
         method: "POST",
@@ -20,5 +20,4 @@ export const purchaseApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useAllPurchasesMutation, useGetFiltersMutation } =
-  purchaseApiSlice;
+export const { useGetItemsMutation, useGetFiltersMutation } = itemsApiSlice;

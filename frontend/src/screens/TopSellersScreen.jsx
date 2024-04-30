@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Form } from "react-bootstrap";
-import { useAllPurchasesMutation } from "../slices/api/purchaseApiSlice.js";
+import { useGetItemsMutation } from "../slices/api/itemsApiSlice.js";
 import { Container } from "react-bootstrap";
 
 import dayjs from "dayjs";
@@ -66,9 +66,9 @@ const columns = [
 ];
 
 const PurchaseScreen = () => {
-  const [purchases, setPurchases] = useState([]);
+  const [items, setItems] = useState([]);
 
-  const [allPurchases, { isLoading }] = useAllPurchasesMutation();
+  const [fetchTopSellers, { isLoading }] = useGetItemsMutation();
 
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [],
@@ -80,15 +80,12 @@ const PurchaseScreen = () => {
   });
 
   const [maxCount, setMaxcount] = useState(0);
-
-  const [priceRange, setPriceRange] = useState([]);
   const [sortModel, setSortModel] = useState([
     {
       field: "items_sold",
       sort: "desc",
     },
   ]);
-
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 25,
     page: 0,
@@ -98,16 +95,15 @@ const PurchaseScreen = () => {
     (async () => {
       await fetchItems();
     })();
-  }, []);
+  }, [paginationModel, setPaginationModel]);
 
   const fetchItems = async () => {
-    const result = await allPurchases({
+    const result = await fetchTopSellers({
       selectedFilters,
-      priceRange,
       sortModel,
       paginationModel,
     }).unwrap();
-    setPurchases(result.purchase);
+    setItems(result.purchase);
     setMaxcount(result.count);
   };
 
@@ -116,43 +112,23 @@ const PurchaseScreen = () => {
   };
 
   return (
-    <div style={{ width: "100%" }}>
-      <Container style={{ width: "100%", maxWidth: "100%" }}>
-        <TopSellersFilters
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
-          handleApply={handleApply}
-          selectedFilters={selectedFilters}
-          setSelectedFilters={setSelectedFilters}
-        />
-
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            p: 1,
-            m: 1,
-            bgcolor: "background.paper",
-            borderRadius: 1,
-            width: "100%",
-          }}
-        >
-          <div id="table" style={{ width: "100%", height: 450 }}>
-            <DataGrid
-              disableColumnFilter
-              columns={columns}
-              rows={purchases}
-              loading={isLoading}
-              onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
-              onPaginationModelChange={setPaginationModel}
-              rowCount={maxCount}
-              pageSizeOptions={[25, 50]}
-              paginationModel={paginationModel}
-              paginationMode="server"
-            />
-          </div>
-        </Box>
-      </Container>
+    <div id="filtered-table">
+      <TopSellersFilters
+        handleApply={handleApply}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+      />
+      <DataGrid
+        columns={columns}
+        rows={items}
+        loading={isLoading}
+        onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
+        onPaginationModelChange={setPaginationModel}
+        rowCount={maxCount}
+        pageSizeOptions={[5, 25, 50, 100]}
+        paginationModel={paginationModel}
+        paginationMode="server"
+      />
     </div>
   );
 };

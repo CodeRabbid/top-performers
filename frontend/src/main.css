@@ -1,0 +1,20 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+#filtered-table {
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+.content {
+  flex: 1 1 auto;
+  background-color: blueviolet;
+}
