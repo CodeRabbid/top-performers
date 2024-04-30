@@ -118,17 +118,19 @@ const PurchaseScreen = () => {
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
       />
-      <DataGrid
-        columns={columns}
-        rows={items}
-        loading={isLoading}
-        onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
-        onPaginationModelChange={setPaginationModel}
-        rowCount={maxCount}
-        pageSizeOptions={[5, 25, 50, 100]}
-        paginationModel={paginationModel}
-        paginationMode="server"
-      />
+      <div id="table" style={{ flex: "1 0 auto" }}>
+        <DataGrid
+          columns={columns}
+          rows={items}
+          loading={isLoading}
+          onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
+          onPaginationModelChange={setPaginationModel}
+          rowCount={maxCount}
+          pageSizeOptions={[5, 25, 50, 100]}
+          paginationModel={paginationModel}
+          paginationMode="server"
+        />
+      </div>
     </div>
   );
 };
