@@ -228,28 +228,30 @@ const getFilters = asyncHandler(async (req, res) => {
 // @access  Private
 const getDiagram = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
+  console.log(selectedFilters);
+  const compare = selectedFilters.compare;
+
   try {
     let result = await postgres.query(
       `
       SELECT 
-        brand,
+        ${compare} as brand,
         COUNT(product.id)::INT as items_sold,
         date_trunc('month', purchase_time) AS month
       FROM purchase 
       JOIN product ON purchase.product_id=product.id 
-      WHERE  brand in ('UGG', 'UGG Kids','adidas') 
+      WHERE ${compare} = ANY($1::VARCHAR[])  
       AND purchase_time >= '2023-04-01'
-        GROUP BY brand, month
+        GROUP BY ${compare}, month
         ORDER BY items_sold DESC
       `,
-      [
-        // selectedFilters.brands, selectedFilters.brands.length == 0
-      ]
+      [selectedFilters[compare + "s"]]
     );
-    console.log(result.rows);
-    // console.log(result.rows[1].month);
-    // console.log(new Date(result.rows[1].month).getMonth());
-    res.json({ diagram: format_as_diagram(result.rows, "Month", new Date()) });
+
+    res.json({
+      diagram: format_as_diagram(result.rows, "Month", new Date()),
+      compare: selectedFilters[compare + "s"],
+    });
   } catch (err) {
     console.log(err);
   }

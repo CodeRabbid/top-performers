@@ -24,8 +24,6 @@ const chartSetting = {
 const valueFormatter = (value) => `${value} items`;
 
 const DiagramsScreen = () => {
-  //   console.error("Failed prop typ");
-
   const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
   const [diagramData, setDiagramData] = useState({
     data: [
@@ -38,6 +36,7 @@ const DiagramsScreen = () => {
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
+    compare: "brand",
     categories: [],
     types: [],
     brands: [],
@@ -54,15 +53,18 @@ const DiagramsScreen = () => {
 
   const fetchData = async () => {
     const result = await fetchDiagram({ selectedFilters }).unwrap();
+
+    const series = result.compare.map((compare) => {
+      return { dataKey: compare, label: compare, valueFormatter };
+    });
     setDiagramData({
       data: result.diagram,
-      series: [
-        { dataKey: "adidas", label: "adidas", valueFormatter },
-        { dataKey: "UGG", label: "UGG", valueFormatter },
-        { dataKey: "UGG Kids", label: "UGG Kids", valueFormatter },
-      ],
+      series: series,
     });
-    console.log(result.diagram);
+  };
+
+  const handleApply = async () => {
+    await fetchData();
   };
 
   return (
@@ -83,6 +85,7 @@ const DiagramsScreen = () => {
       <DiagramFilters
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
+        handleApply={handleApply}
       />
     </div>
   );
