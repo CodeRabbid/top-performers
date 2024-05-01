@@ -26,6 +26,7 @@ const DiagramFilters = ({
     types: [],
     brands: [],
     price_bounds: [],
+    genders: [{ name: "female" }, { name: "male" }, { name: "diverse" }],
   });
 
   const [getFilters] = useGetFiltersMutation();
@@ -35,7 +36,6 @@ const DiagramFilters = ({
       const result = await getFilters({
         selectedFilters,
       }).unwrap();
-      console.log(result);
       setFilters({ ...filters, ...result });
     })();
   }, []);
@@ -78,11 +78,15 @@ const DiagramFilters = ({
                   value={selectedFilters.compare}
                   label="Age"
                   onChange={handleXAxisFilter}
+                  style={{ width: 102 }}
                 >
                   <MenuItem value={"brand"}>Brands</MenuItem>
                   <MenuItem value={"type"}>Types</MenuItem>
+                  <MenuItem value={"gender"}>Gender</MenuItem>
                 </Select>
               </FormControl>
+            </div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
               {selectedFilters.compare == "brand" ? (
                 <Autocomplete
                   multiple
@@ -177,8 +181,52 @@ const DiagramFilters = ({
               ) : (
                 ""
               )}
+              {selectedFilters.compare == "gender" ? (
+                <Autocomplete
+                  multiple
+                  id="gender-filter"
+                  isOptionEqualToValue={(option, value) =>
+                    option.name === value.name
+                  }
+                  options={filters.genders}
+                  disableCloseOnSelect
+                  getOptionLabel={(option) => option.name}
+                  renderOption={(props, option, { selected }) => {
+                    const { key, ...restProps } = props;
+                    return (
+                      <li {...restProps} key={key}>
+                        <Checkbox
+                          icon={icon}
+                          checkedIcon={checkedIcon}
+                          style={{ marginRight: 8 }}
+                          checked={selected}
+                        />
+                        {option.name}
+                      </li>
+                    );
+                  }}
+                  renderTags={(tagValue, getTagProps) => {
+                    return tagValue.map((option, index) => (
+                      <div key={option.name} />
+                    ));
+                  }}
+                  style={{ width: 240 }}
+                  onChange={(event, values) =>
+                    filterHandler(event, values, "genders")
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Gender"
+                      placeholder="Search ..."
+                    />
+                  )}
+                />
+              ) : (
+                ""
+              )}
             </div>
-            <div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <Button
                 id="apply"
                 style={{ height: 56, width: 100 }}

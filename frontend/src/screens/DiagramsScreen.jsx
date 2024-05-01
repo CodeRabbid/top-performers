@@ -26,13 +26,8 @@ const valueFormatter = (value) => `${value} items`;
 const DiagramsScreen = () => {
   const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
   const [diagramData, setDiagramData] = useState({
-    data: [
-      {
-        Item: 0,
-        time_unit: "All time",
-      },
-    ],
-    series: [{ dataKey: "Item", label: "Item", valueFormatter }],
+    data: [],
+    series: [],
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
@@ -41,6 +36,7 @@ const DiagramsScreen = () => {
     types: [],
     brands: [],
     price_range: [],
+    genders: [],
     earliest_purchase_date: dayjs("2000-01-01"),
     latest_purchase_date: dayjs("2024-04-26"),
   });
@@ -53,7 +49,7 @@ const DiagramsScreen = () => {
 
   const fetchData = async () => {
     const result = await fetchDiagram({ selectedFilters }).unwrap();
-
+    console.log(result);
     const series = result.compare.map((compare) => {
       return { dataKey: compare, label: compare, valueFormatter };
     });

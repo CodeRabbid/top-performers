@@ -240,13 +240,16 @@ const getDiagram = asyncHandler(async (req, res) => {
         date_trunc('month', purchase_time) AS month
       FROM purchase 
       JOIN product ON purchase.product_id=product.id 
-      WHERE ${compare} = ANY($1::VARCHAR[])  
+      JOIN customer ON purchase.customer_id=customer.id
+      WHERE ${compare} = ANY($1::VARCHAR[])   
       AND purchase_time >= '2023-04-01'
-        GROUP BY ${compare}, month
-        ORDER BY items_sold DESC
+      GROUP BY ${compare}, month
+      ORDER BY items_sold DESC
       `,
       [selectedFilters[compare + "s"]]
     );
+
+    console.log(result.rows);
 
     res.json({
       diagram: format_as_diagram(result.rows, "Month", new Date()),
