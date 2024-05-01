@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
     "build": "npm i && cd frontend && npm i && npm run build",
     "server": "nodemon backend/server.js",
     "cy:open:dev": "npm run mongodb:restart && cypress open  --browser chrome",
@@ -31,5 +32,8 @@
     "mongoose": "^8.3.1",
     "nodemon": "^3.1.0",
     "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

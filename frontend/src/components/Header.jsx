@@ -42,7 +42,6 @@ const Header = () => {
                       <Dropdown.Toggle
                         style={{
                           backgroundColor: "transparent",
-                          border: "none",
                           color: "white",
                           padding: "10px",
                         }}

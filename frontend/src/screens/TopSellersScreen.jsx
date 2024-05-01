@@ -10,10 +10,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import { DataGrid } from "@mui/x-data-grid";
 
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-
 import "dayjs/locale/de";
 
 import TopSellersFilters from "../components/TopSellerFilters.jsx";
@@ -118,7 +114,7 @@ const PurchaseScreen = () => {
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
       />
-      <div id="table" style={{ flex: "1 0 auto", height: "0%" }}>
+      <div id="table" style={{ flex: "1 1 auto", height: "0%" }}>
         <DataGrid
           columns={columns}
           rows={items}

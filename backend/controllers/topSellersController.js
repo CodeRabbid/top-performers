@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import { client as postgres } from "../config/postgres.js";
+import { format_as_diagram } from "../utils/converter.js";
 
 // @desc    Fetch purchases
 // @route   GET /api/purchase
@@ -117,7 +118,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
-      AND price BETWEEN $7 AND $8
+      AND ( price BETWEEN $7 AND $8 OR $9)
       GROUP BY 
         name
       ORDER BY name ASC
@@ -131,6 +132,7 @@ const getFilters = asyncHandler(async (req, res) => {
         latestPurchaseDate,
         priceRange[0],
         priceRange[1],
+        priceRange.length == 0,
       ]
     );
     filters.categories = result.rows;
@@ -144,7 +146,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
-      AND price BETWEEN $7 AND $8
+      AND ( price BETWEEN $7 AND $8 OR $9)
       GROUP BY 
         name
       ORDER BY name ASC
@@ -158,6 +160,7 @@ const getFilters = asyncHandler(async (req, res) => {
         latestPurchaseDate,
         priceRange[0],
         priceRange[1],
+        priceRange.length == 0,
       ]
     );
     filters.types = result.rows;
@@ -171,7 +174,7 @@ const getFilters = asyncHandler(async (req, res) => {
       WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
       AND ( type = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
-      AND price BETWEEN $7 AND $8
+      AND ( price BETWEEN $7 AND $8 OR $9)
       GROUP BY 
         name
       ORDER BY name ASC
@@ -185,6 +188,7 @@ const getFilters = asyncHandler(async (req, res) => {
         latestPurchaseDate,
         priceRange[0],
         priceRange[1],
+        priceRange.length == 0,
       ]
     );
     filters.brands = result.rows;
@@ -219,4 +223,36 @@ const getFilters = asyncHandler(async (req, res) => {
   }
 });
 
-export { allPurchases, getFilters };
+// @desc    Fetch diagram
+// @route   GET /api/diagram
+// @access  Private
+const getDiagram = asyncHandler(async (req, res) => {
+  const selectedFilters = req.body.selectedFilters;
+  try {
+    let result = await postgres.query(
+      `
+      SELECT 
+        brand,
+        COUNT(product.id)::INT as items_sold,
+        date_trunc('month', purchase_time) AS month
+      FROM purchase 
+      JOIN product ON purchase.product_id=product.id 
+      WHERE  brand in ('UGG', 'UGG Kids','adidas') 
+      AND purchase_time >= '2023-04-01'
+        GROUP BY brand, month
+        ORDER BY items_sold DESC
+      `,
+      [
+        // selectedFilters.brands, selectedFilters.brands.length == 0
+      ]
+    );
+    console.log(result.rows);
+    // console.log(result.rows[1].month);
+    // console.log(new Date(result.rows[1].month).getMonth());
+    res.json({ diagram: format_as_diagram(result.rows, "Month", new Date()) });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+export { allPurchases, getFilters, getDiagram };
