@@ -44,6 +44,7 @@ const Header = () => {
                           backgroundColor: "transparent",
                           color: "white",
                           padding: "10px",
+                          border: "none",
                         }}
                         variant="success"
                         id="dropdown-basic"
