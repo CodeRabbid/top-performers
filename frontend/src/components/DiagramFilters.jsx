@@ -51,7 +51,7 @@ const DiagramFilters = ({
   const handleXAxisFilter = (event, value) => {
     setSelectedFilters((selectedFilters) => ({
       ...selectedFilters,
-      compare: value.props.value,
+      comparee: value.props.value,
     }));
   };
 
@@ -75,7 +75,7 @@ const DiagramFilters = ({
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={selectedFilters.compare}
+                  value={selectedFilters.comparee}
                   label="Age"
                   onChange={handleXAxisFilter}
                   style={{ width: 102 }}
@@ -87,7 +87,7 @@ const DiagramFilters = ({
               </FormControl>
             </div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
-              {selectedFilters.compare == "brand" ? (
+              {selectedFilters.comparee == "brand" ? (
                 <Autocomplete
                   multiple
                   id="brands-filter"
@@ -134,7 +134,7 @@ const DiagramFilters = ({
               ) : (
                 ""
               )}
-              {selectedFilters.compare == "type" ? (
+              {selectedFilters.comparee == "type" ? (
                 <Autocomplete
                   multiple
                   id="types-filter"
@@ -181,7 +181,7 @@ const DiagramFilters = ({
               ) : (
                 ""
               )}
-              {selectedFilters.compare == "gender" ? (
+              {selectedFilters.comparee == "gender" ? (
                 <Autocomplete
                   multiple
                   id="gender-filter"

@@ -31,7 +31,7 @@ const DiagramsScreen = () => {
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
-    compare: "brand",
+    comparee: "brand",
     categories: [],
     types: [],
     brands: [],
@@ -50,8 +50,8 @@ const DiagramsScreen = () => {
   const fetchData = async () => {
     const result = await fetchDiagram({ selectedFilters }).unwrap();
     console.log(result);
-    const series = result.compare.map((compare) => {
-      return { dataKey: compare, label: compare, valueFormatter };
+    const series = result.comparee.map((comparee) => {
+      return { dataKey: comparee, label: comparee, valueFormatter };
     });
     setDiagramData({
       data: result.diagram,

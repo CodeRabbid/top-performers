@@ -2,17 +2,18 @@ import { format_as_diagram } from "../utils/converter.js";
 
 test("converts sql output to api response", () => {
   const time_frame = "All time";
+  const comparees = ["UGG"];
   const input = [
     {
-      brand: "Ahnu",
+      comparee: "Ahnu",
       items_sold: 59,
     },
     {
-      brand: "adidas",
+      comparee: "adidas",
       items_sold: 57,
     },
     {
-      brand: "Aetrex",
+      comparee: "Aetrex",
       items_sold: 86,
     },
   ];
@@ -25,25 +26,28 @@ test("converts sql output to api response", () => {
     },
   ];
 
-  expect(format_as_diagram(input, time_frame)).toStrictEqual(expected_result);
+  expect(format_as_diagram(input, comparees, time_frame)).toStrictEqual(
+    expected_result
+  );
 });
 
 test("converts sql output by months", () => {
   const time_frame = "Month";
   const today = new Date("2024-04-15T22:00:00.000Z");
+  const comparees = ["UGG"];
   const input = [
-    { brand: "UGG", items_sold: 4, month: "2024-03-31T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 7, month: "2023-06-30T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 3, month: "2024-02-29T23:00:00.000Z" },
-    { brand: "UGG", items_sold: 5, month: "2023-04-30T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 2, month: "2024-01-31T23:00:00.000Z" },
-    { brand: "UGG", items_sold: 12, month: "2023-11-30T23:00:00.000Z" },
-    { brand: "UGG", items_sold: 11, month: "2023-10-31T23:00:00.000Z" },
-    { brand: "UGG", items_sold: 1, month: "2023-12-31T23:00:00.000Z" },
-    { brand: "UGG", items_sold: 8, month: "2023-07-31T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 10, month: "2023-09-30T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 9, month: "2023-08-31T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 4, month: "2024-03-31T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 7, month: "2023-06-30T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 3, month: "2024-02-29T23:00:00.000Z" },
+    { comparee: "UGG", items_sold: 5, month: "2023-04-30T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 2, month: "2024-01-31T23:00:00.000Z" },
+    { comparee: "UGG", items_sold: 12, month: "2023-11-30T23:00:00.000Z" },
+    { comparee: "UGG", items_sold: 11, month: "2023-10-31T23:00:00.000Z" },
+    { comparee: "UGG", items_sold: 1, month: "2023-12-31T23:00:00.000Z" },
+    { comparee: "UGG", items_sold: 8, month: "2023-07-31T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 10, month: "2023-09-30T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 9, month: "2023-08-31T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
   ];
   const expected_result = [
     {
@@ -96,7 +100,7 @@ test("converts sql output by months", () => {
     },
   ];
 
-  expect(format_as_diagram(input, time_frame, today)).toStrictEqual(
+  expect(format_as_diagram(input, comparees, time_frame, today)).toStrictEqual(
     expected_result
   );
 });
@@ -104,9 +108,10 @@ test("converts sql output by months", () => {
 test("converts sql output by months with missing input", () => {
   const time_frame = "Month";
   const today = new Date("2024-04-15T22:00:00.000Z");
+  const comparees = ["adidas", "UGG"];
   const input = [
-    { brand: "adidas", items_sold: 4, month: "2023-03-31T22:00:00.000Z" },
-    { brand: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+    { comparee: "adidas", items_sold: 4, month: "2023-03-31T22:00:00.000Z" },
+    { comparee: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
   ];
   const expected_result = [
     {
@@ -171,7 +176,7 @@ test("converts sql output by months with missing input", () => {
     },
   ];
 
-  expect(format_as_diagram(input, time_frame, today)).toStrictEqual(
+  expect(format_as_diagram(input, comparees, time_frame, today)).toStrictEqual(
     expected_result
   );
 });

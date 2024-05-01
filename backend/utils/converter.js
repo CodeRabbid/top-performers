@@ -1,9 +1,9 @@
-const format_as_diagram = (input, time_frame, today) => {
+const format_as_diagram = (input, comparees, time_frame, today) => {
   if (time_frame == "All time") {
     const diagram = [{ time_unit: "All time" }];
 
     for (const item of input) {
-      diagram[0][item.brand] = item.items_sold;
+      diagram[0][item.comparee] = item.items_sold;
     }
     return diagram;
   } else if (time_frame == "Month") {
@@ -25,18 +25,12 @@ const format_as_diagram = (input, time_frame, today) => {
 
     const month_today = today.getMonth();
 
-    const brands = new Set();
-
-    for (const item of input) {
-      brands.add(item.brand);
-    }
-
     for (let i = 0; i < 12; i++) {
       const month = monthNames[i];
       const shifted_month_id = (i - month_today + 11) % 12;
       const unit = { time_unit: month };
-      for (const brand of brands) {
-        unit[brand] = 0;
+      for (const comparee of comparees) {
+        unit[comparee] = 0;
       }
       diagram[shifted_month_id] = unit;
     }
@@ -48,7 +42,7 @@ const format_as_diagram = (input, time_frame, today) => {
       if (!diagram[shifted_month_id]) {
         diagram[shifted_month_id] = { time_unit: month };
       }
-      diagram[shifted_month_id][item.brand] = item.items_sold;
+      diagram[shifted_month_id][item.comparee] = item.items_sold;
     }
 
     return diagram;
