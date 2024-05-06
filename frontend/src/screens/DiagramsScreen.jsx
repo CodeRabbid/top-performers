@@ -31,7 +31,8 @@ const DiagramsScreen = () => {
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
-    comparee: "brand",
+    comparee: "age_group",
+    age_group: "18-24,25-35",
     categories: [],
     types: [],
     brands: [],
@@ -40,12 +41,6 @@ const DiagramsScreen = () => {
     earliest_purchase_date: dayjs("2000-01-01"),
     latest_purchase_date: dayjs("2024-04-26"),
   });
-
-  useEffect(() => {
-    (async () => {
-      await fetchData();
-    })();
-  }, []);
 
   const fetchData = async () => {
     const result = await fetchDiagram({ selectedFilters }).unwrap();
@@ -60,6 +55,7 @@ const DiagramsScreen = () => {
   };
 
   const handleApply = async () => {
+    console.log(selectedFilters);
     await fetchData();
   };
 

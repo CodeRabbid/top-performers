@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { client as postgres } from "../config/postgres.js";
 import { format_as_diagram } from "../utils/converter.js";
+import { generate_select } from "../utils/sql_generator.js";
 
 // @desc    Fetch purchases
 // @route   GET /api/purchase
@@ -229,10 +230,39 @@ const getFilters = asyncHandler(async (req, res) => {
 const getDiagram = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
   const comparee = selectedFilters.comparee;
-
   try {
-    let result = await postgres.query(
-      `
+    let result = { rows: [] };
+    if (comparee == "age_group") {
+      const age_group_strings = selectedFilters.age_group.split(",");
+      const select = generate_select(
+        selectedFilters.age_group.split(","),
+        new Date()
+      );
+
+      result = await postgres.query(
+        ` SELECT  
+            ${select},
+            COUNT(*)::INT as items_sold,
+            date_trunc('month', purchase_time) AS month
+          FROM customer
+          JOIN purchase ON purchase.customer_id=customer.id 
+          AND purchase_time >= '2023-04-01'
+          group by comparee, month
+          `
+      );
+
+      res.json({
+        diagram: format_as_diagram(
+          result.rows,
+          age_group_strings,
+          "Month",
+          new Date()
+        ),
+        comparee: age_group_strings,
+      });
+    } else {
+      result = await postgres.query(
+        `
       SELECT 
         ${comparee} as comparee,
         COUNT(product.id)::INT as items_sold,
@@ -245,18 +275,19 @@ const getDiagram = asyncHandler(async (req, res) => {
       GROUP BY ${comparee}, month
       ORDER BY items_sold DESC
       `,
-      [selectedFilters[comparee + "s"]]
-    );
+        [selectedFilters[comparee + "s"]]
+      );
 
-    res.json({
-      diagram: format_as_diagram(
-        result.rows,
-        selectedFilters[comparee + "s"],
-        "Month",
-        new Date()
-      ),
-      comparee: selectedFilters[comparee + "s"],
-    });
+      res.json({
+        diagram: format_as_diagram(
+          result.rows,
+          selectedFilters[comparee + "s"],
+          "Month",
+          new Date()
+        ),
+        comparee: selectedFilters[comparee + "s"],
+      });
+    }
   } catch (err) {
     console.log(err);
   }

@@ -29,6 +29,8 @@ const DiagramFilters = ({
     genders: [{ name: "female" }, { name: "male" }, { name: "diverse" }],
   });
 
+  const [valid, setValid] = useState(true);
+
   const [getFilters] = useGetFiltersMutation();
 
   useEffect(() => {
@@ -51,7 +53,19 @@ const DiagramFilters = ({
   const handleXAxisFilter = (event, value) => {
     setSelectedFilters((selectedFilters) => ({
       ...selectedFilters,
-      comparee: value.props.value,
+      comparee: event.target.value,
+    }));
+  };
+
+  const handleAgeTextField = (event, value) => {
+    const reg = new RegExp(
+      `^([0123456789]+-[0123456789]+,)*[0123456789]+-[0123456789]+$`
+    );
+    const v = reg.test(event.target.value);
+    setValid(v);
+    setSelectedFilters((selectedFilters) => ({
+      ...selectedFilters,
+      age_group: event.target.value,
     }));
   };
 
@@ -71,9 +85,8 @@ const DiagramFilters = ({
           <div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">X-Axis</InputLabel>
+                <InputLabel id="x-axis-select">X-Axis</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={selectedFilters.comparee}
                   label="Age"
@@ -83,6 +96,7 @@ const DiagramFilters = ({
                   <MenuItem value={"brand"}>Brands</MenuItem>
                   <MenuItem value={"type"}>Types</MenuItem>
                   <MenuItem value={"gender"}>Gender</MenuItem>
+                  <MenuItem value={"age_group"}>Age</MenuItem>
                 </Select>
               </FormControl>
             </div>
@@ -221,6 +235,19 @@ const DiagramFilters = ({
                       placeholder="Search ..."
                     />
                   )}
+                />
+              ) : (
+                ""
+              )}
+              {selectedFilters.comparee == "age_group" ? (
+                <TextField
+                  id="age-textfield"
+                  label="Age Group"
+                  variant="outlined"
+                  value={selectedFilters.age_group}
+                  onChange={handleAgeTextField}
+                  error={!valid}
+                  helperText={valid ? "" : "Incorrect, e.g. 18-24,25-35"}
                 />
               ) : (
                 ""
