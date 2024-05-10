@@ -31,6 +31,7 @@ const DiagramsScreen = () => {
   });
 
   const [selectedFilters, setSelectedFilters] = useState({
+    xUnits: "month",
     comparee: "age_group",
     age_group: "18-24,25-35",
     categories: [],

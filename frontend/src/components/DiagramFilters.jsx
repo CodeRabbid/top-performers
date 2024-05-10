@@ -57,6 +57,13 @@ const DiagramFilters = ({
     }));
   };
 
+  const handlYXAxisFilter = (event, value) => {
+    setSelectedFilters((selectedFilters) => ({
+      ...selectedFilters,
+      yAxis: event.target.value,
+    }));
+  };
+
   const handleAgeTextField = (event, value) => {
     const reg = new RegExp(
       `^([0123456789]+-[0123456789]+,)*[0123456789]+-[0123456789]+$`
@@ -85,11 +92,24 @@ const DiagramFilters = ({
           <div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
-                <InputLabel id="x-axis-select">X-Axis</InputLabel>
+                <InputLabel id="x-units-select">X-Units</InputLabel>
                 <Select
-                  id="demo-simple-select"
+                  value={selectedFilters.xUnits}
+                  label="x-Units"
+                  onChange={handlYXAxisFilter}
+                  style={{ width: 102 }}
+                >
+                  <MenuItem value={"quartal"}>Quartal</MenuItem>
+                  <MenuItem value={"month"}>Month</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+              <FormControl fullWidth>
+                <InputLabel id="compare-select">Compare</InputLabel>
+                <Select
                   value={selectedFilters.comparee}
-                  label="Age"
+                  label="Compare"
                   onChange={handleXAxisFilter}
                   style={{ width: 102 }}
                 >
