@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { client as postgres } from "../config/postgres.js";
 import { format_as_diagram } from "../utils/converter.js";
+import { full_time_unit_year_ago } from "../utils/helpers.js";
 import { generate_select } from "../utils/sql_generator.js";
 
 // @desc    Fetch purchases
@@ -230,6 +231,10 @@ const getFilters = asyncHandler(async (req, res) => {
 const getDiagram = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
   const comparee = selectedFilters.comparee;
+  const xUnits = selectedFilters.xUnits;
+
+  const year_ago = full_time_unit_year_ago(new Date(), xUnits);
+
   try {
     let result = { rows: [] };
     if (comparee == "age_group") {
@@ -243,19 +248,20 @@ const getDiagram = asyncHandler(async (req, res) => {
         ` SELECT  
             ${select},
             COUNT(*)::INT as items_sold,
-            date_trunc('month', purchase_time) AS month
+            extract(${xUnits} from purchase_time) as time
           FROM customer
           JOIN purchase ON purchase.customer_id=customer.id 
-          AND purchase_time >= '2023-04-01'
-          group by comparee, month
-          `
+          AND purchase_time >= $1
+          GROUP BY comparee, time
+          `,
+        [year_ago]
       );
 
       res.json({
         diagram: format_as_diagram(
           result.rows,
           age_group_strings,
-          "Month",
+          xUnits,
           new Date()
         ),
         comparee: age_group_strings,
@@ -265,24 +271,23 @@ const getDiagram = asyncHandler(async (req, res) => {
         `
       SELECT 
         ${comparee} as comparee,
-        COUNT(product.id)::INT as items_sold,
-        date_trunc('month', purchase_time) AS month
+        COUNT(*)::INT as items_sold,
+        extract(${xUnits} from purchase_time) as time
       FROM purchase 
       JOIN product ON purchase.product_id=product.id 
       JOIN customer ON purchase.customer_id=customer.id
       WHERE ${comparee} = ANY($1::VARCHAR[])   
-      AND purchase_time >= '2023-04-01'
-      GROUP BY ${comparee}, month
-      ORDER BY items_sold DESC
+      AND purchase_time >= $2
+      GROUP BY comparee, time 
       `,
-        [selectedFilters[comparee + "s"]]
+        [selectedFilters[comparee + "s"], year_ago]
       );
 
       res.json({
         diagram: format_as_diagram(
           result.rows,
           selectedFilters[comparee + "s"],
-          "Month",
+          xUnits,
           new Date()
         ),
         comparee: selectedFilters[comparee + "s"],

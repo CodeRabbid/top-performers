@@ -60,7 +60,7 @@ const DiagramFilters = ({
   const handlYXAxisFilter = (event, value) => {
     setSelectedFilters((selectedFilters) => ({
       ...selectedFilters,
-      yAxis: event.target.value,
+      xUnits: event.target.value,
     }));
   };
 
@@ -92,24 +92,24 @@ const DiagramFilters = ({
           <div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
-                <InputLabel id="x-units-select">X-Units</InputLabel>
+                <InputLabel id="y-axis-select">X-Units</InputLabel>
                 <Select
                   value={selectedFilters.xUnits}
-                  label="x-Units"
+                  label="y-Axis"
                   onChange={handlYXAxisFilter}
                   style={{ width: 102 }}
                 >
-                  <MenuItem value={"quartal"}>Quartal</MenuItem>
+                  <MenuItem value={"quarter"}>Quarter</MenuItem>
                   <MenuItem value={"month"}>Month</MenuItem>
                 </Select>
               </FormControl>
             </div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
-                <InputLabel id="compare-select">Compare</InputLabel>
+                <InputLabel id="x-axis-select">Compare</InputLabel>
                 <Select
                   value={selectedFilters.comparee}
-                  label="Compare"
+                  label="Age"
                   onChange={handleXAxisFilter}
                   style={{ width: 102 }}
                 >

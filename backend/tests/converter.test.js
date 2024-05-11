@@ -33,22 +33,22 @@ describe("test 1", () => {
   });
 
   test("converts sql output by months", () => {
-    const time_frame = "Month";
+    const time_frame = "month";
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["UGG"];
     const input = [
-      { comparee: "UGG", items_sold: 4, month: "2024-03-31T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 7, month: "2023-06-30T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 3, month: "2024-02-29T23:00:00.000Z" },
-      { comparee: "UGG", items_sold: 5, month: "2023-04-30T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 2, month: "2024-01-31T23:00:00.000Z" },
-      { comparee: "UGG", items_sold: 12, month: "2023-11-30T23:00:00.000Z" },
-      { comparee: "UGG", items_sold: 11, month: "2023-10-31T23:00:00.000Z" },
-      { comparee: "UGG", items_sold: 1, month: "2023-12-31T23:00:00.000Z" },
-      { comparee: "UGG", items_sold: 8, month: "2023-07-31T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 10, month: "2023-09-30T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 9, month: "2023-08-31T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+      { comparee: "UGG", items_sold: 4, time: 4 },
+      { comparee: "UGG", items_sold: 7, time: 7 },
+      { comparee: "UGG", items_sold: 3, time: 3 },
+      { comparee: "UGG", items_sold: 5, time: 5 },
+      { comparee: "UGG", items_sold: 2, time: 2 },
+      { comparee: "UGG", items_sold: 12, time: 12 },
+      { comparee: "UGG", items_sold: 11, time: 11 },
+      { comparee: "UGG", items_sold: 1, time: 1 },
+      { comparee: "UGG", items_sold: 8, time: 8 },
+      { comparee: "UGG", items_sold: 10, time: 10 },
+      { comparee: "UGG", items_sold: 9, time: 9 },
+      { comparee: "UGG", items_sold: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -107,12 +107,12 @@ describe("test 1", () => {
   });
 
   test("converts sql output by months with missing input", () => {
-    const time_frame = "Month";
+    const time_frame = "month";
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["adidas", "UGG"];
     const input = [
-      { comparee: "adidas", items_sold: 4, month: "2023-03-31T22:00:00.000Z" },
-      { comparee: "UGG", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+      { comparee: "adidas", items_sold: 4, time: 4 },
+      { comparee: "UGG", items_sold: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -183,12 +183,12 @@ describe("test 1", () => {
   });
 
   test("converts sql output by months with extra input", () => {
-    const time_frame = "Month";
+    const time_frame = "month";
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["adidas"];
     const input = [
-      { comparee: "adidas", items_sold: 4, month: "2023-03-31T22:00:00.000Z" },
-      { comparee: "other", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+      { comparee: "adidas", items_sold: 4, time: 4 },
+      { comparee: "other", items_sold: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -247,12 +247,12 @@ describe("test 1", () => {
   });
 
   test("converts age groups", () => {
-    const time_frame = "Month";
+    const time_frame = "month";
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["18 - 24", "25 - 35"];
     const input = [
-      { comparee: "18 - 24", items_sold: 4, month: "2023-03-31T22:00:00.000Z" },
-      { comparee: "25 - 35", items_sold: 6, month: "2023-05-31T22:00:00.000Z" },
+      { comparee: "18 - 24", items_sold: 4, time: 4 },
+      { comparee: "25 - 35", items_sold: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -314,6 +314,40 @@ describe("test 1", () => {
         "18 - 24": 4,
         "25 - 35": 0,
         time_unit: "Apr",
+      },
+    ];
+
+    expect(
+      format_as_diagram(input, comparees, time_frame, today)
+    ).toStrictEqual(expected_result);
+  });
+
+  test("converts quarters", () => {
+    const time_frame = "quarter";
+    const today = new Date("2024-04-15T22:00:00.000Z");
+    const comparees = ["UGG"];
+    const input = [
+      { comparee: "UGG", items_sold: 1, time: 1 },
+      { comparee: "UGG", items_sold: 2, time: 2 },
+      { comparee: "UGG", items_sold: 3, time: 3 },
+      { comparee: "UGG", items_sold: 4, time: 4 },
+    ];
+    const expected_result = [
+      {
+        UGG: 3,
+        time_unit: "3-rd Quarter",
+      },
+      {
+        UGG: 4,
+        time_unit: "4-th Quarter",
+      },
+      {
+        UGG: 1,
+        time_unit: "1-st Quarter",
+      },
+      {
+        UGG: 2,
+        time_unit: "2-nd Quarter",
       },
     ];
 
