@@ -7,15 +7,15 @@ describe("test 1", () => {
     const input = [
       {
         comparee: "Ahnu",
-        items_sold: 59,
+        y_value: 59,
       },
       {
         comparee: "adidas",
-        items_sold: 57,
+        y_value: 57,
       },
       {
         comparee: "Aetrex",
-        items_sold: 86,
+        y_value: 86,
       },
     ];
     const expected_result = [
@@ -37,18 +37,18 @@ describe("test 1", () => {
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["UGG"];
     const input = [
-      { comparee: "UGG", items_sold: 4, time: 4 },
-      { comparee: "UGG", items_sold: 7, time: 7 },
-      { comparee: "UGG", items_sold: 3, time: 3 },
-      { comparee: "UGG", items_sold: 5, time: 5 },
-      { comparee: "UGG", items_sold: 2, time: 2 },
-      { comparee: "UGG", items_sold: 12, time: 12 },
-      { comparee: "UGG", items_sold: 11, time: 11 },
-      { comparee: "UGG", items_sold: 1, time: 1 },
-      { comparee: "UGG", items_sold: 8, time: 8 },
-      { comparee: "UGG", items_sold: 10, time: 10 },
-      { comparee: "UGG", items_sold: 9, time: 9 },
-      { comparee: "UGG", items_sold: 6, time: 6 },
+      { comparee: "UGG", y_value: 4, time: 4 },
+      { comparee: "UGG", y_value: 7, time: 7 },
+      { comparee: "UGG", y_value: 3, time: 3 },
+      { comparee: "UGG", y_value: 5, time: 5 },
+      { comparee: "UGG", y_value: 2, time: 2 },
+      { comparee: "UGG", y_value: 12, time: 12 },
+      { comparee: "UGG", y_value: 11, time: 11 },
+      { comparee: "UGG", y_value: 1, time: 1 },
+      { comparee: "UGG", y_value: 8, time: 8 },
+      { comparee: "UGG", y_value: 10, time: 10 },
+      { comparee: "UGG", y_value: 9, time: 9 },
+      { comparee: "UGG", y_value: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -111,8 +111,8 @@ describe("test 1", () => {
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["adidas", "UGG"];
     const input = [
-      { comparee: "adidas", items_sold: 4, time: 4 },
-      { comparee: "UGG", items_sold: 6, time: 6 },
+      { comparee: "adidas", y_value: 4, time: 4 },
+      { comparee: "UGG", y_value: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -187,8 +187,8 @@ describe("test 1", () => {
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["adidas"];
     const input = [
-      { comparee: "adidas", items_sold: 4, time: 4 },
-      { comparee: "other", items_sold: 6, time: 6 },
+      { comparee: "adidas", y_value: 4, time: 4 },
+      { comparee: "other", y_value: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -251,8 +251,8 @@ describe("test 1", () => {
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["18 - 24", "25 - 35"];
     const input = [
-      { comparee: "18 - 24", items_sold: 4, time: 4 },
-      { comparee: "25 - 35", items_sold: 6, time: 6 },
+      { comparee: "18 - 24", y_value: 4, time: 4 },
+      { comparee: "25 - 35", y_value: 6, time: 6 },
     ];
     const expected_result = [
       {
@@ -327,10 +327,10 @@ describe("test 1", () => {
     const today = new Date("2024-04-15T22:00:00.000Z");
     const comparees = ["UGG"];
     const input = [
-      { comparee: "UGG", items_sold: 1, time: 1 },
-      { comparee: "UGG", items_sold: 2, time: 2 },
-      { comparee: "UGG", items_sold: 3, time: 3 },
-      { comparee: "UGG", items_sold: 4, time: 4 },
+      { comparee: "UGG", y_value: 1, time: 1 },
+      { comparee: "UGG", y_value: 2, time: 2 },
+      { comparee: "UGG", y_value: 3, time: 3 },
+      { comparee: "UGG", y_value: 4, time: 4 },
     ];
     const expected_result = [
       {

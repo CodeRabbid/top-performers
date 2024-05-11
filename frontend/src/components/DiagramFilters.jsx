@@ -57,10 +57,17 @@ const DiagramFilters = ({
     }));
   };
 
-  const handlYXAxisFilter = (event, value) => {
+  const handlXUnitsFilter = (event, value) => {
     setSelectedFilters((selectedFilters) => ({
       ...selectedFilters,
       xUnits: event.target.value,
+    }));
+  };
+
+  const handlYUnitsFilter = (event, value) => {
+    setSelectedFilters((selectedFilters) => ({
+      ...selectedFilters,
+      yUnits: event.target.value,
     }));
   };
 
@@ -92,11 +99,25 @@ const DiagramFilters = ({
           <div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
-                <InputLabel id="y-axis-select">X-Units</InputLabel>
+                <InputLabel id="y-units-select">Y-Units</InputLabel>
+                <Select
+                  value={selectedFilters.yUnits}
+                  label="y-Axis"
+                  onChange={handlYUnitsFilter}
+                  style={{ width: 102 }}
+                >
+                  <MenuItem value={"items_sold"}>Items sold</MenuItem>
+                  <MenuItem value={"total_sales"}>Total sales</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+              <FormControl fullWidth>
+                <InputLabel id="x-units-select">X-Units</InputLabel>
                 <Select
                   value={selectedFilters.xUnits}
                   label="y-Axis"
-                  onChange={handlYXAxisFilter}
+                  onChange={handlXUnitsFilter}
                   style={{ width: 102 }}
                 >
                   <MenuItem value={"quarter"}>Quarter</MenuItem>

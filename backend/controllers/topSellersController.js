@@ -232,8 +232,16 @@ const getDiagram = asyncHandler(async (req, res) => {
   const selectedFilters = req.body.selectedFilters;
   const comparee = selectedFilters.comparee;
   const xUnits = selectedFilters.xUnits;
+  const yUnits = selectedFilters.yUnits;
+  console.log(yUnits);
 
   const year_ago = full_time_unit_year_ago(new Date(), xUnits);
+  let select_y_value = "";
+  if (yUnits == "items_sold") {
+    select_y_value = "COUNT(*)::INT as y_value";
+  } else if (yUnits == "total_sales") {
+    select_y_value = "SUM(product.price) as y_value";
+  }
 
   try {
     let result = { rows: [] };
@@ -247,10 +255,11 @@ const getDiagram = asyncHandler(async (req, res) => {
       result = await postgres.query(
         ` SELECT  
             ${select},
-            COUNT(*)::INT as items_sold,
+            ${select_y_value},
             extract(${xUnits} from purchase_time) as time
           FROM customer
           JOIN purchase ON purchase.customer_id=customer.id 
+          JOIN product ON purchase.product_id=product.id 
           AND purchase_time >= $1
           GROUP BY comparee, time
           `,
@@ -271,7 +280,7 @@ const getDiagram = asyncHandler(async (req, res) => {
         `
       SELECT 
         ${comparee} as comparee,
-        COUNT(*)::INT as items_sold,
+        ${select_y_value},
         extract(${xUnits} from purchase_time) as time
       FROM purchase 
       JOIN product ON purchase.product_id=product.id 

@@ -3,7 +3,7 @@ const format_as_diagram = (input, comparees, time_frame, today) => {
     const diagram = [{ time_unit: "All time" }];
 
     for (const item of input) {
-      diagram[0][item.comparee] = item.items_sold;
+      diagram[0][item.comparee] = item.y_value;
     }
     return diagram;
   } else if (time_frame == "month" || time_frame == "quarter") {
@@ -58,7 +58,7 @@ const format_as_diagram = (input, comparees, time_frame, today) => {
         if (!diagram[shifted_month_id]) {
           diagram[shifted_month_id] = { time_unit: unit_name };
         }
-        diagram[shifted_month_id][item.comparee] = item.items_sold;
+        diagram[shifted_month_id][item.comparee] = item.y_value;
       }
     }
 
