@@ -21,8 +21,6 @@ const chartSetting = {
   },
 };
 
-const valueFormatter = (value) => `${value} items`;
-
 const DiagramsScreen = () => {
   const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
   const [diagramData, setDiagramData] = useState({
@@ -39,7 +37,7 @@ const DiagramsScreen = () => {
     types: [],
     brands: [],
     price_range: [],
-    genders: [],
+    genders: ["male", "female", "diverse"],
     earliest_purchase_date: dayjs("2000-01-01"),
     latest_purchase_date: dayjs("2024-04-26"),
   });
@@ -57,10 +55,18 @@ const DiagramsScreen = () => {
   };
 
   const handleApply = async () => {
-    console.log(selectedFilters);
     await fetchData();
   };
 
+  const formatter = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR",
+  });
+
+  const valueFormatter = (value) =>
+    selectedFilters.yUnits == "items_sold"
+      ? `${value} items`
+      : `${formatter.format(value)}`;
   return (
     <div
       style={{

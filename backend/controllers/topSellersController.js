@@ -145,7 +145,7 @@ const getFilters = asyncHandler(async (req, res) => {
         type as name
       FROM purchase 
       JOIN product ON purchase.product_id=product.id  
-      WHERE ( type = ANY($1::VARCHAR[]) OR $2 )
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
       AND ( brand = ANY($3::VARCHAR[]) OR $4 )
       AND purchase_time BETWEEN $5 AND $6
       AND ( price BETWEEN $7 AND $8 OR $9)
@@ -233,7 +233,9 @@ const getDiagram = asyncHandler(async (req, res) => {
   const comparee = selectedFilters.comparee;
   const xUnits = selectedFilters.xUnits;
   const yUnits = selectedFilters.yUnits;
-  console.log(yUnits);
+  const categories = selectedFilters.categories;
+  const types = selectedFilters.types;
+  const brands = selectedFilters.brands;
 
   const year_ago = full_time_unit_year_ago(new Date(), xUnits);
   let select_y_value = "";
@@ -260,10 +262,21 @@ const getDiagram = asyncHandler(async (req, res) => {
           FROM customer
           JOIN purchase ON purchase.customer_id=customer.id 
           JOIN product ON purchase.product_id=product.id 
-          AND purchase_time >= $1
+          WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+          AND ( type = ANY($3::VARCHAR[]) OR $4 )
+          AND ( brand = ANY($5::VARCHAR[]) OR $6 )
+          AND purchase_time >= $7
           GROUP BY comparee, time
           `,
-        [year_ago]
+        [
+          categories,
+          categories.length == 0,
+          types,
+          types.length == 0,
+          brands,
+          brands.length == 0,
+          year_ago,
+        ]
       );
 
       res.json({
@@ -285,11 +298,21 @@ const getDiagram = asyncHandler(async (req, res) => {
       FROM purchase 
       JOIN product ON purchase.product_id=product.id 
       JOIN customer ON purchase.customer_id=customer.id
-      WHERE ${comparee} = ANY($1::VARCHAR[])   
-      AND purchase_time >= $2
+      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
+      AND ( type = ANY($3::VARCHAR[]) OR $4 )
+      AND ( brand = ANY($5::VARCHAR[]) OR $6 ) 
+      AND purchase_time >= $7
       GROUP BY comparee, time 
       `,
-        [selectedFilters[comparee + "s"], year_ago]
+        [
+          categories,
+          categories.length == 0,
+          types,
+          types.length == 0,
+          brands,
+          brands.length == 0,
+          year_ago,
+        ]
       );
 
       res.json({
