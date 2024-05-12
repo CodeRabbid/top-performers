@@ -17,6 +17,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const DiagramFilters = ({
+  selectedDiagram,
   selectedFilters,
   setSelectedFilters,
   handleApply,
@@ -36,7 +37,7 @@ const DiagramFilters = ({
   useEffect(() => {
     (async () => {
       const result = await getFilters({
-        selectedFilters,
+        selectedFilters: selectedFilters[selectedDiagram],
       }).unwrap();
       setFilters({ ...filters, ...result });
     })();
@@ -45,7 +46,7 @@ const DiagramFilters = ({
   useEffect(() => {
     (async () => {
       const result = await getFilters({
-        selectedFilters,
+        selectedFilters: selectedFilters[selectedDiagram],
       }).unwrap();
       console.log(result);
       setFilters(result);
@@ -54,31 +55,39 @@ const DiagramFilters = ({
 
   const filterHandler = (event, values, column) => {
     const selected = values.map((value) => value.name);
-    setSelectedFilters((selectedFilters) => ({
-      ...selectedFilters,
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy[selectedDiagram] = {
+      ...selectedFilters[selectedDiagram],
       [column]: selected,
-    }));
+    };
+    setSelectedFilters(selectedFiltersCopy);
   };
 
-  const handleXAxisFilter = (event, value) => {
-    setSelectedFilters((selectedFilters) => ({
-      ...selectedFilters,
+  const handleCompareeFilter = (event, value) => {
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy[selectedDiagram] = {
+      ...selectedFilters[selectedDiagram],
       comparee: event.target.value,
-    }));
+    };
+    setSelectedFilters(selectedFiltersCopy);
   };
 
   const handlXUnitsFilter = (event, value) => {
-    setSelectedFilters((selectedFilters) => ({
-      ...selectedFilters,
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy[selectedDiagram] = {
+      ...selectedFilters[selectedDiagram],
       xUnits: event.target.value,
-    }));
+    };
+    setSelectedFilters(selectedFiltersCopy);
   };
 
   const handlYUnitsFilter = (event, value) => {
-    setSelectedFilters((selectedFilters) => ({
-      ...selectedFilters,
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy[selectedDiagram] = {
+      ...selectedFilters[selectedDiagram],
       yUnits: event.target.value,
-    }));
+    };
+    setSelectedFilters(selectedFiltersCopy);
   };
 
   const handleAgeTextField = (event, value) => {
@@ -87,10 +96,12 @@ const DiagramFilters = ({
     );
     const v = reg.test(event.target.value);
     setValid(v);
-    setSelectedFilters((selectedFilters) => ({
-      ...selectedFilters,
-      age_group: event.target.value,
-    }));
+    setSelectedFilters((selectedFilters) => [
+      {
+        ...selectedFilters[selectedDiagram],
+        age_group: event.target.value,
+      },
+    ]);
   };
 
   return (
@@ -111,7 +122,7 @@ const DiagramFilters = ({
               <FormControl fullWidth>
                 <InputLabel id="y-units-select">Y-Units</InputLabel>
                 <Select
-                  value={selectedFilters.yUnits}
+                  value={selectedFilters[selectedDiagram].yUnits}
                   label="y-Axis"
                   onChange={handlYUnitsFilter}
                   style={{ width: 102 }}
@@ -121,11 +132,12 @@ const DiagramFilters = ({
                 </Select>
               </FormControl>
             </div>
+
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
               <FormControl fullWidth>
                 <InputLabel id="x-units-select">X-Units</InputLabel>
                 <Select
-                  value={selectedFilters.xUnits}
+                  value={selectedFilters[selectedDiagram].xUnits}
                   label="y-Axis"
                   onChange={handlXUnitsFilter}
                   style={{ width: 102 }}
@@ -139,9 +151,9 @@ const DiagramFilters = ({
               <FormControl fullWidth>
                 <InputLabel id="x-axis-select">Compare</InputLabel>
                 <Select
-                  value={selectedFilters.comparee}
+                  value={selectedFilters[selectedDiagram].comparee}
                   label="Age"
-                  onChange={handleXAxisFilter}
+                  onChange={handleCompareeFilter}
                   style={{ width: 102 }}
                 >
                   <MenuItem value={"brand"}>Brands</MenuItem>
@@ -152,7 +164,7 @@ const DiagramFilters = ({
               </FormControl>
             </div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
-              {selectedFilters.comparee == "brand" ? (
+              {selectedFilters[selectedDiagram].comparee == "brand" ? (
                 <Autocomplete
                   multiple
                   id="brands-filter"
@@ -199,7 +211,7 @@ const DiagramFilters = ({
               ) : (
                 ""
               )}
-              {selectedFilters.comparee == "type" ? (
+              {selectedFilters[selectedDiagram].comparee == "type" ? (
                 <Autocomplete
                   multiple
                   id="types-filter"
@@ -246,13 +258,13 @@ const DiagramFilters = ({
               ) : (
                 ""
               )}
-              {selectedFilters.comparee == "gender" ? "" : ""}
-              {selectedFilters.comparee == "age_group" ? (
+              {selectedFilters[selectedDiagram].comparee == "gender" ? "" : ""}
+              {selectedFilters[selectedDiagram].comparee == "age_group" ? (
                 <TextField
                   id="age-textfield"
                   label="Age Group"
                   variant="outlined"
-                  value={selectedFilters.age_group}
+                  value={selectedFilters[selectedDiagram].age_group}
                   onChange={handleAgeTextField}
                   error={!valid}
                   helperText={valid ? "" : "Incorrect, e.g. 18-24,25-35"}
@@ -330,7 +342,7 @@ const DiagramFilters = ({
               )}
             />
           </div>
-          {selectedFilters.comparee == "type" ? (
+          {selectedFilters[selectedDiagram].comparee == "type" ? (
             ""
           ) : (
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
@@ -379,7 +391,7 @@ const DiagramFilters = ({
               />
             </div>
           )}
-          {selectedFilters.comparee == "brand" ? (
+          {selectedFilters[selectedDiagram].comparee == "brand" ? (
             ""
           ) : (
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
