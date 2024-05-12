@@ -4,10 +4,11 @@ import { ChartContainer } from "@mui/x-charts";
 import { axisClasses } from "@mui/x-charts";
 import { useGetDiagramMutation } from "../slices/api/itemsApiSlice";
 import DiagramFilters from "../components/DiagramFilters";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenNib } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 import dayjs from "dayjs";
 
@@ -29,6 +30,8 @@ const chartSetting = {
 const DiagramsScreen = () => {
   const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
   const [selectedDiagram, setSelectedDiagram] = useState(1);
+  const myRef = useRef([]);
+
   const [diagramData, setDiagramData] = useState([
     {
       data: [],
@@ -69,6 +72,10 @@ const DiagramsScreen = () => {
     },
   ]);
 
+  useEffect(() => {
+    myRef.current[selectedDiagram].scrollIntoView();
+  }, [selectedDiagram]);
+
   const fetchData = async () => {
     const result = await fetchDiagram({
       selectedFilters: selectedFilters[selectedDiagram],
@@ -89,6 +96,16 @@ const DiagramsScreen = () => {
     await fetchData();
   };
 
+  const addDiagram = () => {
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy.push(selectedFilters[selectedFilters.length - 1]);
+    setSelectedFilters(selectedFiltersCopy);
+    const diagramDataCopy = [...diagramData];
+    diagramDataCopy.push(diagramData[diagramData.length - 1]);
+    setDiagramData(diagramDataCopy);
+    setSelectedDiagram(diagramData.length);
+  };
+
   const formatter = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
@@ -99,36 +116,73 @@ const DiagramsScreen = () => {
       ? `${value} items`
       : `${formatter.format(value)}`;
   return (
-    <div id="filtered-table">
+    <div
+      id="filtered-table"
+      style={{
+        postiion: "relative",
+      }}
+    >
+      <button
+        style={{
+          position: "absolute",
+          right: "20px",
+          top: "20px",
+          borderRadius: "50%",
+          height: "50px",
+          width: "50px",
+          border: "none",
+          backgroundColor: "rgb(0, 99, 242)",
+          color: "white",
+          fontSize: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={addDiagram}
+      >
+        &#65291;
+      </button>
       <div
         style={{
           flex: "1 1 auto",
           height: "0%",
           overflowY: "scroll",
+          postiion: "relative ",
+          display: "box",
         }}
       >
-        <FormControl fullWidth>
-          <InputLabel id="selected-diagram-select">Diagram</InputLabel>
-          <Select
-            value={selectedDiagram}
-            label="selected-diagram"
-            onChange={(e) => setSelectedDiagram(e.target.value)}
-            style={{ width: 102 }}
-          >
-            <MenuItem value={0}>0</MenuItem>
-            <MenuItem value={1}>1</MenuItem>
-          </Select>
-        </FormControl>
         {diagramData.map((data, index) => (
           <div
             style={{
               display: "block",
-              margin: "0px auto 0px auto",
               position: "relative",
+              margin: "0px auto 0px auto",
+              backgroundColor: index == selectedDiagram ? "#ebf2ff" : "",
               width: "500px",
             }}
-            key={0}
+            ref={(el) => (myRef.current[index] = el)}
+            onClick={() => setSelectedDiagram(index)}
           >
+            <button
+              style={{
+                position: "absolute",
+                right: "-55px",
+                bottom: "20px",
+                borderRadius: "50%",
+                height: "50px",
+                width: "50px",
+                border: "none",
+                backgroundColor: "#DCDCDC",
+                color: "white",
+                fontSize: "30px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={addDiagram}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </button>
             <BarChart
               margin={{
                 left: 70,
