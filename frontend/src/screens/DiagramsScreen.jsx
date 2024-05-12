@@ -27,49 +27,38 @@ const chartSetting = {
   },
 };
 
+const initialSelectedFilter = {
+  xUnits: "month",
+  yUnits: "items_sold",
+  comparee: "age_group",
+  age_group: "18-24,25-35",
+  categories: [],
+  types: [],
+  brands: [],
+  price_range: [],
+  genders: ["male", "female", "diverse"],
+  earliest_purchase_date: dayjs("2000-01-01"),
+  latest_purchase_date: dayjs("2024-04-26"),
+};
+const initialDiagramData = {
+  data: [],
+  series: [],
+};
+
 const DiagramsScreen = () => {
   const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
   const [selectedDiagram, setSelectedDiagram] = useState(1);
   const myRef = useRef([]);
 
   const [diagramData, setDiagramData] = useState([
-    {
-      data: [],
-      series: [],
-    },
-    {
-      data: [],
-      series: [],
-    },
+    initialDiagramData,
+    initialDiagramData,
   ]);
 
   const [selectedFilters, setSelectedFilters] = useState([
-    {
-      xUnits: "month",
-      yUnits: "items_sold",
-      comparee: "age_group",
-      age_group: "18-24,25-35",
-      categories: [],
-      types: [],
-      brands: [],
-      price_range: [],
-      genders: ["male", "female", "diverse"],
-      earliest_purchase_date: dayjs("2000-01-01"),
-      latest_purchase_date: dayjs("2024-04-26"),
-    },
-    {
-      xUnits: "month",
-      yUnits: "items_sold",
-      comparee: "age_group",
-      age_group: "18-24,25-35",
-      categories: [],
-      types: [],
-      brands: [],
-      price_range: [],
-      genders: ["male", "female", "diverse"],
-      earliest_purchase_date: dayjs("2000-01-01"),
-      latest_purchase_date: dayjs("2024-04-26"),
-    },
+    initialSelectedFilter,
+
+    initialSelectedFilter,
   ]);
 
   useEffect(() => {
@@ -98,12 +87,28 @@ const DiagramsScreen = () => {
 
   const addDiagram = () => {
     const selectedFiltersCopy = [...selectedFilters];
-    selectedFiltersCopy.push(selectedFilters[selectedFilters.length - 1]);
+    selectedFiltersCopy.push(initialSelectedFilter);
     setSelectedFilters(selectedFiltersCopy);
     const diagramDataCopy = [...diagramData];
-    diagramDataCopy.push(diagramData[diagramData.length - 1]);
+    diagramDataCopy.push(initialDiagramData);
     setDiagramData(diagramDataCopy);
     setSelectedDiagram(diagramData.length);
+  };
+
+  const remvoeDiagram = (index) => {
+    setSelectedDiagram(0);
+    const selectedFiltersCopy = [...selectedFilters];
+    selectedFiltersCopy.splice(index, 1);
+    if (selectedFiltersCopy.length == 0) {
+      selectedFiltersCopy.push(initialSelectedFilter);
+    }
+    setSelectedFilters(selectedFiltersCopy);
+    const diagramDataCopy = [...diagramData];
+    diagramDataCopy.splice(index, 1);
+    if (diagramDataCopy.length == 0) {
+      diagramDataCopy.push(initialDiagramData);
+    }
+    setDiagramData(diagramDataCopy);
   };
 
   const formatter = new Intl.NumberFormat("de-DE", {
@@ -154,14 +159,10 @@ const DiagramsScreen = () => {
         {diagramData.map((data, index) => (
           <div
             style={{
-              display: "block",
               position: "relative",
-              margin: "0px auto 0px auto",
-              backgroundColor: index == selectedDiagram ? "#ebf2ff" : "",
+              margin: "0px auto 0px 100px",
               width: "500px",
             }}
-            ref={(el) => (myRef.current[index] = el)}
-            onClick={() => setSelectedDiagram(index)}
           >
             <button
               style={{
@@ -179,22 +180,34 @@ const DiagramsScreen = () => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onClick={addDiagram}
+              onClick={() => remvoeDiagram(index)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </button>
-            <BarChart
-              margin={{
-                left: 70,
-                right: 20,
-                top: 20,
-                bottom: 30,
+            <div
+              style={{
+                display: "block",
+                position: "relative",
+                // margin: "0px auto 0px 100px",
+                backgroundColor: index == selectedDiagram ? "#ebf2ff" : "",
+                width: "500px",
               }}
-              dataset={data.data}
-              xAxis={[{ scaleType: "band", dataKey: "time_unit" }]}
-              series={data.series}
-              {...chartSetting}
-            />
+              ref={(el) => (myRef.current[index] = el)}
+              onClick={() => setSelectedDiagram(index)}
+            >
+              <BarChart
+                margin={{
+                  left: 70,
+                  right: 20,
+                  top: 20,
+                  bottom: 30,
+                }}
+                dataset={data.data}
+                xAxis={[{ scaleType: "band", dataKey: "time_unit" }]}
+                series={data.series}
+                {...chartSetting}
+              />
+            </div>
           </div>
         ))}
       </div>
