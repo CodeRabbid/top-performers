@@ -245,18 +245,18 @@ const getDiagram = asyncHandler(async (req, res) => {
     select_y_value = "SUM(product.price) as y_value";
   }
 
-  try {
-    let result = { rows: [] };
-    if (comparee == "age_group") {
-      const age_group_strings = selectedFilters.age_group.split(",");
-      const select = generate_select(
-        selectedFilters.age_group.split(","),
-        new Date()
-      );
+  let select_x_value = `${comparee} as comparee`;
+  let comparees = selectedFilters[comparee + "s"];
 
-      result = await postgres.query(
-        ` SELECT  
-            ${select},
+  if (comparee == "age_group") {
+    comparees = selectedFilters.age_group.split(",");
+    select_x_value = generate_select(comparees, new Date());
+  }
+
+  try {
+    const result = await postgres.query(
+      ` SELECT  
+            ${select_x_value},
             ${select_y_value},
             extract(${xUnits} from purchase_time) as time
           FROM customer
@@ -268,63 +268,21 @@ const getDiagram = asyncHandler(async (req, res) => {
           AND purchase_time >= $7
           GROUP BY comparee, time
           `,
-        [
-          categories,
-          categories.length == 0,
-          types,
-          types.length == 0,
-          brands,
-          brands.length == 0,
-          year_ago,
-        ]
-      );
+      [
+        categories,
+        categories.length == 0,
+        types,
+        types.length == 0,
+        brands,
+        brands.length == 0,
+        year_ago,
+      ]
+    );
 
-      res.json({
-        diagram: format_as_diagram(
-          result.rows,
-          age_group_strings,
-          xUnits,
-          new Date()
-        ),
-        comparee: age_group_strings,
-      });
-    } else {
-      result = await postgres.query(
-        `
-      SELECT 
-        ${comparee} as comparee,
-        ${select_y_value},
-        extract(${xUnits} from purchase_time) as time
-      FROM purchase 
-      JOIN product ON purchase.product_id=product.id 
-      JOIN customer ON purchase.customer_id=customer.id
-      WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
-      AND ( type = ANY($3::VARCHAR[]) OR $4 )
-      AND ( brand = ANY($5::VARCHAR[]) OR $6 ) 
-      AND purchase_time >= $7
-      GROUP BY comparee, time 
-      `,
-        [
-          categories,
-          categories.length == 0,
-          types,
-          types.length == 0,
-          brands,
-          brands.length == 0,
-          year_ago,
-        ]
-      );
-
-      res.json({
-        diagram: format_as_diagram(
-          result.rows,
-          selectedFilters[comparee + "s"],
-          xUnits,
-          new Date()
-        ),
-        comparee: selectedFilters[comparee + "s"],
-      });
-    }
+    res.json({
+      diagram: format_as_diagram(result.rows, comparees, xUnits, new Date()),
+      comparee: comparees,
+    });
   } catch (err) {
     console.log(err);
   }
