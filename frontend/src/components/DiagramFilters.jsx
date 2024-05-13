@@ -48,7 +48,6 @@ const DiagramFilters = ({
       const result = await getFilters({
         selectedFilters: selectedFilters[selectedDiagram],
       }).unwrap();
-      console.log(result);
       setFilters(result);
     })();
   }, [selectedFilters]);

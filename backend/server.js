@@ -3,6 +3,7 @@ import path from "path";
 import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import purchaseRoutes from "./routes/topSellersRoutes.js";
+import userPresetRoutes from "./routes/userPresetRoutes.js";
 import cookieParser from "cookie-parser";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 app.use("/api/purchase", purchaseRoutes);
+app.use("/api/user-preset", userPresetRoutes);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "/frontend/dist")));

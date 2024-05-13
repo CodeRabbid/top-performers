@@ -1,16 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { ChartContainer } from "@mui/x-charts";
 import { axisClasses } from "@mui/x-charts";
 import { useGetDiagramMutation } from "../slices/api/itemsApiSlice";
+import { useSaveSelectedFiltersMutation } from "../slices/api/userPresetApiSlice";
 import DiagramFilters from "../components/DiagramFilters";
-
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenNib } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-import dayjs from "dayjs";
+import { faTrashCan, faSave } from "@fortawesome/free-solid-svg-icons";
 
 const chartSetting = {
   yAxis: [
@@ -37,8 +35,8 @@ const initialSelectedFilter = {
   brands: [],
   price_range: [],
   genders: ["male", "female", "diverse"],
-  earliest_purchase_date: dayjs("2000-01-01"),
-  latest_purchase_date: dayjs("2024-04-26"),
+  earliest_purchase_date: new Date(2000, 1, 1),
+  latest_purchase_date: new Date(),
 };
 const initialDiagramData = {
   data: [],
@@ -46,8 +44,11 @@ const initialDiagramData = {
 };
 
 const DiagramsScreen = () => {
-  const [fetchDiagram, { isLoading }] = useGetDiagramMutation();
-  const [selectedDiagram, setSelectedDiagram] = useState(1);
+  const [fetchDiagram] = useGetDiagramMutation();
+  const [saveSelectedFilters] = useSaveSelectedFiltersMutation();
+  const [selectedDiagram, setSelectedDiagram] = useState(0);
+  const { userInfo } = useSelector((state) => state.auth);
+
   const myRef = useRef([]);
 
   const [diagramData, setDiagramData] = useState([
@@ -57,7 +58,6 @@ const DiagramsScreen = () => {
 
   const [selectedFilters, setSelectedFilters] = useState([
     initialSelectedFilter,
-
     initialSelectedFilter,
   ]);
 
@@ -69,7 +69,7 @@ const DiagramsScreen = () => {
     const result = await fetchDiagram({
       selectedFilters: selectedFilters[selectedDiagram],
     }).unwrap();
-    console.log(result);
+
     const series = result.comparee.map((comparee) => {
       return { dataKey: comparee, label: comparee, valueFormatter };
     });
@@ -78,6 +78,7 @@ const DiagramsScreen = () => {
       data: result.diagram,
       series: series,
     };
+
     setDiagramData(diagramDataCopy);
   };
 
@@ -95,7 +96,7 @@ const DiagramsScreen = () => {
     setSelectedDiagram(diagramData.length);
   };
 
-  const remvoeDiagram = (index) => {
+  const remveDiagram = (index) => {
     setSelectedDiagram(0);
     const selectedFiltersCopy = [...selectedFilters];
     selectedFiltersCopy.splice(index, 1);
@@ -109,6 +110,18 @@ const DiagramsScreen = () => {
       diagramDataCopy.push(initialDiagramData);
     }
     setDiagramData(diagramDataCopy);
+  };
+
+  const saveDiagrams = async () => {
+    try {
+      const result = await saveSelectedFilters({
+        selectedFilters,
+        user_id: userInfo.user_info._id,
+      }).unwrap();
+      toast.success("Diagrams saved successfully");
+    } catch (err) {
+      toast.success("Error saving diagrams");
+    }
   };
 
   const formatter = new Intl.NumberFormat("de-DE", {
@@ -131,7 +144,7 @@ const DiagramsScreen = () => {
         style={{
           position: "absolute",
           right: "20px",
-          top: "20px",
+          top: "15px",
           borderRadius: "50%",
           height: "50px",
           width: "50px",
@@ -142,6 +155,27 @@ const DiagramsScreen = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+        }}
+        onClick={saveDiagrams}
+      >
+        <FontAwesomeIcon icon={faSave} />
+      </button>
+      <button
+        style={{
+          position: "absolute",
+          right: "20px",
+          top: "75px",
+          borderRadius: "50%",
+          height: "50px",
+          width: "50px",
+          border: "none",
+          backgroundColor: "rgb(0, 99, 242)",
+          color: "white",
+          fontSize: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bold",
         }}
         onClick={addDiagram}
       >
@@ -163,6 +197,7 @@ const DiagramsScreen = () => {
               margin: "0px auto 0px 100px",
               width: "500px",
             }}
+            key={index}
           >
             <button
               style={{
@@ -180,7 +215,7 @@ const DiagramsScreen = () => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onClick={() => remvoeDiagram(index)}
+              onClick={() => remveDiagram(index)}
             >
               <FontAwesomeIcon icon={faTrashCan} />
             </button>
