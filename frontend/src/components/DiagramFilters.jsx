@@ -163,101 +163,6 @@ const DiagramFilters = ({
               </FormControl>
             </div>
             <div style={{ float: "left", margin: "0 5px 0 0" }}>
-              {selectedFilters[selectedDiagram].comparee == "brand" ? (
-                <Autocomplete
-                  multiple
-                  id="brands-filter"
-                  isOptionEqualToValue={(option, value) =>
-                    option.name === value.name
-                  }
-                  options={filters.brands}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option.name}
-                  renderOption={(props, option, { selected }) => {
-                    const { key, ...restProps } = props;
-                    return (
-                      <li {...restProps} key={key}>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option.name}
-                        <span style={{ position: "absolute", right: "10px" }}>
-                          {option.count}
-                        </span>
-                      </li>
-                    );
-                  }}
-                  renderTags={(tagValue, getTagProps) => {
-                    return tagValue.map((option, index) => (
-                      <div key={option.name} />
-                    ));
-                  }}
-                  style={{ width: 240 }}
-                  onChange={(event, values) =>
-                    filterHandler(event, values, "brands")
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Brands"
-                      placeholder="Search ..."
-                    />
-                  )}
-                />
-              ) : (
-                ""
-              )}
-              {selectedFilters[selectedDiagram].comparee == "type" ? (
-                <Autocomplete
-                  multiple
-                  id="types-filter"
-                  isOptionEqualToValue={(option, value) =>
-                    option.name === value.name
-                  }
-                  options={filters.types}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option.name}
-                  renderOption={(props, option, { selected }) => {
-                    const { key, ...restProps } = props;
-                    return (
-                      <li {...restProps} key={key}>
-                        <Checkbox
-                          icon={icon}
-                          checkedIcon={checkedIcon}
-                          style={{ marginRight: 8 }}
-                          checked={selected}
-                        />
-                        {option.name}
-                        <span style={{ position: "absolute", right: "10px" }}>
-                          {option.count}
-                        </span>
-                      </li>
-                    );
-                  }}
-                  renderTags={(tagValue, getTagProps) => {
-                    return tagValue.map((option, index) => (
-                      <div key={option.name} />
-                    ));
-                  }}
-                  style={{ width: 240 }}
-                  onChange={(event, values) =>
-                    filterHandler(event, values, "types")
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Types"
-                      placeholder="Search ..."
-                    />
-                  )}
-                />
-              ) : (
-                ""
-              )}
-              {selectedFilters[selectedDiagram].comparee == "gender" ? "" : ""}
               {selectedFilters[selectedDiagram].comparee == "age_group" ? (
                 <TextField
                   id="age-textfield"
@@ -341,104 +246,94 @@ const DiagramFilters = ({
               )}
             />
           </div>
-          {selectedFilters[selectedDiagram].comparee == "type" ? (
-            ""
-          ) : (
-            <div style={{ float: "left", margin: "0 5px 0 0" }}>
-              <Autocomplete
-                multiple
-                id="types-filter"
-                isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
-                }
-                options={filters.types}
-                disableCloseOnSelect
-                getOptionLabel={(option) => option.name}
-                renderTags={(tagValue, getTagProps) => {
-                  return tagValue.map((option, index) => (
-                    <div key={option.name} />
-                  ));
-                }}
-                renderOption={(props, option, { selected }) => {
-                  const { key, ...restProps } = props;
-                  return (
-                    <li {...restProps} key={key}>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.name}
-                      <span style={{ position: "absolute", right: "10px" }}>
-                        {option.count}
-                      </span>
-                    </li>
-                  );
-                }}
-                style={{ width: 240 }}
-                onChange={(event, values) =>
-                  filterHandler(event, values, "types")
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Types"
-                    placeholder="Search ..."
-                  />
-                )}
-              />
-            </div>
-          )}
-          {selectedFilters[selectedDiagram].comparee == "brand" ? (
-            ""
-          ) : (
-            <div style={{ float: "left", margin: "0 5px 0 0" }}>
-              <Autocomplete
-                multiple
-                id="brands-filter"
-                isOptionEqualToValue={(option, value) =>
-                  option.name === value.name
-                }
-                options={filters.brands}
-                disableCloseOnSelect
-                getOptionLabel={(option) => option.name}
-                renderTags={(tagValue, getTagProps) => {
-                  return tagValue.map((option, index) => (
-                    <div key={option.name} />
-                  ));
-                }}
-                renderOption={(props, option, { selected }) => {
-                  const { key, ...restProps } = props;
-                  return (
-                    <li {...restProps} key={key}>
-                      <Checkbox
-                        icon={icon}
-                        checkedIcon={checkedIcon}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.name}
-                      <span style={{ position: "absolute", right: "10px" }}>
-                        {option.count}
-                      </span>
-                    </li>
-                  );
-                }}
-                style={{ width: 240 }}
-                onChange={(event, values) =>
-                  filterHandler(event, values, "brands")
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Brands"
-                    placeholder="Search ..."
-                  />
-                )}
-              />
-            </div>
-          )}
+
+          <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <Autocomplete
+              multiple
+              id="types-filter"
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              options={filters.types}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <div key={option.name} />
+                ));
+              }}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...restProps } = props;
+                return (
+                  <li {...restProps} key={key}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                    <span style={{ position: "absolute", right: "10px" }}>
+                      {option.count}
+                    </span>
+                  </li>
+                );
+              }}
+              style={{ width: 240 }}
+              onChange={(event, values) =>
+                filterHandler(event, values, "types")
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Types" placeholder="Search ..." />
+              )}
+            />
+          </div>
+
+          <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <Autocomplete
+              multiple
+              id="brands-filter"
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
+              options={filters.brands}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.name}
+              renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option, index) => (
+                  <div key={option.name} />
+                ));
+              }}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...restProps } = props;
+                return (
+                  <li {...restProps} key={key}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                    <span style={{ position: "absolute", right: "10px" }}>
+                      {option.count}
+                    </span>
+                  </li>
+                );
+              }}
+              style={{ width: 240 }}
+              onChange={(event, values) =>
+                filterHandler(event, values, "brands")
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Brands"
+                  placeholder="Search ..."
+                />
+              )}
+            />
+          </div>
         </Box>
       </div>
     </>

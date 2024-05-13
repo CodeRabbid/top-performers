@@ -24,6 +24,13 @@ export const itemsApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getDiagrams: builder.mutation({
+      query: (data) => ({
+        url: `${PURCHASE_URL}/diagrams`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -31,4 +38,5 @@ export const {
   useGetItemsMutation,
   useGetFiltersMutation,
   useGetDiagramMutation,
+  useGetDiagramsMutation,
 } = itemsApiSlice;

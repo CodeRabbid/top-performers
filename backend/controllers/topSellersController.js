@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import { client as postgres } from "../config/postgres.js";
 import { format_as_diagram } from "../utils/converter.js";
 
-import { getDiagramData } from "../repository/diagramRepository.js";
+import { getDiagramData } from "../repository/diagramRepo.js";
 
 // @desc    Fetch purchases
 // @route   GET /api/purchase
@@ -250,4 +250,36 @@ const getDiagram = asyncHandler(async (req, res) => {
   }
 });
 
-export { allPurchases, getFilters, getDiagram };
+// @desc    Fetch diagrams
+// @route   GET /api/diagrams
+// @access  Private
+const getDiagrams = asyncHandler(async (req, res) => {
+  console.log(req.body.multipleSelectedFilters);
+
+  const diagrams = [];
+
+  try {
+    for (const selectedFilters of req.body.multipleSelectedFilters) {
+      const diagramData = await getDiagramData(selectedFilters);
+
+      const xUnits = selectedFilters.xUnits;
+      const comparee = selectedFilters.comparee;
+      let comparees = selectedFilters[comparee + "s"];
+      if (comparee == "age_group") {
+        comparees = selectedFilters.age_group.split(",");
+      }
+      diagrams.push({
+        diagram: format_as_diagram(diagramData, comparees, xUnits, new Date()),
+        comparee: comparees,
+      });
+    }
+
+    res.json({
+      diagrams,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+export { allPurchases, getFilters, getDiagram, getDiagrams };

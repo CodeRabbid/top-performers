@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { axisClasses } from "@mui/x-charts";
-import { useGetDiagramMutation } from "../slices/api/itemsApiSlice";
+import {
+  useGetDiagramMutation,
+  useGetDiagramsMutation,
+} from "../slices/api/itemsApiSlice";
 import {
   useSaveSelectedFiltersMutation,
   useLoadSelectedFiltersMutation,
@@ -48,6 +51,7 @@ const initialDiagramData = {
 
 const DiagramsScreen = () => {
   const [fetchDiagram] = useGetDiagramMutation();
+  const [fetchDiagrams] = useGetDiagramsMutation();
   const [saveSelectedFilters] = useSaveSelectedFiltersMutation();
   const [loadSelectedFilters] = useLoadSelectedFiltersMutation();
   const [selectedDiagram, setSelectedDiagram] = useState(0);
@@ -67,15 +71,29 @@ const DiagramsScreen = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(userInfo.user_info);
       try {
-        const result = await loadSelectedFilters({
+        const selectedFilters_result = await loadSelectedFilters({
           user_id: userInfo.user_info._id,
         }).unwrap();
-        console.log(result);
+        const diagramData_result = await fetchDiagrams({
+          multipleSelectedFilters: selectedFilters_result.selectedFilters,
+        }).unwrap();
+        const newDiagramData = [];
+        for (const diagram of diagramData_result.diagrams) {
+          const series = diagram.comparee.map((comparee) => {
+            return { dataKey: comparee, label: comparee, valueFormatter };
+          });
+          newDiagramData.push({
+            data: diagram.diagram,
+            series: series,
+          });
+        }
+        setSelectedFilters(selectedFilters_result.selectedFilters);
+        setDiagramData(newDiagramData);
+        setSelectedDiagram(0);
       } catch (err) {
         console.log(err);
-        toast.success("Error loading diagrams");
+        toast.error("Error loading diagrams");
       }
     })();
   }, []);
@@ -103,6 +121,7 @@ const DiagramsScreen = () => {
 
   const handleApply = async () => {
     await fetchData();
+    console.log(selectedFilters);
   };
 
   const addDiagram = () => {
@@ -201,25 +220,6 @@ const DiagramsScreen = () => {
         &#65291;
       </button>
 
-      <button
-        style={{
-          position: "absolute",
-          right: "20px",
-          top: "135px",
-          borderRadius: "50%",
-          height: "50px",
-          width: "50px",
-          border: "none",
-          backgroundColor: "rgb(0, 99, 242)",
-          color: "white",
-          fontSize: "30px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontWeight: "bold",
-        }}
-        onClick={addDiagram}
-      ></button>
       <div
         style={{
           flex: "1 1 auto",
