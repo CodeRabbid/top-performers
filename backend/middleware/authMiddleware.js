@@ -12,7 +12,6 @@ const oAuth2Client = new OAuth2Client(clientId, clientSecret, redirectURI);
 const protect = asyncHandler(async (req, res, next) => {
   const access_token = req.headers.authorization?.split(" ")[1];
   const auth_provider = req.headers.auth_provider;
-  console.log(access_token);
 
   if (access_token) {
     if (auth_provider == "google") {

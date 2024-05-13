@@ -15,4 +15,18 @@ const saveDiagramSelectedFilters = asyncHandler(async (req, res) => {
   }
 });
 
-export { saveDiagramSelectedFilters };
+const loadDiagramSelectedFilters = asyncHandler(async (req, res) => {
+  try {
+    console.log(req.user_id);
+    const userPresets = await UserPresets.findOne({
+      user_id: req.body.user_id,
+    });
+    console.log(userPresets);
+
+    res.json({ selectedFilters: userPresets.selectedFilters });
+  } catch (err) {
+    throw new Error("Error loading filters");
+  }
+});
+
+export { saveDiagramSelectedFilters, loadDiagramSelectedFilters };

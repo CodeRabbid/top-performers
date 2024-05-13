@@ -10,6 +10,13 @@ export const userPresetApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    loadSelectedFilters: builder.mutation({
+      query: (data) => ({
+        url: `${USER_PRESET_URL}/diagram/selected-filters/load`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 

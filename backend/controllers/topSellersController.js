@@ -1,8 +1,8 @@
 import asyncHandler from "express-async-handler";
 import { client as postgres } from "../config/postgres.js";
 import { format_as_diagram } from "../utils/converter.js";
-import { full_time_unit_year_ago } from "../utils/helpers.js";
-import { generate_select } from "../utils/sql_generator.js";
+
+import { getDiagramData } from "../repository/diagramRepository.js";
 
 // @desc    Fetch purchases
 // @route   GET /api/purchase
@@ -229,58 +229,20 @@ const getFilters = asyncHandler(async (req, res) => {
 // @route   GET /api/diagram
 // @access  Private
 const getDiagram = asyncHandler(async (req, res) => {
-  const selectedFilters = req.body.selectedFilters;
-  const comparee = selectedFilters.comparee;
-  const xUnits = selectedFilters.xUnits;
-  const yUnits = selectedFilters.yUnits;
-  const categories = selectedFilters.categories;
-  const types = selectedFilters.types;
-  const brands = selectedFilters.brands;
-
-  const year_ago = full_time_unit_year_ago(new Date(), xUnits);
-  let select_y_value = "";
-  if (yUnits == "items_sold") {
-    select_y_value = "COUNT(*)::INT as y_value";
-  } else if (yUnits == "total_sales") {
-    select_y_value = "SUM(product.price) as y_value";
-  }
-
-  let select_x_value = `${comparee} as comparee`;
-  let comparees = selectedFilters[comparee + "s"];
-
-  if (comparee == "age_group") {
-    comparees = selectedFilters.age_group.split(",");
-    select_x_value = generate_select(comparees, new Date());
-  }
-
   try {
-    const result = await postgres.query(
-      ` SELECT  
-            ${select_x_value},
-            ${select_y_value},
-            extract(${xUnits} from purchase_time) as time
-          FROM customer
-          JOIN purchase ON purchase.customer_id=customer.id 
-          JOIN product ON purchase.product_id=product.id 
-          WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
-          AND ( type = ANY($3::VARCHAR[]) OR $4 )
-          AND ( brand = ANY($5::VARCHAR[]) OR $6 )
-          AND purchase_time >= $7
-          GROUP BY comparee, time
-          `,
-      [
-        categories,
-        categories.length == 0,
-        types,
-        types.length == 0,
-        brands,
-        brands.length == 0,
-        year_ago,
-      ]
-    );
+    const selectedFilters = req.body.selectedFilters;
+
+    const diagramData = await getDiagramData(selectedFilters);
+
+    const xUnits = selectedFilters.xUnits;
+    const comparee = selectedFilters.comparee;
+    let comparees = selectedFilters[comparee + "s"];
+    if (comparee == "age_group") {
+      comparees = selectedFilters.age_group.split(",");
+    }
 
     res.json({
-      diagram: format_as_diagram(result.rows, comparees, xUnits, new Date()),
+      diagram: format_as_diagram(diagramData, comparees, xUnits, new Date()),
       comparee: comparees,
     });
   } catch (err) {

@@ -2,7 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { axisClasses } from "@mui/x-charts";
 import { useGetDiagramMutation } from "../slices/api/itemsApiSlice";
-import { useSaveSelectedFiltersMutation } from "../slices/api/userPresetApiSlice";
+import {
+  useSaveSelectedFiltersMutation,
+  useLoadSelectedFiltersMutation,
+} from "../slices/api/userPresetApiSlice";
 import DiagramFilters from "../components/DiagramFilters";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -46,6 +49,7 @@ const initialDiagramData = {
 const DiagramsScreen = () => {
   const [fetchDiagram] = useGetDiagramMutation();
   const [saveSelectedFilters] = useSaveSelectedFiltersMutation();
+  const [loadSelectedFilters] = useLoadSelectedFiltersMutation();
   const [selectedDiagram, setSelectedDiagram] = useState(0);
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -60,6 +64,21 @@ const DiagramsScreen = () => {
     initialSelectedFilter,
     initialSelectedFilter,
   ]);
+
+  useEffect(() => {
+    (async () => {
+      console.log(userInfo.user_info);
+      try {
+        const result = await loadSelectedFilters({
+          user_id: userInfo.user_info._id,
+        }).unwrap();
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+        toast.success("Error loading diagrams");
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     myRef.current[selectedDiagram].scrollIntoView();
@@ -181,6 +200,26 @@ const DiagramsScreen = () => {
       >
         &#65291;
       </button>
+
+      <button
+        style={{
+          position: "absolute",
+          right: "20px",
+          top: "135px",
+          borderRadius: "50%",
+          height: "50px",
+          width: "50px",
+          border: "none",
+          backgroundColor: "rgb(0, 99, 242)",
+          color: "white",
+          fontSize: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontWeight: "bold",
+        }}
+        onClick={addDiagram}
+      ></button>
       <div
         style={{
           flex: "1 1 auto",
