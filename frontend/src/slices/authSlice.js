@@ -4,7 +4,7 @@ const initialState = {
   userInfo: localStorage.getItem("access_token")
     ? {
         access_token: localStorage.getItem("access_token"),
-        user_info: localStorage.getItem("user_info"),
+        user_info: JSON.parse(localStorage.getItem("user_info")),
         auth_provider: localStorage.getItem("auth_provider"),
       }
     : null,
@@ -18,7 +18,10 @@ const authSlice = createSlice({
       state.userInfo = { ...state.userInfo, ...action.payload };
       localStorage.setItem("auth_provider", action.payload.auth_provider);
       localStorage.setItem("access_token", action.payload.access_token);
-      localStorage.setItem("user_info", action.payload.user_info);
+      localStorage.setItem(
+        "user_info",
+        JSON.stringify(action.payload.user_info)
+      );
     },
     logout: (state, action) => {
       state.userInfo = null;
