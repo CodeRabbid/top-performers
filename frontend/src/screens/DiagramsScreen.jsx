@@ -74,10 +74,6 @@ const DiagramsScreen = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleUnload);
-  }, []);
-
   const constructDiagram = (diagram) => {
     const valueFormatter = (value) =>
       diagram.yUnits == "items_sold"
