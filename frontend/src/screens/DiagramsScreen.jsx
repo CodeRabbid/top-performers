@@ -17,12 +17,7 @@ import ConfirmationDialogue from "../components/ConfirmationDialogue";
 import Tooltip from "@mui/material/Tooltip";
 import { faTrashCan, faSave } from "@fortawesome/free-solid-svg-icons";
 
-const chartSetting = {
-  yAxis: [
-    {
-      label: "Items sold",
-    },
-  ],
+const defaultChartSetting = {
   width: 500,
   height: 300,
   sx: {
@@ -53,9 +48,7 @@ const initialDiagramData = {
 const DiagramsScreen = () => {
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [changesMade, setChangesMade] = useState(false);
 
   const [fetchDiagram] = useGetDiagramMutation();
   const [fetchDiagrams] = useGetDiagramsMutation();
@@ -76,6 +69,36 @@ const DiagramsScreen = () => {
     initialSelectedFilter,
   ]);
 
+  const handleUnload = (event) => {
+    if (changesMade) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleUnload);
+  }, []);
+
+  const constructDiagram = (diagram) => {
+    const valueFormatter = (value) =>
+      diagram.yUnits == "items_sold"
+        ? `${value} items`
+        : `${formatter.format(value)}`;
+    const series = diagram.comparee.map((comparee) => {
+      return {
+        dataKey: comparee,
+        label: comparee,
+        valFormatter: valueFormatter,
+      };
+    });
+    return {
+      data: diagram.diagram,
+      series: series,
+      yUnits: diagram.yUnits == "items_sold" ? "Items sold" : "Total sales",
+    };
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -86,14 +109,10 @@ const DiagramsScreen = () => {
           multipleSelectedFilters: selectedFilters_result.selectedFilters,
         }).unwrap();
         const newDiagramData = [];
+
         for (const diagram of diagramData_result.diagrams) {
-          const series = diagram.comparee.map((comparee) => {
-            return { dataKey: comparee, label: comparee, valueFormatter };
-          });
-          newDiagramData.push({
-            data: diagram.diagram,
-            series: series,
-          });
+          const diagData = constructDiagram(diagram);
+          newDiagramData.push(diagData);
         }
         setSelectedFilters(selectedFilters_result.selectedFilters);
         setDiagramData(newDiagramData);
@@ -109,19 +128,18 @@ const DiagramsScreen = () => {
     myRef.current[selectedDiagram].scrollIntoView();
   }, [selectedDiagram]);
 
+  useEffect(() => {
+    setChangesMade(true);
+  }, [selectedFilters]);
+
   const fetchData = async () => {
     const result = await fetchDiagram({
       selectedFilters: selectedFilters[selectedDiagram],
     }).unwrap();
+    const diagData = constructDiagram(result);
 
-    const series = result.comparee.map((comparee) => {
-      return { dataKey: comparee, label: comparee, valueFormatter };
-    });
     const diagramDataCopy = [...diagramData];
-    diagramDataCopy[selectedDiagram] = {
-      data: result.diagram,
-      series: series,
-    };
+    diagramDataCopy[selectedDiagram] = diagData;
 
     setDiagramData(diagramDataCopy);
   };
@@ -167,6 +185,7 @@ const DiagramsScreen = () => {
         selectedFilters,
         user_id: userInfo.user_info._id,
       }).unwrap();
+      setChangesMade(false);
       toast.success("Diagrams saved successfully");
     } catch (err) {
       toast.success("Error saving diagrams");
@@ -178,10 +197,6 @@ const DiagramsScreen = () => {
     currency: "EUR",
   });
 
-  const valueFormatter = (value) =>
-    selectedFilters.yUnits == "items_sold"
-      ? `${value} items`
-      : `${formatter.format(value)}`;
   return (
     <div
       id="filtered-table"
@@ -300,7 +315,8 @@ const DiagramsScreen = () => {
                 dataset={data.data}
                 xAxis={[{ scaleType: "band", dataKey: "time_unit" }]}
                 series={data.series}
-                {...chartSetting}
+                yAxis={[{ label: data.yUnits }]}
+                {...defaultChartSetting}
               />
             </div>
           </div>

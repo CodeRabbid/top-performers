@@ -244,6 +244,7 @@ const getDiagram = asyncHandler(async (req, res) => {
     res.json({
       diagram: format_as_diagram(diagramData, comparees, xUnits, new Date()),
       comparee: comparees,
+      yUnits: selectedFilters.yUnits,
     });
   } catch (err) {
     console.log(err);
@@ -269,6 +270,7 @@ const getDiagrams = asyncHandler(async (req, res) => {
       diagrams.push({
         diagram: format_as_diagram(diagramData, comparees, xUnits, new Date()),
         comparee: comparees,
+        yUnits: selectedFilters.yUnits,
       });
     }
 
