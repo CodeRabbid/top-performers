@@ -67,13 +67,6 @@ const DiagramsScreen = () => {
     initialSelectedFilter,
   ]);
 
-  const handleUnload = (event) => {
-    if (changesMade) {
-      event.preventDefault();
-      event.returnValue = "";
-    }
-  };
-
   const constructDiagram = (diagram) => {
     const valueFormatter = (value) =>
       diagram.yUnits == "items_sold"

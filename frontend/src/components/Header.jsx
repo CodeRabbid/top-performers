@@ -7,8 +7,21 @@ import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/api/authApiSlice";
 import { logout } from "../slices/authSlice";
+import { useEffect, useState } from "react";
 
 const Header = ({ openDrawer }) => {
+  const [smallScreen, setSmallScreen] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 800) {
+        setSmallScreen(true);
+      } else {
+        setSmallScreen(false);
+      }
+    });
+  }, []);
+
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -31,20 +44,38 @@ const Header = ({ openDrawer }) => {
       <div className="headerContainer">
         <div className="headerInnerContainer">
           <div>
-            <IconButton
-              style={{ float: "left", margin: "0 0 0 8px" }}
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={openDrawer()}
-            >
-              <MenuIcon style={{ color: "white" }} />
-            </IconButton>
+            {smallScreen && (
+              <IconButton
+                style={{ float: "left", margin: "0 0 0 8px" }}
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={openDrawer()}
+              >
+                <MenuIcon style={{ color: "white" }} />
+              </IconButton>
+            )}
             <div className="logo" style={{ float: "left" }}>
               <LinkContainer to="/register">
                 <Nav.Link id="logo">Top Performers</Nav.Link>
               </LinkContainer>
             </div>
+          </div>
+          <div>
+            {!smallScreen && (
+              <>
+                <div className="header-link" style={{ float: "left" }}>
+                  <LinkContainer to="/purchases">
+                    <Nav.Link id="logo">Top-Sellers</Nav.Link>
+                  </LinkContainer>
+                </div>
+                <div className="header-link" style={{ float: "left" }}>
+                  <LinkContainer to="/diagrams">
+                    <Nav.Link id="logo">Diagrams</Nav.Link>
+                  </LinkContainer>
+                </div>
+              </>
+            )}
           </div>
           <div>
             {userInfo?.user_info ? (

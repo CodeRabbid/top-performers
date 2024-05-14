@@ -25,3 +25,8 @@
   white-space: nowrap;
   color: white;
 }
+
+.header-link {
+  padding: 10px;
+  color: white;
+}

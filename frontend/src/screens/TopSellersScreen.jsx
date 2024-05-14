@@ -99,13 +99,26 @@ const PurchaseScreen = () => {
       sortModel,
       paginationModel,
     }).unwrap();
-    setItems(result.purchase);
+    const receivedItems = result.purchase.map((receivedItem) => {
+      return {
+        ...receivedItem,
+        price: formatter.format(receivedItem.price),
+        total_sales: formatter.format(receivedItem.total_sales),
+      };
+    });
+
+    setItems(receivedItems);
     setMaxcount(result.count);
   };
 
   const handleApply = async () => {
     await fetchItems();
   };
+
+  const formatter = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR",
+  });
 
   return (
     <div id="filtered-table" style={{}}>
