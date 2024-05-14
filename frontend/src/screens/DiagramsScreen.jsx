@@ -18,8 +18,6 @@ import Tooltip from "@mui/material/Tooltip";
 import { faTrashCan, faSave } from "@fortawesome/free-solid-svg-icons";
 
 const defaultChartSetting = {
-  width: 500,
-  height: 300,
   sx: {
     [`.${axisClasses.left} .${axisClasses.label}`]: {
       transform: "translate(-20px, 0)",
@@ -209,73 +207,7 @@ const DiagramsScreen = () => {
         handleConfirm={() => handleConfirm()}
         handleCancel={() => setOpen(false)}
       />
-      <Tooltip title="Save progress" enterDelay={800} placement="left">
-        <button
-          style={{
-            position: "absolute",
-            right: "20px",
-            top: "10px",
-            borderRadius: "50%",
-            height: "50px",
-            width: "50px",
-            border: "none",
-            backgroundColor: "rgb(0, 99, 242)",
-            color: "white",
-            fontSize: "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={saveDiagrams}
-        >
-          <FontAwesomeIcon icon={faSave} />
-        </button>
-      </Tooltip>
-      <Tooltip title="Add diagram" enterDelay={800} placement="left">
-        <button
-          style={{
-            position: "absolute",
-            right: "20px",
-            top: "70px",
-            borderRadius: "50%",
-            height: "50px",
-            width: "50px",
-            border: "none",
-            backgroundColor: "rgb(0, 99, 242)",
-            color: "white",
-            fontSize: "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontWeight: "bold",
-          }}
-          onClick={addDiagram}
-        >
-          &#65291;
-        </button>
-      </Tooltip>
-      <Tooltip title="Remove diagram" enterDelay={800} placement="left">
-        <button
-          style={{
-            position: "absolute",
-            right: "20px",
-            top: "130px",
-            borderRadius: "50%",
-            height: "50px",
-            width: "50px",
-            border: "none",
-            backgroundColor: "rgb(0, 99, 242)",
-            color: "white",
-            fontSize: "30px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={() => setOpen(true)}
-        >
-          <FontAwesomeIcon icon={faTrashCan} />
-        </button>
-      </Tooltip>
+
       <div
         style={{
           flex: "1 1 auto",
@@ -289,8 +221,8 @@ const DiagramsScreen = () => {
           <div
             style={{
               position: "relative",
-              margin: "0px auto 0px 100px",
-              width: "500px",
+              margin: "0px auto 0px 0px",
+              height: "100%",
             }}
             key={index}
           >
@@ -298,9 +230,9 @@ const DiagramsScreen = () => {
               style={{
                 display: "block",
                 position: "relative",
-                // margin: "0px auto 0px 100px",
                 backgroundColor: index == selectedDiagram ? "#ebf2ff" : "",
-                width: "500px",
+                width: "100%",
+                height: "95%",
               }}
               ref={(el) => (myRef.current[index] = el)}
               onClick={() => setSelectedDiagram(index)}
@@ -308,10 +240,12 @@ const DiagramsScreen = () => {
               <BarChart
                 margin={{
                   left: 70,
-                  right: 20,
+                  right: 70,
                   top: 20,
                   bottom: 30,
                 }}
+                // width={600}
+                // height={400}
                 dataset={data.data}
                 xAxis={[{ scaleType: "band", dataKey: "time_unit" }]}
                 series={data.series}
@@ -321,6 +255,73 @@ const DiagramsScreen = () => {
             </div>
           </div>
         ))}
+        <Tooltip title="Save progress" enterDelay={800} placement="left">
+          <button
+            style={{
+              position: "absolute",
+              right: "20px",
+              top: "10px",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              border: "none",
+              backgroundColor: "rgb(0, 99, 242)",
+              color: "white",
+              fontSize: "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={saveDiagrams}
+          >
+            <FontAwesomeIcon icon={faSave} />
+          </button>
+        </Tooltip>
+        <Tooltip title="Add diagram" enterDelay={800} placement="left">
+          <button
+            style={{
+              position: "absolute",
+              right: "20px",
+              top: "70px",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              border: "none",
+              backgroundColor: "rgb(0, 99, 242)",
+              color: "white",
+              fontSize: "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontWeight: "bold",
+            }}
+            onClick={addDiagram}
+          >
+            &#65291;
+          </button>
+        </Tooltip>
+        <Tooltip title="Remove diagram" enterDelay={800} placement="left">
+          <button
+            style={{
+              position: "absolute",
+              right: "20px",
+              top: "130px",
+              borderRadius: "50%",
+              height: "50px",
+              width: "50px",
+              border: "none",
+              backgroundColor: "rgb(0, 99, 242)",
+              color: "white",
+              fontSize: "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={() => setOpen(true)}
+          >
+            <FontAwesomeIcon icon={faTrashCan} />
+          </button>
+        </Tooltip>
       </div>
       <div style={{}}>
         <DiagramFilters
