@@ -116,15 +116,20 @@ const DiagramFilters = ({
             borderRadius: 1,
           }}
         >
-          <div>
-            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+          <div style={{ width: "100%" }}>
+            <div
+              style={{
+                float: "left",
+                margin: "0 5px 0 0",
+              }}
+            >
               <FormControl fullWidth>
                 <InputLabel id="y-units-select">Y-Units</InputLabel>
                 <Select
                   value={selectedFilters[selectedDiagram].yUnits}
                   label="y-Axis"
                   onChange={handlYUnitsFilter}
-                  style={{ width: 102 }}
+                  style={{ width: 150 }}
                 >
                   <MenuItem value={"items_sold"}>Items sold</MenuItem>
                   <MenuItem value={"total_sales"}>Total sales</MenuItem>
@@ -139,7 +144,7 @@ const DiagramFilters = ({
                   value={selectedFilters[selectedDiagram].xUnits}
                   label="y-Axis"
                   onChange={handlXUnitsFilter}
-                  style={{ width: 102 }}
+                  style={{ width: 150 }}
                 >
                   <MenuItem value={"quarter"}>Quarter</MenuItem>
                   <MenuItem value={"month"}>Month</MenuItem>
@@ -153,7 +158,7 @@ const DiagramFilters = ({
                   value={selectedFilters[selectedDiagram].comparee}
                   label="Age"
                   onChange={handleCompareeFilter}
-                  style={{ width: 102 }}
+                  style={{ width: 150 }}
                 >
                   <MenuItem value={"brand"}>Brands</MenuItem>
                   <MenuItem value={"type"}>Types</MenuItem>
@@ -177,7 +182,7 @@ const DiagramFilters = ({
                 ""
               )}
             </div>
-            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+            <div style={{ float: "right", margin: "0 5px 0 auto" }}>
               <Button
                 id="apply"
                 style={{ height: 56, width: 100 }}
@@ -199,140 +204,146 @@ const DiagramFilters = ({
             borderRadius: 1,
           }}
         >
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              id="categories-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.categories}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <div key={option.name} />
-                ));
-              }}
-              renderOption={(props, option, { selected }) => {
-                const { k, ...restProps } = props;
-                const key = option.key;
-                const prop = { ...restProps };
-                return (
-                  <li {...props} key={option.name}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "categories")
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Categories"
-                  placeholder="Search ..."
-                />
-              )}
-            />
-          </div>
+          <div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+              <Autocomplete
+                multiple
+                id="categories-filter"
+                isOptionEqualToValue={(option, value) =>
+                  option.name === value.name
+                }
+                options={filters.categories}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name}
+                renderTags={(tagValue, getTagProps) => {
+                  return tagValue.map((option, index) => (
+                    <div key={option.name} />
+                  ));
+                }}
+                renderOption={(props, option, { selected }) => {
+                  const { k, ...restProps } = props;
+                  const key = option.key;
+                  const prop = { ...restProps };
+                  return (
+                    <li {...props} key={option.name}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.name}
+                      <span style={{ position: "absolute", right: "10px" }}>
+                        {option.count}
+                      </span>
+                    </li>
+                  );
+                }}
+                style={{ width: 200 }}
+                onChange={(event, values) =>
+                  filterHandler(event, values, "categories")
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Categories"
+                    placeholder="Search ..."
+                  />
+                )}
+              />
+            </div>
 
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              id="types-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.types}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <div key={option.name} />
-                ));
-              }}
-              renderOption={(props, option, { selected }) => {
-                const { key, ...restProps } = props;
-                return (
-                  <li {...restProps} key={key}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "types")
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Types" placeholder="Search ..." />
-              )}
-            />
-          </div>
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+              <Autocomplete
+                multiple
+                id="types-filter"
+                isOptionEqualToValue={(option, value) =>
+                  option.name === value.name
+                }
+                options={filters.types}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name}
+                renderTags={(tagValue, getTagProps) => {
+                  return tagValue.map((option, index) => (
+                    <div key={option.name} />
+                  ));
+                }}
+                renderOption={(props, option, { selected }) => {
+                  const { key, ...restProps } = props;
+                  return (
+                    <li {...restProps} key={key}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.name}
+                      <span style={{ position: "absolute", right: "10px" }}>
+                        {option.count}
+                      </span>
+                    </li>
+                  );
+                }}
+                style={{ width: 200 }}
+                onChange={(event, values) =>
+                  filterHandler(event, values, "types")
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Types"
+                    placeholder="Search ..."
+                  />
+                )}
+              />
+            </div>
 
-          <div style={{ float: "left", margin: "0 5px 0 0" }}>
-            <Autocomplete
-              multiple
-              id="brands-filter"
-              isOptionEqualToValue={(option, value) =>
-                option.name === value.name
-              }
-              options={filters.brands}
-              disableCloseOnSelect
-              getOptionLabel={(option) => option.name}
-              renderTags={(tagValue, getTagProps) => {
-                return tagValue.map((option, index) => (
-                  <div key={option.name} />
-                ));
-              }}
-              renderOption={(props, option, { selected }) => {
-                const { key, ...restProps } = props;
-                return (
-                  <li {...restProps} key={key}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                    <span style={{ position: "absolute", right: "10px" }}>
-                      {option.count}
-                    </span>
-                  </li>
-                );
-              }}
-              style={{ width: 240 }}
-              onChange={(event, values) =>
-                filterHandler(event, values, "brands")
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Brands"
-                  placeholder="Search ..."
-                />
-              )}
-            />
+            <div style={{ float: "left", margin: "0 5px 0 0" }}>
+              <Autocomplete
+                multiple
+                id="brands-filter"
+                isOptionEqualToValue={(option, value) =>
+                  option.name === value.name
+                }
+                options={filters.brands}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name}
+                renderTags={(tagValue, getTagProps) => {
+                  return tagValue.map((option, index) => (
+                    <div key={option.name} />
+                  ));
+                }}
+                renderOption={(props, option, { selected }) => {
+                  const { key, ...restProps } = props;
+                  return (
+                    <li {...restProps} key={key}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.name}
+                      <span style={{ position: "absolute", right: "10px" }}>
+                        {option.count}
+                      </span>
+                    </li>
+                  );
+                }}
+                style={{ width: 200 }}
+                onChange={(event, values) =>
+                  filterHandler(event, values, "brands")
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Brands"
+                    placeholder="Search ..."
+                  />
+                )}
+              />
+            </div>
           </div>
         </Box>
       </div>
