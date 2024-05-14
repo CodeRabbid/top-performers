@@ -2,11 +2,13 @@ import "./Header.css";
 import { Nav, Dropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/api/authApiSlice";
 import { logout } from "../slices/authSlice";
 
-const Header = () => {
+const Header = ({ openDrawer }) => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -28,10 +30,21 @@ const Header = () => {
     <header>
       <div className="headerContainer">
         <div className="headerInnerContainer">
-          <div className="logo">
-            <LinkContainer to="/register">
-              <Nav.Link id="logo">Top Performers</Nav.Link>
-            </LinkContainer>
+          <div>
+            <IconButton
+              style={{ float: "left", margin: "0 0 0 8px" }}
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={openDrawer()}
+            >
+              <MenuIcon style={{ color: "white" }} />
+            </IconButton>
+            <div className="logo" style={{ float: "left" }}>
+              <LinkContainer to="/register">
+                <Nav.Link id="logo">Top Performers</Nav.Link>
+              </LinkContainer>
+            </div>
           </div>
           <div>
             {userInfo?.user_info ? (

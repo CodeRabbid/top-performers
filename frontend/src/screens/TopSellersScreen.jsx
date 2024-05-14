@@ -114,7 +114,10 @@ const PurchaseScreen = () => {
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
       />
-      <div id="table" style={{ flex: "1 1 auto", height: "0%" }}>
+      <div
+        id="table"
+        style={{ flex: "1 1 auto", height: "0%", width: "99%", maxWidth: 900 }}
+      >
         <DataGrid
           columns={columns}
           rows={items}
