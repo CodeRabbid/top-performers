@@ -254,7 +254,7 @@ const DiagramsScreen = () => {
               height: "50px",
               width: "50px",
               border: "none",
-              backgroundColor: "rgb(0, 99, 242)",
+              backgroundColor: "#0063F2",
               color: "white",
               fontSize: "30px",
               display: "flex",

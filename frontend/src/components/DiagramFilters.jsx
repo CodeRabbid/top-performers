@@ -185,7 +185,7 @@ const DiagramFilters = ({
             <div style={{ float: "right", margin: "0 5px 0 auto" }}>
               <Button
                 id="apply"
-                style={{ height: 56, width: 100 }}
+                style={{ height: 56, width: 100, backgroundColor: "#0063F2" }}
                 variant="contained"
                 onClick={handleApply}
               >

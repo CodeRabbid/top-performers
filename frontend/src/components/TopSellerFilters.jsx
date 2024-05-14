@@ -312,7 +312,7 @@ const TopSellersFilters = ({
         <div>
           <Button
             id="apply"
-            style={{ height: 56, width: 100 }}
+            style={{ height: 56, width: 100, backgroundColor: "#0063F2" }}
             variant="contained"
             onClick={handleApply}
           >
