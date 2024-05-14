@@ -254,8 +254,6 @@ const getDiagram = asyncHandler(async (req, res) => {
 // @route   GET /api/diagrams
 // @access  Private
 const getDiagrams = asyncHandler(async (req, res) => {
-  console.log(req.body.multipleSelectedFilters);
-
   const diagrams = [];
 
   try {

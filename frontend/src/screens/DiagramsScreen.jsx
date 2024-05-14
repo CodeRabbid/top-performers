@@ -13,6 +13,7 @@ import DiagramFilters from "../components/DiagramFilters";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ConfirmationDialogue from "../components/ConfirmationDialogue";
 
 import { faTrashCan, faSave } from "@fortawesome/free-solid-svg-icons";
 
@@ -50,6 +51,12 @@ const initialDiagramData = {
 };
 
 const DiagramsScreen = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [fetchDiagram] = useGetDiagramMutation();
   const [fetchDiagrams] = useGetDiagramsMutation();
   const [saveSelectedFilters] = useSaveSelectedFiltersMutation();
@@ -121,7 +128,6 @@ const DiagramsScreen = () => {
 
   const handleApply = async () => {
     await fetchData();
-    console.log(selectedFilters);
   };
 
   const addDiagram = () => {
@@ -134,16 +140,21 @@ const DiagramsScreen = () => {
     setSelectedDiagram(diagramData.length);
   };
 
-  const remveDiagram = (index) => {
+  const handleConfirm = () => {
+    removeSelectedDiagram();
+    setOpen(false);
+  };
+
+  const removeSelectedDiagram = () => {
     setSelectedDiagram(0);
     const selectedFiltersCopy = [...selectedFilters];
-    selectedFiltersCopy.splice(index, 1);
+    selectedFiltersCopy.splice(selectedDiagram, 1);
     if (selectedFiltersCopy.length == 0) {
       selectedFiltersCopy.push(initialSelectedFilter);
     }
     setSelectedFilters(selectedFiltersCopy);
     const diagramDataCopy = [...diagramData];
-    diagramDataCopy.splice(index, 1);
+    diagramDataCopy.splice(selectedDiagram, 1);
     if (diagramDataCopy.length == 0) {
       diagramDataCopy.push(initialDiagramData);
     }
@@ -178,11 +189,17 @@ const DiagramsScreen = () => {
         postiion: "relative",
       }}
     >
+      <ConfirmationDialogue
+        open={open}
+        handleConfirm={() => handleConfirm()}
+        handleCancel={() => setOpen(false)}
+      />
+
       <button
         style={{
           position: "absolute",
           right: "20px",
-          top: "15px",
+          top: "10px",
           borderRadius: "50%",
           height: "50px",
           width: "50px",
@@ -202,7 +219,7 @@ const DiagramsScreen = () => {
         style={{
           position: "absolute",
           right: "20px",
-          top: "75px",
+          top: "70px",
           borderRadius: "50%",
           height: "50px",
           width: "50px",
@@ -219,7 +236,26 @@ const DiagramsScreen = () => {
       >
         &#65291;
       </button>
-
+      <button
+        style={{
+          position: "absolute",
+          right: "20px",
+          top: "130px",
+          borderRadius: "50%",
+          height: "50px",
+          width: "50px",
+          border: "none",
+          backgroundColor: "rgb(0, 99, 242)",
+          color: "white",
+          fontSize: "30px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={() => setOpen(true)}
+      >
+        <FontAwesomeIcon icon={faTrashCan} />
+      </button>
       <div
         style={{
           flex: "1 1 auto",
@@ -238,26 +274,6 @@ const DiagramsScreen = () => {
             }}
             key={index}
           >
-            <button
-              style={{
-                position: "absolute",
-                right: "-55px",
-                bottom: "20px",
-                borderRadius: "50%",
-                height: "50px",
-                width: "50px",
-                border: "none",
-                backgroundColor: "#DCDCDC",
-                color: "white",
-                fontSize: "30px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onClick={() => remveDiagram(index)}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </button>
             <div
               style={{
                 display: "block",
