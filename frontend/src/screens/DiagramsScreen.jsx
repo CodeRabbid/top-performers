@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmationDialogue from "../components/ConfirmationDialogue";
-
+import Tooltip from "@mui/material/Tooltip";
 import { faTrashCan, faSave } from "@fortawesome/free-solid-svg-icons";
 
 const chartSetting = {
@@ -194,68 +194,73 @@ const DiagramsScreen = () => {
         handleConfirm={() => handleConfirm()}
         handleCancel={() => setOpen(false)}
       />
-
-      <button
-        style={{
-          position: "absolute",
-          right: "20px",
-          top: "10px",
-          borderRadius: "50%",
-          height: "50px",
-          width: "50px",
-          border: "none",
-          backgroundColor: "rgb(0, 99, 242)",
-          color: "white",
-          fontSize: "30px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onClick={saveDiagrams}
-      >
-        <FontAwesomeIcon icon={faSave} />
-      </button>
-      <button
-        style={{
-          position: "absolute",
-          right: "20px",
-          top: "70px",
-          borderRadius: "50%",
-          height: "50px",
-          width: "50px",
-          border: "none",
-          backgroundColor: "rgb(0, 99, 242)",
-          color: "white",
-          fontSize: "30px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontWeight: "bold",
-        }}
-        onClick={addDiagram}
-      >
-        &#65291;
-      </button>
-      <button
-        style={{
-          position: "absolute",
-          right: "20px",
-          top: "130px",
-          borderRadius: "50%",
-          height: "50px",
-          width: "50px",
-          border: "none",
-          backgroundColor: "rgb(0, 99, 242)",
-          color: "white",
-          fontSize: "30px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onClick={() => setOpen(true)}
-      >
-        <FontAwesomeIcon icon={faTrashCan} />
-      </button>
+      <Tooltip title="Save progress" enterDelay={800} placement="left">
+        <button
+          style={{
+            position: "absolute",
+            right: "20px",
+            top: "10px",
+            borderRadius: "50%",
+            height: "50px",
+            width: "50px",
+            border: "none",
+            backgroundColor: "rgb(0, 99, 242)",
+            color: "white",
+            fontSize: "30px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={saveDiagrams}
+        >
+          <FontAwesomeIcon icon={faSave} />
+        </button>
+      </Tooltip>
+      <Tooltip title="Add diagram" enterDelay={800} placement="left">
+        <button
+          style={{
+            position: "absolute",
+            right: "20px",
+            top: "70px",
+            borderRadius: "50%",
+            height: "50px",
+            width: "50px",
+            border: "none",
+            backgroundColor: "rgb(0, 99, 242)",
+            color: "white",
+            fontSize: "30px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontWeight: "bold",
+          }}
+          onClick={addDiagram}
+        >
+          &#65291;
+        </button>
+      </Tooltip>
+      <Tooltip title="Remove diagram" enterDelay={800} placement="left">
+        <button
+          style={{
+            position: "absolute",
+            right: "20px",
+            top: "130px",
+            borderRadius: "50%",
+            height: "50px",
+            width: "50px",
+            border: "none",
+            backgroundColor: "rgb(0, 99, 242)",
+            color: "white",
+            fontSize: "30px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={() => setOpen(true)}
+        >
+          <FontAwesomeIcon icon={faTrashCan} />
+        </button>
+      </Tooltip>
       <div
         style={{
           flex: "1 1 auto",
