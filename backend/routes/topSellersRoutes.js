@@ -5,12 +5,13 @@ import {
   getDiagrams,
   getFilters,
 } from "../controllers/topSellersController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/all", allPurchases);
-router.post("/filters", getFilters);
-router.post("/diagram", getDiagram);
-router.post("/diagrams", getDiagrams);
+router.route("/all").post(protect, allPurchases);
+router.route("/filters").post(protect, getFilters);
+router.route("/diagram").post(protect, getDiagram);
+router.route("/diagrams").post(protect, getDiagrams);
 
 export default router;
