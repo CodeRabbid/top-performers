@@ -63,17 +63,3 @@ export default function App() {
     </>
   );
 }
-//  <Header />
-//       <ToastContainer />
-//       <Container
-//         style={{
-//           width: "100%",
-//           minWidth: "320px",
-//           maxWidth: "880px",
-//           marginLeft: "auto",
-//           height: "0%",
-//           flex: "1 0 auto",
-//         }}
-//       >
-//         <Outlet />
-//       </Container>
