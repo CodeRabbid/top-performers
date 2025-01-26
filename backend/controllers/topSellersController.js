@@ -22,7 +22,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       `
     SELECT 
       row_number() OVER () as id,
-      COUNT(product.image)::INT as items_sold, 
+      COUNT(product.model)::INT as items_sold, 
 	    SUM(product.price) as total_sales,
       product.category as category, 
       product.type as type, 
@@ -44,7 +44,7 @@ const allPurchases = asyncHandler(async (req, res) => {
       product.brand, 
       product.model, 
       product.price, 
-      product.image,
+      product.model,
       product.image_url
     ${sorting}
     LIMIT $12
@@ -70,7 +70,7 @@ const allPurchases = asyncHandler(async (req, res) => {
     const count_result = await postgres.query(
       `
     SELECT 
-      COUNT(DISTINCT image)::INT as count
+      COUNT(DISTINCT model)::INT as count
     FROM purchase 
     JOIN product ON purchase.product_id=product.id
     WHERE ( category = ANY($1::VARCHAR[]) OR $2 )
@@ -113,7 +113,7 @@ const getFilters = asyncHandler(async (req, res) => {
     let result = await postgres.query(
       `
       SELECT 
-        COUNT(DISTINCT image) as count,
+        COUNT(DISTINCT model) as count,
         category as name
       FROM purchase 
       JOIN product ON purchase.product_id=product.id  
@@ -141,7 +141,7 @@ const getFilters = asyncHandler(async (req, res) => {
 
     result = await postgres.query(
       `SELECT 
-        COUNT(DISTINCT image) as count,
+        COUNT(id) as count,
         type as name
       FROM purchase 
       JOIN product ON purchase.product_id=product.id  
@@ -169,7 +169,7 @@ const getFilters = asyncHandler(async (req, res) => {
 
     result = await postgres.query(
       `SELECT 
-        COUNT(DISTINCT image) as count,
+        COUNT(DISTINCT id) as count,
         brand as name
       FROM purchase 
       JOIN product ON purchase.product_id=product.id  
