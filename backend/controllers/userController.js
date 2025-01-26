@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { jwtDecode } from "jwt-decode";
 import jwt from "jsonwebtoken";
+import UserPresets from "../models/userPresetsModel.js";
 
 import generateRefreshToken from "../utils/generateToken.js";
 import { OAuth2Client, UserRefreshClient } from "google-auth-library";
@@ -29,6 +30,23 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+  });
+
+  await UserPresets.findOneAndUpdate({
+    user_id: user._id,
+    selectedFilters: {
+      xUnits: "month",
+      yUnits: "items_sold",
+      comparee: "age_group",
+      age_group: "18-24,25-35",
+      categories: [],
+      types: [],
+      brands: [],
+      price_range: [],
+      genders: ["male", "female", "diverse"],
+      earliest_purchase_date: "2000-01-31T23:00:00.000Z",
+      latest_purchase_date: "2024-05-15T18:55:08.210Z",
+    },
   });
 
   if (user) {
