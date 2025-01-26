@@ -13,8 +13,8 @@ import cors from "cors";
 
 const port = 5000;
 
-connectDB();
-connectPostgres();
+await connectDB();
+await connectPostgres();
 
 const app = express();
 
